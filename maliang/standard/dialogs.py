@@ -6,13 +6,15 @@ __all__ = [
     "TkMessage",
     "TkColorChooser",
     "TkFontChooser",
+    "TkFileChooser",
 ]
 
 import collections.abc
 import tkinter
 import tkinter.colorchooser
+import tkinter.filedialog
 import typing
-from tkinter import filedialog
+
 
 
 class TkMessage:
@@ -154,7 +156,7 @@ class TkFileChooser:
         match mode:
             case "open":
                 if multiple:
-                    file_paths = filedialog.askopenfilenames(
+                    file_paths = tkinter.filedialog.askopenfilenames(
                         title=title,
                         initialdir=initialdir,
                         initialfile=initialfile,
@@ -163,7 +165,7 @@ class TkFileChooser:
                         parent=master,
                     )
                 else:
-                    file_path = filedialog.askopenfilename(
+                    file_path = tkinter.filedialog.askopenfilename(
                         title=title,
                         initialdir=initialdir,
                         initialfile=initialfile,
@@ -173,7 +175,7 @@ class TkFileChooser:
                     )
                     file_paths = file_path if file_path else None
             case "save":
-                file_paths = filedialog.asksaveasfilename(
+                file_paths = tkinter.filedialog.asksaveasfilename(
                     title=title,
                     initialdir=initialdir,
                     initialfile=initialfile,
@@ -182,7 +184,7 @@ class TkFileChooser:
                     parent=master,
                 )
             case "dir":
-                file_paths = filedialog.askdirectory(
+                file_paths = tkinter.filedialog.askdirectory(
                     title=title,
                     initialdir=initialdir,
                     parent=master,
