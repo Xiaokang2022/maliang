@@ -151,9 +151,29 @@ class TkFileChooser:
         if master is None:
             master = tkinter._get_temp_root()
 
-        if mode == "open":
-            if multiple:
-                file_paths = filedialog.askopenfilenames(
+        match mode:
+            case "open":
+                if multiple:
+                    file_paths = filedialog.askopenfilenames(
+                        title=title,
+                        initialdir=initialdir,
+                        initialfile=initialfile,
+                        filetypes=filetypes,
+                        defaultextension=defaultextension,
+                        parent=master,
+                    )
+                else:
+                    file_path = filedialog.askopenfilename(
+                        title=title,
+                        initialdir=initialdir,
+                        initialfile=initialfile,
+                        filetypes=filetypes,
+                        defaultextension=defaultextension,
+                        parent=master,
+                    )
+                    file_paths = file_path if file_path else None
+            case "save":
+                file_paths = filedialog.asksaveasfilename(
                     title=title,
                     initialdir=initialdir,
                     initialfile=initialfile,
@@ -161,33 +181,14 @@ class TkFileChooser:
                     defaultextension=defaultextension,
                     parent=master,
                 )
-            else:
-                file_path = filedialog.askopenfilename(
+            case "dir":
+                file_paths = filedialog.askdirectory(
                     title=title,
                     initialdir=initialdir,
-                    initialfile=initialfile,
-                    filetypes=filetypes,
-                    defaultextension=defaultextension,
                     parent=master,
                 )
-                file_paths = file_path if file_path else None
-        elif mode == "save":
-            file_paths = filedialog.asksaveasfilename(
-                title=title,
-                initialdir=initialdir,
-                initialfile=initialfile,
-                filetypes=filetypes,
-                defaultextension=defaultextension,
-                parent=master,
-            )
-        elif mode == "dir":
-            file_paths = filedialog.askdirectory(
-                title=title,
-                initialdir=initialdir,
-                parent=master,
-            )
-        else:
-            file_paths = None
+            case _:
+                file_paths = None
 
         if command is not None and file_paths:
             command(file_paths)
