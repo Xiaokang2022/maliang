@@ -186,6 +186,8 @@ class TkFileChooser:
                 initialdir=initialdir,
                 parent=master,
             )
+        else:
+            file_paths = None
 
         if command is not None and file_paths:
             command(file_paths)
