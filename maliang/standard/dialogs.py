@@ -16,7 +16,6 @@ import tkinter.filedialog
 import typing
 
 
-
 class TkMessage:
     """Message pop-up"""
 
@@ -132,7 +131,7 @@ class TkFileChooser:
         title: str | None = None,
         initialdir: str | None = None,
         initialfile: str | None = None,
-        filetypes: typing.Sequence[tuple[str, str]] | None = [],
+        filetypes: collections.abc.Sequence[tuple[str, str]] | None = None,
         defaultextension: str | None = None,
         multiple: bool = False,
         mode: typing.Literal["open", "save", "dir"] = "open",
