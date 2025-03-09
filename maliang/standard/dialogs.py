@@ -16,7 +16,6 @@ import tkinter.filedialog
 import typing
 
 
-
 class TkMessage:
     """Message pop-up"""
 
@@ -128,21 +127,21 @@ class TkFileChooser:
 
     def __init__(
         self,
-        is_dir: bool = False,
-        save: bool = True,
+        is_dir: bool = None,
+        mode: typing.Literal["save", "open"] = None,
         *,
         title: str | None = None,
         initialdir: str | None = None,
         initialfile: str | None = None,
-        filetypes: typing.Sequence[tuple[str, str]] | None = None,
+        filetypes: collections.abc.Sequence[tuple[str, str]] | None = None,
         defaultextension: str | None = None,
         multiple: bool = False,
         master: tkinter.Tk | None = None,
         command: collections.abc.Callable[[str | tuple[str, ...]], typing.Any] | None = None,
     ) -> None:
         """
-        * `is_dir`: whether to select a directory (default False)
-        * `save`: whether to save the file (default True)
+        * `is_dir`: whether to select a directory
+        * `mode`: whether to save or open a file, must be "save" or "open"
         * `initialfile`: initial file
         * `filetypes`: file types to filter (e.g., [("Text Files", "*.txt"), ("All Files", "*.*")])
         * `defaultextension`: default file extension
@@ -158,39 +157,34 @@ class TkFileChooser:
 
         if is_dir:
             mode = "dir"
-        elif save:
-            mode = "save"
-        else:
-            mode = "open"
 
         common_args = {
             "title": title,
             "initialdir": initialdir,
             "parent": master,
         }
+        common_args2 = {
+            "initialfile":initialfile,
+            "filetypes":filetypes,
+            "defaultextension":defaultextension,
+        }
 
         match mode:
             case "open":
                 if multiple:
                     file_paths = tkinter.filedialog.askopenfilenames(
-                        initialfile=initialfile,
-                        filetypes=filetypes,
-                        defaultextension=defaultextension,
+                        **common_args2,
                         **common_args,
                     )
                 else:
                     file_path = tkinter.filedialog.askopenfilename(
-                        initialfile=initialfile,
-                        filetypes=filetypes,
-                        defaultextension=defaultextension,
+                        **common_args2,
                         **common_args,
                     )
                     file_paths = file_path if file_path else None
             case "save":
                 file_paths = tkinter.filedialog.asksaveasfilename(
-                    initialfile=initialfile,
-                    filetypes=filetypes,
-                    defaultextension=defaultextension,
+                    **common_args2,
                     **common_args,
                 )
             case "dir":
