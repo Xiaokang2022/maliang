@@ -6,7 +6,7 @@ __all__ = [
     "TkMessage",
     "TkColorChooser",
     "TkFontChooser",
-    "TkFileChooser",
+    # "TkFileChooser",
 ]
 
 import collections.abc
@@ -14,6 +14,7 @@ import tkinter
 import tkinter.colorchooser
 import tkinter.filedialog
 import typing
+import warnings
 
 
 class TkMessage:
@@ -122,13 +123,17 @@ class TkFontChooser:
         master.call("tk", "fontchooser", "show")
 
 
-class TkFileChooser:
+# XXX: The code below is bad and needs to be improved in the future
+# Consider converting individual modes into methods
+
+
+class _TkFileChooser:
     """File chooser pop-up"""
 
     def __init__(
         self,
-        is_dir: bool = None,
-        mode: typing.Literal["save", "open"] = None,
+        is_dir: bool,
+        mode: typing.Literal["save", "open"],
         *,
         title: str | None = None,
         initialdir: str | None = None,
@@ -149,6 +154,9 @@ class TkFileChooser:
         * `master`: parent widget of the window
         * `command`: callback function
         """
+        warnings.warn(
+            "This class is not fully implemented yet.", FutureWarning, 2)
+
         if master is None:
             master = tkinter._get_temp_root()
 
@@ -164,9 +172,9 @@ class TkFileChooser:
             "parent": master,
         }
         common_args2 = {
-            "initialfile":initialfile,
-            "filetypes":filetypes,
-            "defaultextension":defaultextension,
+            "initialfile": initialfile,
+            "filetypes": filetypes,
+            "defaultextension": defaultextension,
         }
 
         match mode:
