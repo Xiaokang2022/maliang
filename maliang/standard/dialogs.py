@@ -6,12 +6,15 @@ __all__ = [
     "TkMessage",
     "TkColorChooser",
     "TkFontChooser",
+    # "TkFileChooser",
 ]
 
 import collections.abc
 import tkinter
 import tkinter.colorchooser
+import tkinter.filedialog
 import typing
+import warnings
 
 
 def _get_temp_root() -> tkinter.Tk:
@@ -125,3 +128,86 @@ class TkFontChooser:
 
         master.call("tk", "fontchooser", "configure", "-parent", master, *args)
         master.call("tk", "fontchooser", "show")
+
+
+# XXX: The code below is bad and needs to be improved in the future
+# Consider converting individual modes into methods
+
+
+class _TkFileChooser:
+    """File chooser pop-up"""
+
+    def __init__(
+        self,
+        is_dir: bool,
+        mode: typing.Literal["save", "open"],
+        *,
+        title: str | None = None,
+        initialdir: str | None = None,
+        initialfile: str | None = None,
+        filetypes: collections.abc.Sequence[tuple[str, str]] | None = None,
+        defaultextension: str | None = None,
+        multiple: bool = False,
+        master: tkinter.Tk | None = None,
+        command: collections.abc.Callable[[str | tuple[str, ...]], typing.Any] | None = None,
+    ) -> None:
+        """
+        * `is_dir`: whether to select a directory
+        * `mode`: whether to save or open a file, must be "save" or "open"
+        * `initialfile`: initial file
+        * `filetypes`: file types to filter (e.g., [("Text Files", "*.txt"), ("All Files", "*.*")])
+        * `defaultextension`: default file extension
+        * `multiple`: whether to allow multiple file selection
+        * `master`: parent widget of the window
+        * `command`: callback function
+        """
+        warnings.warn(
+            "This class is not fully implemented yet.", FutureWarning, 2)
+
+        if master is None:
+            master = tkinter._get_temp_root()
+
+        if filetypes is None:
+            filetypes = []
+
+        if is_dir:
+            mode = "dir"
+
+        common_args = {
+            "title": title,
+            "initialdir": initialdir,
+            "parent": master,
+        }
+        common_args2 = {
+            "initialfile": initialfile,
+            "filetypes": filetypes,
+            "defaultextension": defaultextension,
+        }
+
+        match mode:
+            case "open":
+                if multiple:
+                    file_paths = tkinter.filedialog.askopenfilenames(
+                        **common_args2,
+                        **common_args,
+                    )
+                else:
+                    file_path = tkinter.filedialog.askopenfilename(
+                        **common_args2,
+                        **common_args,
+                    )
+                    file_paths = file_path if file_path else None
+            case "save":
+                file_paths = tkinter.filedialog.asksaveasfilename(
+                    **common_args2,
+                    **common_args,
+                )
+            case "dir":
+                file_paths = tkinter.filedialog.askdirectory(
+                    **common_args,
+                )
+            case _:
+                file_paths = None
+
+        if command is not None and file_paths:
+            command(file_paths)
