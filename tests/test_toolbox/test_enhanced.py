@@ -1,4 +1,4 @@
-# pylint: disable=all
+# pylint: disable=C0111
 
 import importlib
 import pathlib

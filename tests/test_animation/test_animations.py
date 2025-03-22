@@ -1,4 +1,4 @@
-# pylint: disable=all
+# pylint: disable=C0111
 
 import tkinter
 import unittest
@@ -115,7 +115,7 @@ class TestAnimation(unittest.TestCase):
         an.stop()
 
 
-class TestMoveWindow_Tk(unittest.TestCase):
+class TestMoveWindowTk(unittest.TestCase):
 
     def setUp(self) -> None:
         self.tk = tkinter.Tk()

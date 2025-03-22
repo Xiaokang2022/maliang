@@ -1,4 +1,4 @@
-# pylint: disable=all
+# pylint: disable=C0111
 
 import contextlib
 import importlib
@@ -48,8 +48,10 @@ class TestCase(unittest.TestCase):
         manager._process_event("light")
         self.assertEqual(a, "light")
 
+        def func() -> None: ...
+
         manager.remove_event(callback)
-        manager.register_event(f := lambda: None)
+        manager.register_event(func)
 
         with io.StringIO() as captured_output:
             with contextlib.redirect_stderr(captured_output):
@@ -57,7 +59,7 @@ class TestCase(unittest.TestCase):
 
             self.assertTrue(bool(captured_output.getvalue()))
 
-        manager.remove_event(f)
+        manager.remove_event(func)
 
     @unittest.skipUnless(platform.system() == "Windows", "Only works on Windows OS.")
     def test_apply_theme(self) -> None:
@@ -97,7 +99,7 @@ class TestCase(unittest.TestCase):
         importlib.reload(manager)
 
     @unittest.skipUnless(platform.system() == "Windows", "Only works on Windows OS.")
-    def test_apply_theme_on_Windows10(self) -> None:
+    def test_apply_theme_on_windows10(self) -> None:
         with unittest.mock.patch("platform.win32_ver", return_value=('10', '10.0.19041', 'multiprocessor Free')):
             manager.apply_theme(self.tk, theme="normal")
 
