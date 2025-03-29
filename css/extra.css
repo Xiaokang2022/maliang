@@ -90,6 +90,10 @@ figcaption {
     .md-tooltip2 {
         display: none;
     }
+
+    .statistics {
+        display: none;
+    }
 }
 
 /*屏幕过窄时隐藏音乐播放器*/
