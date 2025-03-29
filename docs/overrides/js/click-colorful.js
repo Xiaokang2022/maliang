@@ -5,7 +5,7 @@
   var defaultParams = {
     colors: ['#eb125f', '#6eff8a', '#6386ff', '#f9f383'],
     size: 10,
-    maxCount: 30
+    maxCount: 24
   }
   function colorBall(params) {
     this.params = Object.assign({}, defaultParams, params)
