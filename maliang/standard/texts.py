@@ -309,11 +309,11 @@ class SingleLineText(virtual.Text):
 
             if index + len(value) == self.text_proxy.length():
                 # Insert at the end
-                while self._is_overflow():
+                while self._is_overflow() and self.text_proxy.length():
                     self.text_proxy.remove(0)
                     self.left += 1
             else:
-                while self._is_overflow():
+                while self._is_overflow() and self.text_proxy.length():
                     self.text_proxy.remove(-1)
                     self.right -= 1
 
