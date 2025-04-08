@@ -87,8 +87,6 @@ class Tk(tkinter.Tk, Misc):
 
         self.light, self.dark = self.light.copy(), self.dark.copy()
 
-        self.update()  # wm_iconbitmap will not take effect without this line
-
         self._icon: str | enhanced.PhotoImage | None = icon
 
         if icon is not None:
@@ -243,6 +241,7 @@ class Tk(tkinter.Tk, Misc):
 
         * `value`: the icon
         """
+        self.update()  # wm_iconbitmap will not take effect without this line
         self._icon = value
 
         if isinstance(value, enhanced.PhotoImage):
