@@ -265,8 +265,8 @@ class SingleLineText(virtual.Text):
         """Get the size of the spacing between the text and the border"""
         if self.items:
             _, y1, _, y2 = self.widget.master.bbox(self.items[0])
-            return (self.size[1] - (y2-y1)) / 2
-        return (self.size[1] - abs(self.font.cget("size"))) / 2
+            return max(0, self.size[1] - (y2-y1)) / 2
+        return max(0, self.size[1] - abs(self.font.cget("size"))) / 2
 
     def _is_overflow(self) -> bool:
         """Whether the text content extends beyond the text box"""
