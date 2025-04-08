@@ -471,6 +471,26 @@ class InputBox(virtual.Widget):
         """Clear the text value of the Entry"""
         self.texts[0].clear()
 
+    @typing_extensions.override
+    def update(
+        self,
+        state: str | None = None,
+        *,
+        gradient_animation: bool | None = None,
+        nested: bool = True,
+    ) -> None:
+        """Update the widget.
+
+        * `state`: state of the widget
+        * `gradient_animation`: whether use gradient animation
+        * `nested`: whether nested
+        """
+        super().update(
+            state, gradient_animation=gradient_animation, nested=nested)
+
+        if state == "disabled" and self.master.focus() == self.texts[0].items[0]:
+            self.master.focus("")
+
 
 class CheckBox(virtual.Widget):
     """Checkbox button widget, generally used to check some options"""
