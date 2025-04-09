@@ -12,6 +12,28 @@
 > * 🟠 **Deprecated / 弃用**
 > * 🟤 **Refactored / 重构**
 
+## 🔖 `3.0.4`
+
+🕓 *Release Date / 发布日期 : 2025-04-09*
+
+🟣 **Fixed / 修复**
+
+* Fix a bug where the cursor still flashes when widget `InputBox` is disabled  
+修复了控件 `InputBox` 在禁用后光标仍然闪烁的 bug  
+Issue: #92
+
+* Fix an issue where the widget `InputBox` is freezing in some cases when entering text  
+修复了控件 `InputBox` 在高度设置比较大的时候，限制文本长度将导致程序卡死的 bug  
+Issue: #100
+
+* Fix a bug where the text of widget `InputBox` will extend beyond the text box  
+修复了控件 `InputBox` 的文本会超出文本框边界的 bug  
+Issue: #101
+
+* Partially fix a bug that cause the window to flicker when it started  
+部分修复了窗口在启动时会闪烁的 bug  
+Issue: #102
+
 ## 🔖 `3.0.3`
 
 🕓 *Release Date / 发布日期 : 2025-03-20*

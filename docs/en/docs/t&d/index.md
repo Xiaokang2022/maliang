@@ -9,7 +9,7 @@ icon: material/bookshelf
 
 !!! success inline "3.0.x"
 
-    * Latest version: `3.0.3`
+    * Latest version: `3.0.4`
     * Version type: Stable
     * Updating status: 🟢 <font color="limegreen">OK</font>
 
