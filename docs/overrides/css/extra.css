@@ -85,6 +85,21 @@ figcaption {
     margin: 0 0;
 }
 
+/*代码块非高亮行模糊，鼠标移上去变清晰*/
+.blur.highlight .hll {
+    background-color: unset;
+    box-shadow: unset;
+}
+
+.blur .md-code__content>span>span:not(.hll) {
+    filter: blur(1.8px);
+    transition: filter 0.3s ease;
+}
+
+.blur .md-code__content:hover>span>span:not(.hll) {
+    filter: none;
+}
+
 /*打印时隐藏部分元素*/
 @media print {
     .md-tooltip2 {
