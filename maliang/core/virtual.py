@@ -12,7 +12,7 @@ and `Image`.
 abstract base class `Elements`.
 """
 
-from __future__ import annotations
+from __future__ import annotations as _annotations
 
 __all__ = [
     "Element",
@@ -25,7 +25,6 @@ __all__ = [
 ]
 
 import abc
-import collections.abc
 import copy
 import math
 import re
@@ -41,8 +40,14 @@ import typing_extensions
 from ..animation import animations
 from ..color import convert, rgb
 from ..theme import manager
-from ..toolbox import enhanced
-from . import configs, containers
+from . import configs
+
+if typing.TYPE_CHECKING:
+
+    import collections.abc
+
+    from ..toolbox import enhanced
+    from . import containers
 
 
 class Element(abc.ABC):

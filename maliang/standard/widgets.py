@@ -1,6 +1,6 @@
 """All standard `Widget` classes"""
 
-from __future__ import annotations
+from __future__ import annotations as _annotations
 
 __all__ = [
     "Text",
@@ -25,7 +25,6 @@ __all__ = [
     "Tooltip",
 ]
 
-import collections.abc
 import itertools
 import math
 import typing
@@ -34,9 +33,16 @@ import warnings
 import typing_extensions
 
 from ..animation import animations, controllers
-from ..core import configs, containers, virtual
-from ..toolbox import enhanced, utility
+from ..core import configs, virtual
+from ..toolbox import utility
 from . import features, images, shapes, styles, texts
+
+if typing.TYPE_CHECKING:
+
+    import collections.abc
+
+    from ..core import containers
+    from ..toolbox import enhanced
 
 
 class Text(virtual.Widget):

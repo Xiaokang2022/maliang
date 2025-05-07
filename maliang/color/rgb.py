@@ -1,6 +1,6 @@
 """Some functions about RGB codes."""
 
-from __future__ import annotations
+from __future__ import annotations as _annotations
 
 __all__ = [
     "contrast",
@@ -9,10 +9,14 @@ __all__ = [
     "gradient",
 ]
 
-import collections.abc
 import statistics
+import typing
 
 from ..animation import controllers
+
+if typing.TYPE_CHECKING:
+
+    import collections.abc
 
 
 def contrast(

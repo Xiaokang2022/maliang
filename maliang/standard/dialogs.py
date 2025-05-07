@@ -1,6 +1,6 @@
 """All standard dialog classes"""
 
-from __future__ import annotations
+from __future__ import annotations as _annotations
 
 __all__ = [
     "TkMessage",
@@ -9,12 +9,15 @@ __all__ = [
     # "TkFileChooser",
 ]
 
-import collections.abc
 import tkinter
 import tkinter.colorchooser
 import tkinter.filedialog
 import typing
 import warnings
+
+if typing.TYPE_CHECKING:
+
+    import collections.abc
 
 
 def _get_temp_root() -> tkinter.Tk:

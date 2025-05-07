@@ -5,7 +5,7 @@ they will take effect globally for the program. Some changes take effect
 immediately, but some need to take effect when the relevant option is invoked.
 """
 
-from __future__ import annotations
+from __future__ import annotations as _annotations
 
 __all__ = [
     "Env",

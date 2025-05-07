@@ -10,7 +10,7 @@ def f(t: float) -> float: ...
 * return: real number, indicates a multiple of the cardinality of the animation
 """
 
-from __future__ import annotations
+from __future__ import annotations as _annotations
 
 __all__ = [
     "generate",
@@ -21,11 +21,14 @@ __all__ = [
     "ease_out",
 ]
 
-import collections.abc
 import functools
 import math
 import typing
 import warnings
+
+if typing.TYPE_CHECKING:
+
+    import collections.abc
 
 
 def _map_t(

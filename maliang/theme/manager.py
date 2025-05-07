@@ -6,7 +6,7 @@
 * hPyT: https://github.com/Zingzy/hPyT
 """
 
-from __future__ import annotations
+from __future__ import annotations as _annotations
 
 __all__ = [
     "set_color_mode",
@@ -18,12 +18,10 @@ __all__ = [
     "customize_window",
 ]
 
-import collections.abc
 import ctypes.wintypes
 import platform
 import sys
 import threading
-import tkinter
 import traceback
 import typing
 import warnings
@@ -59,6 +57,11 @@ try:
         import darkdetect
 except ImportError:
     darkdetect = None
+
+if typing.TYPE_CHECKING:
+
+    import collections.abc
+    import tkinter
 
 _callback_events: dict[collections.abc.Callable[..., typing.Any], tuple] = {}
 """Events that are responded to when the system theme changes."""

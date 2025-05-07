@@ -1,6 +1,6 @@
 """Mapping table between the color names and the RGB codes."""
 
-from __future__ import annotations
+from __future__ import annotations as _annotations
 
 __all__ = [
     "MAPPING_TABLE",

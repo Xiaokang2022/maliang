@@ -1,6 +1,6 @@
 """Some functions about HSL codes."""
 
-from __future__ import annotations
+from __future__ import annotations as _annotations
 
 __all__ = [
     "contrast",
@@ -9,11 +9,15 @@ __all__ = [
     "gradient",
 ]
 
-import collections.abc
 import math
 import statistics
+import typing
 
 from ..animation import controllers
+
+if typing.TYPE_CHECKING:
+
+    import collections.abc
 
 
 def contrast(

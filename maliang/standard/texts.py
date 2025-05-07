@@ -1,6 +1,6 @@
 """All standard `Text` classes"""
 
-from __future__ import annotations
+from __future__ import annotations as _annotations
 
 __all__ = [
     "Information",
@@ -15,7 +15,11 @@ import typing
 
 import typing_extensions
 
-from ..core import containers, virtual
+from ..core import virtual
+
+if typing.TYPE_CHECKING:
+
+    from ..core import containers
 
 
 class _CanvasTextProxy:

@@ -7,7 +7,7 @@ There is another container at the canvas level: `Canvas`. `Canvas` is the main
 container carrier.
 """
 
-from __future__ import annotations
+from __future__ import annotations as _annotations
 
 __all__ = [
     "Tk",
@@ -16,7 +16,6 @@ __all__ = [
 ]
 
 import abc
-import collections.abc
 import functools
 import sys
 import tkinter
@@ -28,7 +27,13 @@ import typing_extensions
 
 from ..theme import manager
 from ..toolbox import enhanced, utility
-from . import configs, virtual
+from . import configs
+
+if typing.TYPE_CHECKING:
+
+    import collections.abc
+
+    from . import virtual
 
 
 class Misc(abc.ABC):

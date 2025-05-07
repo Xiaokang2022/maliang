@@ -1,6 +1,6 @@
 """All standard `Style` classes"""
 
-from __future__ import annotations
+from __future__ import annotations as _annotations
 
 __all__ = [
     "ButtonStyle",
@@ -23,12 +23,15 @@ __all__ = [
 ]
 
 import copy
-import types
 import typing
 
 import typing_extensions
 
 from ..core import virtual
+
+if typing.TYPE_CHECKING:
+
+    import types
 
 
 class TextStyle(virtual.Style):

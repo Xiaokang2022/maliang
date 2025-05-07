@@ -1,6 +1,6 @@
 """Some useful utility classes or utility functions."""
 
-from __future__ import annotations
+from __future__ import annotations as _annotations
 
 __all__ = [
     "get_parent",
@@ -13,7 +13,6 @@ __all__ = [
 ]
 
 import atexit
-import collections.abc
 import ctypes
 import os
 import platform
@@ -31,6 +30,10 @@ try:
     from PIL import Image
 except ImportError:
     Image = None
+
+if typing.TYPE_CHECKING:
+
+    import collections.abc
 
 
 class Trigger:

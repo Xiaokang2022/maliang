@@ -1,6 +1,6 @@
 """All standard `Feature` classes"""
 
-from __future__ import annotations
+from __future__ import annotations as _annotations
 
 __all__ = [
     "LabelFeature",
@@ -18,8 +18,6 @@ __all__ = [
     "SpinBoxFeature",
 ]
 
-import collections.abc
-import tkinter
 import typing
 
 import typing_extensions
@@ -28,6 +26,11 @@ from ..animation import animations, controllers
 from ..core import virtual
 from ..standard import shapes
 from ..toolbox import utility
+
+if typing.TYPE_CHECKING:
+
+    import collections.abc
+    import tkinter
 
 
 class LabelFeature(virtual.Feature):

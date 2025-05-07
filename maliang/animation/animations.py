@@ -4,7 +4,7 @@ The animation base class can be inherited or called directly. Other standard
 animation classes are best used by direct calls, rather than inheritance.
 """
 
-from __future__ import annotations
+from __future__ import annotations as _annotations
 
 __all__ = [
     "Animation",
@@ -18,13 +18,18 @@ __all__ = [
     "ScaleFontSize",
 ]
 
-import collections.abc
-import tkinter
 import typing
 
 from ..color import convert, rgb
-from ..core import configs, containers, virtual
+from ..core import configs, containers
 from . import controllers
+
+if typing.TYPE_CHECKING:
+
+    import collections.abc
+    import tkinter
+
+    from ..core import virtual
 
 
 class Animation:
