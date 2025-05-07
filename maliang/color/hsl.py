@@ -64,7 +64,7 @@ def blend(
     colors = zip(*values)
 
     if weights is None:  # Same weights
-        return tuple(map(statistics.mean, colors))
+        return tuple(map(statistics.fmean, colors))
 
     total = sum(weights)
     weights = tuple(map(lambda x: x/total, weights))  # Different weights
