@@ -54,42 +54,52 @@ markdown_extensions:
 
   ###### PyMdown Extensions 配置（markdown 扩展语法）
 
-  # - pymdownx.pathconverter # 相对链接转绝对链接【?】
-  # - pymdownx.b64 # 允许使用 base64 编码【?】
-
+  # - pymdownx.b64 # 普通网站用不到，详见 PyMdown 文档
+  # - pymdownx.pathconverter # 普通网站用不到，详见 PyMdown 文档
   # - pymdownx.progressbar # 进度条（暂不支持）
-
   # - pymdownx.striphtml # 去除 HTML 中不需要的注释和 / 或标记属性，与插件 minify 有交叉但没有完全覆盖【别启用，大坑】
 
   - pymdownx.extra # 见上面 Python Markdown 配置说明
 
-  - pymdownx.blocks.tab # 支持更高级的标签块写法（可能与 pymdownx.tabbed 混淆）
-  - pymdownx.blocks.html # 支持一些更高级的 Markdown 内嵌 HTML 语法（pymdownx.blocks 默认开启）
-  - pymdownx.blocks.details # 支持更高级的提示框布局（可能与 pymdownx.details 混淆）
-  - pymdownx.blocks.definition # 支持更高级的定义块语法（可能与 def_list 混淆）
   - pymdownx.blocks.admonition # 支持更高级提示框语法（可能与 admonition 混淆）
+  - pymdownx.blocks.caption # 支持更高级标题语法
+  - pymdownx.blocks.definition # 支持更高级的定义块语法（可能与 def_list 混淆）
+  - pymdownx.blocks.details # 支持更高级的提示框布局（可能与 pymdownx.details 混淆）
+  - pymdownx.blocks.html # 支持一些更高级的 Markdown 内嵌 HTML 语法（pymdownx.blocks 默认开启）
+  - pymdownx.blocks.tab # 支持更高级的标签块写法（可能与 pymdownx.tabbed 混淆）
 
-  - pymdownx.saneheaders # 理智标题，“#”和标题间必须有空格
-  - pymdownx.smartsymbols # 智能符号优化，比上面的 smarty 支持更多
+  - pymdownx.betterem # 斜体与粗体优化，更好的嵌套使用
+  - pymdownx.caret # 文本下划线及上标
+  - pymdownx.critic # 支持 Critic Markup 语法
+  - pymdownx.details # 支持提示框的折叠
+  - pymdownx.fancylists  # 高级列表
   - pymdownx.inlinehilite # 行内代码高亮
   - pymdownx.keys # 按键高亮优化，增加图标
-  - pymdownx.details # 支持提示框的折叠
   - pymdownx.mark # 文本高亮
-  - pymdownx.caret # 文本下划线及上标
+  - pymdownx.saneheaders # 理智标题，“#”和标题间必须有空格
+  - pymdownx.smartsymbols # 智能符号优化，比上面的 smarty 支持更多
   - pymdownx.tilde # 文本删除线及下标
-  - pymdownx.betterem # 斜体与粗体优化，更好的嵌套使用
 
   - pymdownx.arithmatex: # 数学表达式
       generic: true
 
-  - pymdownx.snippets: # 外部片段插入
-      url_download: true # 远程文件下载
-      url_timeout: 10.0 # 超时时长（默认值）
-      url_max_size: 33554432 # 文件大小限制（默认值），32MiB
+  - pymdownx.emoji: # Emoji 表情
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
 
   - pymdownx.escapeall: # 转义一切
       hardbreak: true # 转义换行符会变成间断 <br>
       nbsp: true # 空格转义会变成无间隔空格 &nbsp;
+
+  - pymdownx.highlight: # 代码高亮
+      use_pygments: true # 使用 Pygments 而不是 JavaScript 来渲染高亮
+      linenums: true # 显示行号（默认值）
+      anchor_linenums: true # 用锚链接包装代码行号，便于超链接和共享（就是行号可以像锚点一样被点击）
+      line_spans: __span # 这对于高亮功能正常工作至关重要
+      pygments_lang_class: true # 对于自定义注释标记的运行至关重要
+      # pygments_style: one-dark # 代码高亮风格，见 https://pygments.org/styles/
+      # noclasses: true  # 使用 pygments_style 必须开启
+      # auto_title: true # 自动为所有代码块添加一个标题
 
   - pymdownx.magiclink: # 魔术链接，自动识别链接
       user: "Xiaokang2022" # 可缺省的用户名
@@ -101,25 +111,10 @@ markdown_extensions:
       social_url_shortener: true # 社交账号等链接简短显示
       normalize_issue_symbols: true # 规范化 Issue、PR 等链接的表示为 #
 
-  - pymdownx.critic: # 文本评论
-      mode: view # view 显示差异，accept 显示修改后，reject 显示修改前
-
-  - pymdownx.tasklist: # 任务列表
-      custom_checkbox: true # 允许修改复选框样式（默认已修改）
-      clickable_checkbox: true # 允许点击复选框
-
-  - pymdownx.highlight: # 代码高亮
-      use_pygments: true # 使用 Pygments 而不是 JavaScript 来渲染高亮
-      linenums: true # 显示行号（默认值）
-      linenums_style: table # 行号样式 pymdownx-inline 或者 inline 和 table
-      anchor_linenums: true # 用锚链接包装代码行号，便于超链接和共享（就是行号可以像锚点一样被点击）
-      line_spans: __span # 这对于高亮功能正常工作至关重要
-      pygments_lang_class: true # 对于自定义注释标记的运行至关重要
-      # auto_title: true # 自动为所有代码块添加一个标题
-
-  - pymdownx.emoji: # Emoji 表情
-      emoji_index: !!python/name:material.extensions.emoji.twemoji
-      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+  - pymdownx.snippets: # 外部片段插入
+      url_download: true # 远程文件下载
+      url_timeout: 10.0 # 超时时长（默认值）
+      url_max_size: 33554432 # 文件大小限制（默认值），32MiB
 
   - pymdownx.superfences: # 各种嵌套
       disable_indented_code_blocks: false # 禁用缩进代码块（默认值）
@@ -134,6 +129,9 @@ markdown_extensions:
       combine_header_slug: true # 选项卡 URL 带上父标题的前缀
       separator: "-" # 分隔符（默认值），替换空格字符
       slugify: !!python/object/apply:pymdownx.slugs.slugify {}
+
+  - pymdownx.tasklist: # 任务列表
+      custom_checkbox: true # 允许修改复选框样式（默认已修改）
 
 theme: # 此项各个设定因主题而异
   name: material # 主题名称
