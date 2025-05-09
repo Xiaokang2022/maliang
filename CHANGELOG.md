@@ -12,6 +12,18 @@
 > * 🟠 **Deprecated / 弃用**
 > * 🟤 **Refactored / 重构**
 
+## 🔖 `3.0.5`
+
+🕓 *Release Date / 发布日期 : 2025-05-10*
+
+🔵 **Optimized / 优化**
+
+* Improve the performance of functions `color.rgb.blend` and `color.hsl.blend`  
+提高了函数 `color.rgb.blend` 和 `color.hsl.blend` 的性能
+
+* Optimize part of the import, increasing the import speed.  
+优化部分导入，提高导入速度
+
 ## 🔖 `3.0.4`
 
 🕓 *Release Date / 发布日期 : 2025-04-09*
