@@ -1,6 +1,6 @@
 """Some useful utility classes or utility functions."""
 
-from __future__ import annotations as _annotations
+from __future__ import annotations as _
 
 __all__ = [
     "get_parent",
@@ -32,7 +32,6 @@ except ImportError:
     Image = None
 
 if typing.TYPE_CHECKING:
-
     import collections.abc
 
 

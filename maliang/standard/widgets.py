@@ -1,6 +1,6 @@
 """All standard `Widget` classes"""
 
-from __future__ import annotations as _annotations
+from __future__ import annotations as _
 
 __all__ = [
     "Text",
@@ -38,7 +38,6 @@ from ..toolbox import utility
 from . import features, images, shapes, styles, texts
 
 if typing.TYPE_CHECKING:
-
     import collections.abc
 
     from ..core import containers

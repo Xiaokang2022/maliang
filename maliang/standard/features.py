@@ -1,6 +1,6 @@
 """All standard `Feature` classes"""
 
-from __future__ import annotations as _annotations
+from __future__ import annotations as _
 
 __all__ = [
     "LabelFeature",
@@ -28,7 +28,6 @@ from ..standard import shapes
 from ..toolbox import utility
 
 if typing.TYPE_CHECKING:
-
     import collections.abc
     import tkinter
 

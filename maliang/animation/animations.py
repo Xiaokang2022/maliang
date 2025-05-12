@@ -4,7 +4,7 @@ The animation base class can be inherited or called directly. Other standard
 animation classes are best used by direct calls, rather than inheritance.
 """
 
-from __future__ import annotations as _annotations
+from __future__ import annotations as _
 
 __all__ = [
     "Animation",
@@ -25,7 +25,6 @@ from ..core import configs, containers
 from . import controllers
 
 if typing.TYPE_CHECKING:
-
     import collections.abc
     import tkinter
 

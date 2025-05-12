@@ -7,7 +7,7 @@
 * NAME: string, such as 'royalblue'
 """
 
-from __future__ import annotations as _annotations
+from __future__ import annotations as _
 
 __all__ = [
     "rgb_to_hex",

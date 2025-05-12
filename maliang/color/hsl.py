@@ -1,6 +1,6 @@
 """Some functions about HSL codes."""
 
-from __future__ import annotations as _annotations
+from __future__ import annotations as _
 
 __all__ = [
     "contrast",
@@ -16,7 +16,6 @@ import typing
 from ..animation import controllers
 
 if typing.TYPE_CHECKING:
-
     import collections.abc
 
 

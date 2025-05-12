@@ -6,7 +6,7 @@
 * hPyT: https://github.com/Zingzy/hPyT
 """
 
-from __future__ import annotations as _annotations
+from __future__ import annotations as _
 
 __all__ = [
     "set_color_mode",
@@ -59,7 +59,6 @@ except ImportError:
     darkdetect = None
 
 if typing.TYPE_CHECKING:
-
     import collections.abc
     import tkinter
 

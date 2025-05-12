@@ -1,6 +1,6 @@
 """Enhanced versions of some tkinter classes and functions."""
 
-from __future__ import annotations as _annotations
+from __future__ import annotations as _
 
 __all__ = [
     "PhotoImage",

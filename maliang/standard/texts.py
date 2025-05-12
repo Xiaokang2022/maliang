@@ -1,6 +1,6 @@
 """All standard `Text` classes"""
 
-from __future__ import annotations as _annotations
+from __future__ import annotations as _
 
 __all__ = [
     "Information",
@@ -18,7 +18,6 @@ import typing_extensions
 from ..core import virtual
 
 if typing.TYPE_CHECKING:
-
     from ..core import containers
 
 
