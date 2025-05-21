@@ -18,6 +18,7 @@ __all__ = [
     "ScaleFontSize",
 ]
 
+import collections.abc
 import typing
 
 from ..color import convert, rgb
@@ -25,7 +26,6 @@ from ..core import configs, containers
 from . import controllers
 
 if typing.TYPE_CHECKING:
-    import collections.abc
     import tkinter
 
     from ..core import virtual
@@ -239,9 +239,37 @@ class MoveTkWidget(Animation):
 class MoveWidget(Animation):
     """Animation of moving `virtual.Widget`."""
 
+    @typing.overload
     def __init__(
         self,
         widget: virtual.Widget,
+        offset: tuple[float, float],
+        duration: int,
+        *,
+        controller: collections.abc.Callable[[float], float] = controllers.linear,
+        end: collections.abc.Callable[[], typing.Any] | None = None,
+        fps: int = 30,
+        repeat: int = 0,
+        repeat_delay: int = 0,
+    ) -> None: ...
+
+    @typing.overload
+    def __init__(
+        self,
+        widget: collections.abc.Sequence[virtual.Widget],
+        offset: tuple[float, float],
+        duration: int,
+        *,
+        controller: collections.abc.Callable[[float], float] = controllers.linear,
+        end: collections.abc.Callable[[], typing.Any] | None = None,
+        fps: int = 30,
+        repeat: int = 0,
+        repeat_delay: int = 0,
+    ) -> None: ...
+
+    def __init__(
+        self,
+        widget: virtual.Widget | collections.abc.Sequence[virtual.Widget],
         offset: tuple[float, float],
         duration: int,
         *,
@@ -261,8 +289,17 @@ class MoveWidget(Animation):
         * `repeat`: number of repetitions of the animation
         * `repeat_delay`: length of the delay before the animation repeats
         """
+        if isinstance(widget, collections.abc.Sequence):
+            def command(p: float) -> None:
+                dx, dy = offset[0]*p, offset[1]*p
+                for w in widget:
+                    w.move(dx, dy)
+        else:
+            def command(p: float) -> None:
+                widget.move(offset[0]*p, offset[1]*p)
+
         Animation.__init__(
-            self, duration, lambda p: widget.move(offset[0]*p, offset[1]*p),
+            self, duration, command,
             controller=controller, end=end, fps=fps, repeat=repeat,
             repeat_delay=repeat_delay, derivation=True,
         )
@@ -271,9 +308,37 @@ class MoveWidget(Animation):
 class MoveElement(Animation):
     """Animation of moving `virtual.Element`."""
 
+    @typing.overload
     def __init__(
         self,
         element: virtual.Element,
+        offset: tuple[float, float],
+        duration: int,
+        *,
+        controller: collections.abc.Callable[[float], float] = controllers.linear,
+        end: collections.abc.Callable[[], typing.Any] | None = None,
+        fps: int = 30,
+        repeat: int = 0,
+        repeat_delay: int = 0,
+    ) -> None: ...
+
+    @typing.overload
+    def __init__(
+        self,
+        element: collections.abc.Sequence[virtual.Element],
+        offset: tuple[float, float],
+        duration: int,
+        *,
+        controller: collections.abc.Callable[[float], float] = controllers.linear,
+        end: collections.abc.Callable[[], typing.Any] | None = None,
+        fps: int = 30,
+        repeat: int = 0,
+        repeat_delay: int = 0,
+    ) -> None: ...
+
+    def __init__(
+        self,
+        element: virtual.Element | collections.abc.Sequence[virtual.Element],
         offset: tuple[float, float],
         duration: int,
         *,
@@ -293,8 +358,17 @@ class MoveElement(Animation):
         * `repeat`: number of repetitions of the animation
         * `repeat_delay`: length of the delay before the animation repeats
         """
+        if isinstance(element, collections.abc.Sequence):
+            def command(p: float) -> None:
+                dx, dy = offset[0]*p, offset[1]*p
+                for e in element:
+                    e.move(dx, dy)
+        else:
+            def command(p: float) -> None:
+                element.move(offset[0]*p, offset[1]*p)
+
         Animation.__init__(
-            self, duration, lambda p: element.move(offset[0]*p, offset[1]*p),
+            self, duration, command,
             controller=controller, end=end, fps=fps, repeat=repeat,
             repeat_delay=repeat_delay, derivation=True,
         )
@@ -303,10 +377,40 @@ class MoveElement(Animation):
 class MoveItem(Animation):
     """Animation of moving a item of `tkinter.Canvas`."""
 
+    @typing.overload
     def __init__(
         self,
         canvas: tkinter.Canvas | containers.Canvas,
         item: int,
+        offset: tuple[float, float],
+        duration: int,
+        *,
+        controller: collections.abc.Callable[[float], float] = controllers.linear,
+        end: collections.abc.Callable[[], typing.Any] | None = None,
+        fps: int = 30,
+        repeat: int = 0,
+        repeat_delay: int = 0,
+    ) -> None: ...
+
+    @typing.overload
+    def __init__(
+        self,
+        canvas: tkinter.Canvas | containers.Canvas,
+        item: collections.abc.Sequence[int],
+        offset: tuple[float, float],
+        duration: int,
+        *,
+        controller: collections.abc.Callable[[float], float] = controllers.linear,
+        end: collections.abc.Callable[[], typing.Any] | None = None,
+        fps: int = 30,
+        repeat: int = 0,
+        repeat_delay: int = 0,
+    ) -> None: ...
+
+    def __init__(
+        self,
+        canvas: tkinter.Canvas | containers.Canvas,
+        item: int | collections.abc.Sequence[int],
         offset: tuple[float, float],
         duration: int,
         *,
@@ -327,9 +431,17 @@ class MoveItem(Animation):
         * `repeat`: number of repetitions of the animation
         * `repeat_delay`: length of the delay before the animation repeats
         """
+        if isinstance(item, collections.abc.Sequence):
+            def command(p: float) -> None:
+                dx, dy = offset[0]*p, offset[1]*p
+                for i in item:
+                    canvas.move(i, dx, dy)
+        else:
+            def command(p: float) -> None:
+                canvas.move(item, offset[0]*p, offset[1]*p)
+
         Animation.__init__(
-            self, duration, lambda p: canvas.move(
-                item, offset[0]*p, offset[1]*p),
+            self, duration, command,
             controller=controller, end=end, fps=fps, repeat=repeat,
             repeat_delay=repeat_delay, derivation=True,
         )
@@ -338,9 +450,41 @@ class MoveItem(Animation):
 class GradientTkWidget(Animation):
     """Animation of making the color of `tkinter.Widget` to be gradient."""
 
+    @typing.overload
     def __init__(
         self,
         widget: tkinter.Widget,
+        parameter: str,
+        colors: tuple[str, str],
+        duration: int,
+        *,
+        controller: collections.abc.Callable[[float], float] = controllers.linear,
+        end: collections.abc.Callable[[], typing.Any] | None = None,
+        fps: int = 30,
+        repeat: int = 0,
+        repeat_delay: int = 0,
+        derivation: bool = False,
+    ) -> None: ...
+
+    @typing.overload
+    def __init__(
+        self,
+        widget: collections.abc.Sequence[tkinter.Widget],
+        parameter: str,
+        colors: tuple[str, str],
+        duration: int,
+        *,
+        controller: collections.abc.Callable[[float], float] = controllers.linear,
+        end: collections.abc.Callable[[], typing.Any] | None = None,
+        fps: int = 30,
+        repeat: int = 0,
+        repeat_delay: int = 0,
+        derivation: bool = False,
+    ) -> None: ...
+
+    def __init__(
+        self,
+        widget: tkinter.Widget | collections.abc.Sequence[tkinter.Widget],
         parameter: str,
         colors: tuple[str, str],
         duration: int,
@@ -369,9 +513,18 @@ class GradientTkWidget(Animation):
 
         c1, c2 = convert.str_to_rgb(colors[0]), convert.str_to_rgb(colors[1])
 
+        if isinstance(widget, collections.abc.Sequence):
+            def command(p: float) -> None:
+                value = convert.rgb_to_hex(rgb.transition(c1, c2, p))
+                for w in widget:
+                    w.configure({parameter: value})
+        else:
+            def command(p: float) -> None:
+                widget.configure(
+                    {parameter: convert.rgb_to_hex(rgb.transition(c1, c2, p))})
+
         Animation.__init__(
-            self, duration, lambda p: widget.configure(
-                {parameter: convert.rgb_to_hex(rgb.transition(c1, c2, p))}),
+            self, duration, command,
             controller=controller, end=end, fps=fps, repeat=repeat,
             repeat_delay=repeat_delay, derivation=derivation,
         )
@@ -380,10 +533,44 @@ class GradientTkWidget(Animation):
 class GradientItem(Animation):
     """Animation of making the color of canvas item to be gradient."""
 
+    @typing.overload
     def __init__(
         self,
         canvas: tkinter.Canvas | containers.Canvas,
         item: int,
+        parameter: str,
+        colors: tuple[str, str],
+        duration: int,
+        *,
+        controller: collections.abc.Callable[[float], float] = controllers.linear,
+        end: collections.abc.Callable[[], typing.Any] | None = None,
+        fps: int = 30,
+        repeat: int = 0,
+        repeat_delay: int = 0,
+        derivation: bool = False,
+    ) -> None: ...
+
+    @typing.overload
+    def __init__(
+        self,
+        canvas: tkinter.Canvas | containers.Canvas,
+        item: collections.abc.Sequence[int],
+        parameter: str,
+        colors: tuple[str, str],
+        duration: int,
+        *,
+        controller: collections.abc.Callable[[float], float] = controllers.linear,
+        end: collections.abc.Callable[[], typing.Any] | None = None,
+        fps: int = 30,
+        repeat: int = 0,
+        repeat_delay: int = 0,
+        derivation: bool = False,
+    ) -> None: ...
+
+    def __init__(
+        self,
+        canvas: tkinter.Canvas | containers.Canvas,
+        item: int | collections.abc.Sequence[int],
         parameter: str,
         colors: tuple[str, str],
         duration: int,
@@ -413,9 +600,18 @@ class GradientItem(Animation):
 
         c1, c2 = convert.str_to_rgb(colors[0]), convert.str_to_rgb(colors[1])
 
+        if isinstance(item, collections.abc.Sequence):
+            def command(p: float) -> None:
+                value = convert.rgb_to_hex(rgb.transition(c1, c2, p))
+                for i in item:
+                    canvas.itemconfigure(i, {parameter: value})
+        else:
+            def command(p: float) -> None:
+                canvas.itemconfigure(
+                    item, {parameter: convert.rgb_to_hex(rgb.transition(c1, c2, p))})
+
         Animation.__init__(
-            self, duration, lambda p: canvas.itemconfigure(
-                item, {parameter: convert.rgb_to_hex(rgb.transition(c1, c2, p))}),
+            self, duration, command,
             controller=controller, end=end, fps=fps, repeat=repeat,
             repeat_delay=repeat_delay, derivation=derivation,
         )
