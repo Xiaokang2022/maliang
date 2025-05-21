@@ -188,14 +188,18 @@ class TestMoveWidget(unittest.TestCase):
         self.tk = containers.Tk()
         self.cv = containers.Canvas(self.tk)
         self.widget = widgets.Button(self.cv, (10, 10))
+        self.widget2 = widgets.Button(self.cv, (10, 10))
 
     def tearDown(self) -> None:
         self.an.stop()
+        self.an2.stop()
         self.tk.destroy()
 
     def test_init(self) -> None:
         self.an = animations.MoveWidget(self.widget, (99, 99), 99)
+        self.an2 = animations.MoveWidget((self.widget, self.widget2), (99, 99), 99)
         self.an.start()
+        self.an2.start()
 
 
 class TestMoveElement(unittest.TestCase):
@@ -207,11 +211,14 @@ class TestMoveElement(unittest.TestCase):
 
     def tearDown(self) -> None:
         self.an.stop()
+        self.an2.stop()
         self.tk.destroy()
 
     def test_init(self) -> None:
         self.an = animations.MoveElement(self.widget.elements[0], (99, 99), 99)
+        self.an2 = animations.MoveElement(self.widget.elements, (99, 99), 99)
         self.an.start()
+        self.an2.start()
 
 
 class TestMoveItem(unittest.TestCase):
@@ -220,14 +227,18 @@ class TestMoveItem(unittest.TestCase):
         self.tk = containers.Tk()
         self.cv = containers.Canvas(self.tk)
         self.item = self.cv.create_rectangle(10, 10, 20, 20)
+        self.item2 = self.cv.create_rectangle(10, 10, 20, 20)
 
     def tearDown(self) -> None:
         self.an.stop()
+        self.an2.stop()
         self.tk.destroy()
 
     def test_init(self) -> None:
         self.an = animations.MoveItem(self.cv, self.item, (99, 99), 99)
+        self.an2 = animations.MoveItem(self.cv, (self.item, self.item2), (99, 99), 99)
         self.an.start()
+        self.an2.start()
 
 
 class TestGradientTkWidget(unittest.TestCase):
@@ -235,14 +246,18 @@ class TestGradientTkWidget(unittest.TestCase):
     def setUp(self) -> None:
         self.tk = containers.Tk()
         self.widget = tkinter.Label(self.tk)
+        self.widget2 = tkinter.Label(self.tk)
 
     def tearDown(self) -> None:
         self.an.stop()
+        self.an2.stop()
         self.tk.destroy()
 
     def test_init(self) -> None:
         self.an = animations.GradientTkWidget(self.widget, "fill", ("red", "#00FF00"), 99)
+        self.an2 = animations.GradientTkWidget((self.widget, self.widget2), "fill", ("red", "#00FF00"), 99)
         self.an.start()
+        self.an2.start()
         self.assertRaises(ValueError, lambda: animations.GradientTkWidget(self.widget, "fill", ("", ""), 1000))
 
 
@@ -252,14 +267,18 @@ class TestGradientItem(unittest.TestCase):
         self.tk = containers.Tk()
         self.cv = tkinter.Canvas(self.tk)
         self.item = self.cv.create_rectangle(10, 10, 20, 20)
+        self.item2 = self.cv.create_rectangle(10, 10, 20, 20)
 
     def tearDown(self) -> None:
         self.an.stop()
+        self.an2.stop()
         self.tk.destroy()
 
     def test_init(self) -> None:
         self.an = animations.GradientItem(self.cv, self.item, "fill", ("red", "#0000FF"), 99)
+        self.an2 = animations.GradientItem(self.cv, (self.item, self.item2), "fill", ("red", "#0000FF"), 99)
         self.an.start()
+        self.an2.start()
         self.assertRaises(ValueError, lambda: animations.GradientItem(self.cv, self.item, "fill", ("", ""), 1000))
 
 
