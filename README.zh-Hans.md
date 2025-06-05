@@ -1,6 +1,3 @@
-> [!IMPORTANT]  
-> 本项目原名为 `tkintertools`，经社区[投票](https://github.com/Xiaokang2022/maliang/discussions/41)，已重命名为 `maliang`！🎉
-
 <h1 align="center">maliang</h1>
 
 <p align="center"><img src="docs/logo.png" alt="Logo" title="Logo" /></p>
