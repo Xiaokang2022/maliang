@@ -60,6 +60,7 @@ class Text(virtual.Widget):
         underline: bool = False,
         overstrike: bool = False,
         justify: typing.Literal["left", "center", "right"] = "left",
+        wrap_length: int | None = None,
         anchor: typing.Literal["n", "e", "w", "s", "nw", "ne", "sw", "se", "center"] = "nw",
         capture_events: bool | None = None,
         gradient_animation: bool | None = None,
@@ -77,6 +78,7 @@ class Text(virtual.Widget):
         * `underline`: whether the text is underline
         * `overstrike`: whether the text is overstrike
         * `justify`: justify mode of the text
+        * `wrap_length`: limit the length of text, beyond which it will automatically wrap
         * `anchor`: anchor of the widget
         * `capture_events`: whether detect another widget under the widget
         * `gradient_animation`: whether enable gradient_animation
@@ -92,8 +94,9 @@ class Text(virtual.Widget):
         if style is None:
             self.style = styles.TextStyle(self)
         texts.Information(
-            self, text=text, family=family, fontsize=fontsize, weight=weight, slant=slant,
-            underline=underline, overstrike=overstrike, justify=justify, anchor=anchor)
+            self, text=text, family=family, fontsize=fontsize, weight=weight,
+            slant=slant, underline=underline, overstrike=overstrike,
+            justify=justify, anchor=anchor, width=wrap_length)
 
     def get(self) -> str:
         """Get the text of the widget"""
