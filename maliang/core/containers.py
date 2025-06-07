@@ -186,8 +186,9 @@ class Tk(tkinter.Tk, Misc):
         self.configure(bg=getattr(self, value)["bg"])
 
         if sys.platform == "win32":  # Now only support for Windows OS
-            manager.apply_theme(
-                self, theme="dark" if value == "dark" else "normal")
+            if manager.pywinstyles is not None:  # Avoid warnings
+                manager.apply_theme(
+                    self, theme="dark" if value == "dark" else "normal")
 
         if include_children:
             for child in self.children.values():
