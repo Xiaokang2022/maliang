@@ -64,7 +64,7 @@ class _CanvasTextProxy:
         end = start + 1 if end is None else self._get_index(end)
         self.canvas.dchars(self.id, start, end - 1)  # including
 
-    def pop(self, index: int = -1) -> None:
+    def pop(self, index: int = -1) -> str:
         """Pop"""
         value = self.get()[index := self._get_index(index)]
         self.remove(index)
