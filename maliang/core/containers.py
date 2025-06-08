@@ -677,7 +677,7 @@ class Canvas(tkinter.Canvas, Misc):
     def on_motion(self, event: tkinter.Event, name: str) -> None:
         """Events to move the mouse"""
         self.trigger_config.reset()
-        for widget in self.widgets[::-1]:
+        for widget in reversed(self.widgets):
             if hasattr(widget, "feature") and not widget.disappeared:
                 flag = widget.feature.get_method(name)(event)
                 if widget.capture_events is None:
@@ -691,7 +691,7 @@ class Canvas(tkinter.Canvas, Misc):
         """Events to active the mouse"""
         self.focus_set()
         self.trigger_focus.reset()
-        for widget in self.widgets[::-1]:
+        for widget in reversed(self.widgets):
             if hasattr(widget, "feature") and not widget.disappeared:
                 if widget.feature.get_method(name)(event) and widget.capture_events:
                     event.x = 9999
@@ -699,7 +699,7 @@ class Canvas(tkinter.Canvas, Misc):
 
     def on_release(self, event: tkinter.Event, name: str) -> None:
         """Events to release the mouse"""
-        for widget in self.widgets[::-1]:
+        for widget in reversed(self.widgets):
             if hasattr(widget, "feature") and not widget.disappeared:
                 if widget.feature.get_method(name)(event) and widget.capture_events:
                     event.x = 9999
@@ -708,21 +708,21 @@ class Canvas(tkinter.Canvas, Misc):
         """Events to scroll the mouse wheel"""
         if type_ is not None:
             event.delta = 120 if type_ else -120
-        for widget in self.widgets[::-1]:
+        for widget in reversed(self.widgets):
             if hasattr(widget, "feature") and not widget.disappeared:
                 if widget.feature.get_method("<MouseWheel>")(event) and widget.capture_events:
                     event.x = 9999
 
     def on_key_press(self, event: tkinter.Event) -> None:
         """Events for typing"""
-        for widget in self.widgets[::-1]:
+        for widget in reversed(self.widgets):
             if hasattr(widget, "feature") and not widget.disappeared:
                 if widget.feature.get_method("<KeyPress>")(event) and widget.capture_events:
                     event.x = 9999
 
     def on_key_release(self, event: tkinter.Event) -> None:
         """Events for typing"""
-        for widget in self.widgets[::-1]:
+        for widget in reversed(self.widgets):
             if hasattr(widget, "feature") and not widget.disappeared:
                 if widget.feature.get_method("<KeyRelease>")(event) and widget.capture_events:
                     event.x = 9999
@@ -743,7 +743,7 @@ class Canvas(tkinter.Canvas, Misc):
         method once.
         """
         def handle_event(event: tkinter.Event) -> None:
-            for widget in self.widgets[::-1]:
+            for widget in reversed(self.widgets):
                 if hasattr(widget, "feature"):
                     if widget.feature.get_method(name)(event) and widget.capture_events:
                         pass
