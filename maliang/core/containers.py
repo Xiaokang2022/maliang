@@ -486,6 +486,10 @@ class Canvas(tkinter.Canvas, Misc):
         self._keep_ratio: typing.Literal["min", "max"] | None = keep_ratio
         self._zoom_all_items = zoom_all_items
 
+        self._focus_widget: virtual.Widget | None = None
+        self._focus_rect: int = self.create_rectangle(
+            0, 0, 0, 0, outline="red", width=0)
+
         self.trigger_focus = utility.Trigger(self.focus)
         self.trigger_config = utility.Trigger(lambda **kwargs: self.configure(
             **{k: v for k, v in kwargs.items() if self[k] != v}))
@@ -516,6 +520,9 @@ class Canvas(tkinter.Canvas, Misc):
             self.register_event(_n)
 
         self.bind("<Configure>", lambda _: self._zoom_self())
+
+        self.bind("<Tab>", self._highlight_focus_widget)
+        self.bind("<Shift-Tab>", self._highlight_focus_widget)
 
     @functools.cached_property
     def ratios(self) -> tuple[float, float]:
@@ -690,11 +697,14 @@ class Canvas(tkinter.Canvas, Misc):
     def on_click(self, event: tkinter.Event, name: str) -> None:
         """Events to active the mouse"""
         self.focus_set()
+        self._hide_focus_rect()
         self.trigger_focus.reset()
         for widget in reversed(self.widgets):
             if hasattr(widget, "feature") and not widget.disappeared:
-                if widget.feature.get_method(name)(event) and widget.capture_events:
-                    event.x = 9999
+                if widget.feature.get_method(name)(event):
+                    self._focus_widget = widget
+                    if widget.capture_events:
+                        event.x = 9999
         self.trigger_focus.update(True, "")
 
     def on_release(self, event: tkinter.Event, name: str) -> None:
@@ -749,3 +759,30 @@ class Canvas(tkinter.Canvas, Misc):
                         pass
 
         return self.bind(name, handle_event, add)
+
+    def _highlight_focus_widget(self, event: tkinter.Event) -> None:
+        """Highlight the widget that has focus."""
+        self._focus_widget = self._get_focus_widget(event)
+        if self._focus_widget is None:
+            return
+        x, y = self._focus_widget.position
+        w, h = self._focus_widget.size
+        self.tag_raise(self._focus_rect)
+        self.itemconfigure(self._focus_rect, width=2)
+        self.coords(self._focus_rect, x, y, x+w, y+h)
+
+    def _get_focus_widget(self, event: tkinter.Event) -> virtual.Widget | None:
+        """Get the widget that has focus."""
+        if not self.widgets:
+            return None
+        if self._focus_widget not in self.widgets:
+            return self.widgets[0]
+        delta = -1 if int(event.state) & 0x0001 else 1
+        index = self.widgets.index(self._focus_widget) + delta
+        return self.widgets[index % len(self.widgets)]
+
+    def _hide_focus_rect(self) -> None:
+        """Hide the focus rectangle."""
+        self._focus_widget = None
+        self.tag_lower(self._focus_rect)
+        self.itemconfigure(self._focus_rect, width=0)
