@@ -840,7 +840,7 @@ class Widget:
         state: str | None = None,
         *,
         gradient_animation: bool | None = None,
-        nested: bool = True,
+        nested: bool = False,
     ) -> None:
         """Update the widget.
 
