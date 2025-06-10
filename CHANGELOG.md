@@ -12,6 +12,46 @@
 > * 🟠 **Deprecated / 弃用**
 > * 🟤 **Refactored / 重构**
 
+## 🔖 `3.1.0`
+
+🕓 *Release Date / 发布日期 : 2025-06-10*
+
+🟢 **Added / 新增**
+
+* Some animation classes can take effect on multiple objects at the same time  
+一些动画类可以对多个对象同时生效  
+Issue: #106
+
+* Add method `lift` to class `virtual.Widget`  
+类 `virtual.Widget` 新增方法 `lift`  
+Issue: #116
+
+* Add the ability for widget `Text` to set the length of character wrapping  
+给控件 `Text` 增加能够设置自动换行的字符长度的功能  
+Issue: #97
+
+* Some functionalities for operating widgets using the keyboard have been implemented  
+实现了一些使用键盘操作控件的功能  
+Issue: #70 (*Partially Resolved*)
+
+🟣 **Fixed / 修复**
+
+* Fix a bug that generating unexpected warnings  
+修复了生成非预期警告的 bug  
+Issue: #117
+
+* Fix an exception caused by inconsistent state parameters when updating nested widgets  
+修复更新嵌套控件时状态参数不一致导致的异常  
+Issue: #113
+
+* Fix a wrong type hint  
+修复一个错误的类型提示
+
+🔵 **Optimized / 优化**
+
+* Reduce memory usage and improve responsiveness  
+降低内存使用量并提高事件响应速度
+
 ## 🔖 `3.0.5`
 
 🕓 *Release Date / 发布日期 : 2025-05-10*
@@ -21,7 +61,7 @@
 * Improve the performance of functions `color.rgb.blend` and `color.hsl.blend`  
 提高了函数 `color.rgb.blend` 和 `color.hsl.blend` 的性能
 
-* Optimize part of the import, increasing the import speed.  
+* Optimize part of the import, increasing the import speed  
 优化部分导入，提高导入速度
 
 ## 🔖 `3.0.4`
