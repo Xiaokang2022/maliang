@@ -114,7 +114,7 @@ class Oval(virtual.Shape):
         self.widget.master.coords(self.items[0], *self.region())
 
     @typing_extensions.override
-    def detect(self, x: int, y: int) -> bool:
+    def detect(self, x: float, y: float) -> bool:
         """Detect whether the specified coordinates are within `Element`"""
         x1, y1, w, h = *self.position, *self.size
         return math.hypot(2*(x-x1)/w - 1, 2*(y-y1)/h - 1) <= 1
@@ -462,7 +462,7 @@ class SemicircularRectangle(virtual.Shape):
         self.widget.master.coords(self.items[6], x1+r, y2, x2-r+1, y2)
 
     @typing_extensions.override
-    def detect(self, x: int, y: int) -> bool:
+    def detect(self, x: float, y: float) -> bool:
         """Detect whether the specified coordinates are within `Element`"""
         x1, y1, w, h = *self.position, *self.size
         r = h / 2

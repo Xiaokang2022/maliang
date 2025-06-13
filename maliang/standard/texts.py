@@ -9,9 +9,9 @@ __all__ = [
 
 import bisect
 import itertools
-import math
 import tkinter.font
 import typing
+import warnings
 
 import typing_extensions
 
@@ -112,8 +112,7 @@ class _CanvasTextProxy:
 
     def cursor_find(self, x: int) -> int:
         """cursor find"""
-        x1, *_ = self.canvas.bbox(self.id)
-        x -= x1 + 1
+        x -= self.canvas.bbox(self.id)[0] + 1
         font = tkinter.font.Font(font=self.canvas.itemcget(self.id, "font"))
         index = bisect.bisect_right(tuple(itertools.accumulate(self.get())), x, key=font.measure)
 
@@ -186,8 +185,8 @@ class SingleLineText(virtual.Text):
         size: tuple[int, int] | None = None,
         *,
         text: str = "",
-        ignore: tuple[str, ...] = ("\n", "\r"),
-        limit: int = math.inf,
+        ignore: tuple[str, ...] | str = "\n\r",
+        limit: int = -1,
         limit_width: int = 0,
         show: str | None = None,
         placeholder: str = "",
@@ -303,7 +302,7 @@ class SingleLineText(virtual.Text):
         if not self.text_proxy.length() and value:
             self.widget.master.itemconfigure(self.items[1], fill="")
 
-        if flag := len(self.text + value) <= self.limit:
+        if flag := len(self.text) + len(value) <= self.limit or self.limit <= 0:
             index = self._get_index(index)
             key = self.left + index
             self.text = self.text[:key] + value + self.text[key:]
@@ -404,6 +403,9 @@ class SingleLineText(virtual.Text):
     def cursor_move(self, count: int) -> None:
         """Move the index position of the text cursor"""
         index = self.text_proxy.cursor_get()
+        if index is None:
+            warnings.warn("Can not move the cursor.", RuntimeWarning, 2)
+            return
         if count < 0 < index:
             self.text_proxy.cursor_set(index + count)
         elif 0 < count and index < self.text_proxy.length():
@@ -415,4 +417,8 @@ class SingleLineText(virtual.Text):
 
     def cursor_move_to(self, count: int) -> None:
         """Move the index position of the text cursor to a certain index"""
-        return self.cursor_move(count - self.text_proxy.cursor_get())
+        index = self.text_proxy.cursor_get()
+        if index is None:  # HACK: Duplicate shit code!
+            warnings.warn("Can not move the cursor.", RuntimeWarning, 2)
+            return None
+        return self.cursor_move(count-index)

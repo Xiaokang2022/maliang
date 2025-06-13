@@ -396,7 +396,7 @@ class InputBox(virtual.Widget):
         placeholder: str = "",
         show: str | None = None,
         ignore: tuple[str, ...] = ("\n", "\r"),
-        limit: int = math.inf,
+        limit: int = -1,
         limit_width: int = 0,
         image: enhanced.PhotoImage | None = None,
         anchor: typing.Literal["n", "e", "w", "s", "nw", "ne", "sw", "se", "center"] = "nw",
