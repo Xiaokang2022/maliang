@@ -13,6 +13,11 @@ import maliang
 from maliang.core import configs, containers
 from maliang.toolbox import utility
 
+try:
+    import PIL
+except ImportError:
+    PIL = None
+
 
 class TestTrigger(unittest.TestCase):
 
@@ -100,15 +105,17 @@ class TestCase(unittest.TestCase):
         with unittest.mock.patch("platform.system", return_value="Linux"):
             self.assertEqual(utility.fix_cursor("disabled"), "arrow")
 
+    @unittest.skipIf(PIL is None, "Can not import package pillow.")
     def test_create_smoke(self) -> None:
         size = 100, 100
         smoke = utility.create_smoke(size)
         self.assertEqual((smoke.width(), smoke.height()), size)
 
+    def test_create_smoke_without_pillow(self) -> None:
         with unittest.mock.patch.dict("sys.modules", {'PIL': None}):
             importlib.reload(utility)
 
-        self.assertRaises(RuntimeError, utility.create_smoke, size)
+        self.assertRaises(RuntimeError, utility.create_smoke, (100, 100))
 
         importlib.reload(utility)
 
