@@ -35,7 +35,7 @@ if typing.TYPE_CHECKING:
 class LabelFeature(virtual.Feature):
     """Feature of Label"""
 
-    def _motion(self, event: tkinter.Event) -> bool:
+    def _motion(self, event: tkinter.Event, /) -> bool:
         if flag := self.widget.shapes[0].detect(event.x, event.y):
             self.widget.master.trigger_config.update(cursor="arrow")
             if self.widget.state != "hover":
@@ -62,10 +62,10 @@ class ButtonFeature(virtual.Feature):
         * `args`: arguments of callback function
         """
         virtual.Feature.__init__(self, widget)
-        self.command: collections.abc.Callable = command
-        self._args: tuple = args
+        self.command = command
+        self._args = args
 
-    def _motion(self, event: tkinter.Event) -> bool:
+    def _motion(self, event: tkinter.Event, /) -> bool:
         if flag := self.widget.shapes[0].detect(event.x, event.y):
             cursor = utility.fix_cursor(
                 "disabled" if self.widget.state == "disabled" else "hand2")
@@ -77,21 +77,21 @@ class ButtonFeature(virtual.Feature):
                 self.widget.update("normal")
         return flag
 
-    def _b_1_motion(self, event: tkinter.Event) -> bool:
+    def _b_1_motion(self, event: tkinter.Event, /) -> bool:
         return self._motion(event)
 
-    def _b_2_motion(self, event: tkinter.Event) -> bool:
+    def _b_2_motion(self, event: tkinter.Event, /) -> bool:
         return self._motion(event)
 
-    def _b_3_motion(self, event: tkinter.Event) -> bool:
+    def _b_3_motion(self, event: tkinter.Event, /) -> bool:
         return self._motion(event)
 
-    def _button_1(self, _: tkinter.Event) -> bool:
+    def _button_1(self, _: tkinter.Event, /) -> bool:
         if flag := self.widget.state == "hover":
             self.widget.update("active")
         return flag
 
-    def _button_release_1(self, event: tkinter.Event) -> bool:
+    def _button_release_1(self, event: tkinter.Event, /) -> bool:
         if flag := self.widget.shapes[0].detect(event.x, event.y):
             if self.widget.state == "active":
                 self.widget.update("hover")
@@ -103,7 +103,8 @@ class ButtonFeature(virtual.Feature):
 class Underline(ButtonFeature):
     """Feature of underline"""
 
-    def _motion(self, event: tkinter.Event) -> bool:
+    @typing_extensions.override
+    def _motion(self, event: tkinter.Event, /) -> bool:
         if flag := self.widget.texts[0].detect(event.x, event.y):
             cursor = utility.fix_cursor(
                 "disabled" if self.widget.state == "disabled" else "hand2")
@@ -117,12 +118,14 @@ class Underline(ButtonFeature):
                 self.widget.texts[0].font.config(underline=False)
         return flag
 
-    def _button_1(self, _: tkinter.Event) -> bool:
+    @typing_extensions.override
+    def _button_1(self, _: tkinter.Event, /) -> bool:
         if flag := self.widget.state == "hover":
             self.widget.update("active")
         return flag
 
-    def _button_release_1(self, event: tkinter.Event) -> bool:
+    @typing_extensions.override
+    def _button_release_1(self, event: tkinter.Event, /) -> bool:
         if flag := self.widget.texts[0].detect(event.x, event.y):
             if self.widget.state == "active":
                 self.widget.update("hover")
@@ -135,7 +138,8 @@ class Underline(ButtonFeature):
 class Highlight(ButtonFeature):
     """Feature of highlight"""
 
-    def _motion(self, event: tkinter.Event) -> bool:
+    @typing_extensions.override
+    def _motion(self, event: tkinter.Event, /) -> bool:
         if flag := self.widget.texts[0].detect(event.x, event.y):
             cursor = utility.fix_cursor(
                 "disabled" if self.widget.state == "disabled" else "hand2")
@@ -149,13 +153,15 @@ class Highlight(ButtonFeature):
                 animations.ScaleFontSize(self.widget.texts[0], 24, 150).start()
         return flag
 
-    def _button_1(self, _: tkinter.Event) -> bool:
+    @typing_extensions.override
+    def _button_1(self, _: tkinter.Event, /) -> bool:
         if flag := self.widget.state == "hover":
             self.widget.update("active")
             animations.ScaleFontSize(self.widget.texts[0], 26, 150).start()
         return flag
 
-    def _button_release_1(self, event: tkinter.Event) -> bool:
+    @typing_extensions.override
+    def _button_release_1(self, event: tkinter.Event, /) -> bool:
         if flag := self.widget.texts[0].detect(event.x, event.y):
             if self.widget.state == "active":
                 self.widget.update("hover")
@@ -168,7 +174,8 @@ class Highlight(ButtonFeature):
 class SwitchFeature(ButtonFeature):
     """Feature of Switch"""
 
-    def _motion(self, event: tkinter.Event) -> bool:
+    @typing_extensions.override
+    def _motion(self, event: tkinter.Event, /) -> bool:
         if flag := self.widget.shapes[0].detect(event.x, event.y):
             cursor = utility.fix_cursor(
                 "disabled" if self.widget.state == "disabled" else "hand2")
@@ -190,12 +197,14 @@ class SwitchFeature(ButtonFeature):
                 self.widget.update(f"normal-{'on' if self.widget.get() else 'off'}")
         return flag
 
-    def _button_1(self, _: tkinter.Event) -> bool:
+    @typing_extensions.override
+    def _button_1(self, _: tkinter.Event, /) -> bool:
         if flag := self.widget.state.startswith("hover"):
             self.widget.update(f"active-{'on' if self.widget.get() else 'off'}", gradient_animation=True)
         return flag
 
-    def _button_release_1(self, event: tkinter.Event) -> bool:
+    @typing_extensions.override
+    def _button_release_1(self, event: tkinter.Event, /) -> bool:
         if flag := self.widget.shapes[0].detect(event.x, event.y):
             if self.widget.state.startswith("active"):
                 boolean = not self.widget.get()
@@ -209,7 +218,8 @@ class SwitchFeature(ButtonFeature):
 class ToggleButtonFeature(ButtonFeature):
     """Feature of ToggleButton"""
 
-    def _motion(self, event: tkinter.Event) -> bool:
+    @typing_extensions.override
+    def _motion(self, event: tkinter.Event, /) -> bool:
         if flag := self.widget.shapes[0].detect(event.x, event.y):
             cursor = utility.fix_cursor(
                 "disabled" if self.widget.state == "disabled" else "hand2")
@@ -221,12 +231,14 @@ class ToggleButtonFeature(ButtonFeature):
                 self.widget.update(f"normal-{'on' if self.widget.get() else 'off'}")
         return flag
 
-    def _button_1(self, _: tkinter.Event) -> bool:
+    @typing_extensions.override
+    def _button_1(self, _: tkinter.Event, /) -> bool:
         if flag := self.widget.state.startswith("hover"):
             self.widget.update(f"active-{'on' if self.widget.get() else 'off'}")
         return flag
 
-    def _button_release_1(self, event: tkinter.Event) -> bool:
+    @typing_extensions.override
+    def _button_release_1(self, event: tkinter.Event, /) -> bool:
         if flag := self.widget.shapes[0].detect(event.x, event.y):
             if self.widget.state.startswith("active"):
                 boolean = not self.widget.get()
@@ -244,13 +256,14 @@ class CheckBoxFeature(ToggleButtonFeature):
 class RadioBoxFeature(ButtonFeature):
     """Feature of RadioButton"""
 
-    def _button_1(self, _: tkinter.Event) -> bool:
+    @typing_extensions.override
+    def _button_1(self, _: tkinter.Event, /) -> bool:
         if flag := self.widget.state == "hover":
             self.widget.update("active", gradient_animation=True)
         return flag
 
     @typing_extensions.override
-    def _button_release_1(self, event: tkinter.Event) -> bool:
+    def _button_release_1(self, event: tkinter.Event, /) -> bool:
         if flag := self.widget.shapes[0].detect(event.x, event.y):
             if self.widget.state.startswith("active"):
                 if self.widget.get():
@@ -286,7 +299,8 @@ class InputBoxFeature(ButtonFeature):
         self._start_index: int | None = None
         self._end_index: int | None = None
 
-    def _motion(self, event: tkinter.Event) -> bool:
+    @typing_extensions.override
+    def _motion(self, event: tkinter.Event, /) -> bool:
         if flag := self.widget.shapes[0].detect(event.x, event.y):
             cursor = utility.fix_cursor(
                 "disabled" if self.widget.state == "disabled" else "xterm")
@@ -298,7 +312,8 @@ class InputBoxFeature(ButtonFeature):
                 self.widget.update("normal")
         return flag
 
-    def _button_1(self, event: tkinter.Event) -> bool:
+    @typing_extensions.override
+    def _button_1(self, event: tkinter.Event, /) -> bool:
         if flag := self.widget.shapes[0].detect(event.x, event.y):
             self.widget.update("active")
             if self.widget.state == "active":  # Maybe widget is disabled
@@ -311,7 +326,8 @@ class InputBoxFeature(ButtonFeature):
         self.widget.texts[0].text_proxy.select_clear()
         return flag
 
-    def _b_1_motion(self, event: tkinter.Event) -> bool:
+    @typing_extensions.override
+    def _b_1_motion(self, event: tkinter.Event, /) -> bool:
         if self.widget.state == "active":
             cursor = utility.fix_cursor(
                 "disabled" if self.widget.state == "disabled" else "xterm")
@@ -327,10 +343,11 @@ class InputBoxFeature(ButtonFeature):
             return True
         return False
 
-    def _button_release_1(self, _: tkinter.Event) -> bool:
+    @typing_extensions.override
+    def _button_release_1(self, _: tkinter.Event, /) -> bool:
         return False
 
-    def _key_press(self, event: tkinter.Event) -> bool:
+    def _key_press(self, event: tkinter.Event, /) -> bool:
         if self.widget.state == "active":
             select = self.widget.texts[0].text_proxy.select_get()
             match event.keysym:
@@ -367,7 +384,7 @@ class InputBoxFeature(ButtonFeature):
                             self.widget.texts[0].text_proxy.cursor_get(), event.char)
         return False
 
-    def _copy(self, _: tkinter.Event) -> bool:
+    def _copy(self, _: tkinter.Event, /) -> bool:
         if flag := self.widget.state == "active":
             select = self.widget.texts[0].text_proxy.select_get()
             if select is not None:
@@ -376,7 +393,7 @@ class InputBoxFeature(ButtonFeature):
                     self.widget.texts[0].text_proxy.get()[select[0]: select[1]])
         return flag
 
-    def _paste(self, _: tkinter.Event) -> bool:
+    def _paste(self, _: tkinter.Event, /) -> bool:
         if flag := self.widget.state == "active":
             select = self.widget.texts[0].text_proxy.select_get()
             if select is not None:
@@ -386,7 +403,7 @@ class InputBoxFeature(ButtonFeature):
                 self.widget.texts[0].append(value)
         return flag
 
-    def _cut(self, event: tkinter.Event) -> bool:
+    def _cut(self, event: tkinter.Event, /) -> bool:
         if flag := self._copy(event):
             select = self.widget.texts[0].text_proxy.select_get()
             if select is not None:
@@ -394,7 +411,7 @@ class InputBoxFeature(ButtonFeature):
                 self.widget.texts[0].text_proxy.select_clear()
         return flag
 
-    def _select_all(self, _: tkinter.Event) -> bool:
+    def _select_all(self, _: tkinter.Event, /) -> bool:
         if flag := self.widget.state == "active":
             self.widget.texts[0].text_proxy.select_all()
         return flag
@@ -407,7 +424,7 @@ class SliderFeature(virtual.Feature):
         super().__init__(widget)
         self._temp_position: tuple[float, float] | None = None
 
-    def _motion(self, event: tkinter.Event) -> bool:
+    def _motion(self, event: tkinter.Event, /) -> bool:
         if flag := self.widget.shapes[2].detect(event.x, event.y):
             if self.widget.state == "normal":
                 self.widget.update("hover")
@@ -426,7 +443,7 @@ class SliderFeature(virtual.Feature):
                          self.widget.shapes[-2].position[1] + self.widget.size[1]/4))
         return flag
 
-    def _button_1(self, event: tkinter.Event) -> bool:
+    def _button_1(self, event: tkinter.Event, /) -> bool:
         if self.widget.state == "hover":
             self._temp_position = event.x, event.y
             self.widget.update("active")
@@ -451,7 +468,7 @@ class SliderFeature(virtual.Feature):
                 150, lambda k: self.widget.set(temp_value + delta*k, callback=True),
                 controller=controllers.smooth, fps=60).start()
 
-    def _b_1_motion(self, event: tkinter.Event) -> bool:
+    def _b_1_motion(self, event: tkinter.Event, /) -> bool:
         if self._temp_position is not None:
             if isinstance(self.widget.shapes[-1], shapes.Oval):
                 delta = (event.x-self._temp_position[0]) / (self.widget.size[0]-self.widget.size[1])
@@ -461,7 +478,7 @@ class SliderFeature(virtual.Feature):
             self._temp_position = event.x, event.y
             self.widget.set(self.widget.value + delta, callback=True)
 
-    def _button_release_1(self, _: tkinter.Event) -> bool:
+    def _button_release_1(self, _: tkinter.Event, /) -> bool:
         if self.widget.state == "active":
             self._temp_position = None
             self.widget.update("hover")
@@ -470,7 +487,7 @@ class SliderFeature(virtual.Feature):
 class SegmentedButtonFeature(virtual.Feature):
     """Feature of SegmentedButton"""
 
-    def _motion(self, event: tkinter.Event) -> bool:
+    def _motion(self, event: tkinter.Event, /) -> bool:
         return self.widget.shapes[0].detect(event.x, event.y)
 
 
@@ -488,11 +505,11 @@ class SpinBoxFeature(virtual.Feature):
         * `command`: callback function
         """
         virtual.Feature.__init__(self, widget)
-        self.command: collections.abc.Callable = command
+        self.command = command
         if self.command is None:
             self.command = self.widget.change
 
-    def _mouse_wheel(self, event: tkinter.Event) -> bool:
+    def _mouse_wheel(self, event: tkinter.Event, /) -> bool:
         if flag := self.widget.children[0].state == "active":
             self.command(event.delta > 0)
         return flag
