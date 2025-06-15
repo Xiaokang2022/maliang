@@ -765,11 +765,9 @@ class Canvas(tkinter.Canvas, Misc):
         self._focus_widget = self._get_focus_widget(event)
         if self._focus_widget is None:
             return
-        x, y = self._focus_widget.position
-        w, h = self._focus_widget.size
         self.tag_raise(self._focus_rect)
         self.itemconfigure(self._focus_rect, width=2)
-        self.coords(self._focus_rect, x, y, x+w, y+h)
+        self.coords(self._focus_rect, *self._focus_widget.region())
 
     def _get_focus_widget(self, event: tkinter.Event) -> virtual.Widget | None:
         """Get the widget that has focus."""
