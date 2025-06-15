@@ -1049,16 +1049,19 @@ class Widget:
         for element in self.elements:
             element.destroy()
 
+    def region(self) -> tuple[int, int, int, int]:
+        """Return the decision region of the `Widget`."""
+        x, y, w, h, dx, dy = *self.position, *self.size, *self.offset
+        return round(x-dx), round(y-dy), round(x+w-dx), round(y+h-dy)
+
     def detect(self, x: float, y: float) -> bool:
         """Detect whether the specified coordinates are within the `Widget`.
 
         * `x`: x-coordinate of the location to be detected
         * `y`: y-coordinate of the location to be detected
         """
-        x1, y1, w, h = *self.position, *self.size
-        x2, y2 = x1+w, y1+h
-
-        return x1 <= x+self.offset[0] <= x2 and y1 <= y+self.offset[1] <= y2
+        x1, y1, x2, y2 = self.region()
+        return x1 <= x <= x2 and y1 <= y <= y2
 
     def zoom(
         self,
