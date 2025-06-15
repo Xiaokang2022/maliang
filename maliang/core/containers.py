@@ -592,6 +592,8 @@ class Canvas(tkinter.Canvas, Misc):
 
     def _zoom_self(self) -> None:
         """Scale the `Canvas` itself."""
+        self._hide_focus_rect()
+
         if not hasattr(self, "_size"):
             self._initialization()
             return
@@ -762,12 +764,16 @@ class Canvas(tkinter.Canvas, Misc):
 
     def _highlight_focus_widget(self, event: tkinter.Event) -> None:
         """Highlight the widget that has focus."""
-        self._focus_widget = self._get_focus_widget(event)
-        if self._focus_widget is None:
+        while True:
+            self._focus_widget = self._get_focus_widget(event)
+            if widget := self._focus_widget:  # Alias for self._focus_widget
+                if widget.disappeared or widget.state == "disabled":
+                    continue
+                break
             return
         self.tag_raise(self._focus_rect)
         self.itemconfigure(self._focus_rect, width=2)
-        self.coords(self._focus_rect, *self._focus_widget.region())
+        self.coords(self._focus_rect, *widget.region())
 
     def _get_focus_widget(self, event: tkinter.Event) -> virtual.Widget | None:
         """Get the widget that has focus."""
