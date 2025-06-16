@@ -140,17 +140,19 @@ class Image(virtual.Widget):
         * `auto_update`: whether the theme manager update it automatically
         * `style`: style of the widget
         """
+        if size is None and image is not None:
+            size = image.width(), image.height()
         virtual.Widget.__init__(
-            self, master, position, (0, 0), anchor=anchor,
+            self, master, position, size if size else (0, 0), anchor=anchor,
             capture_events=capture_events, gradient_animation=gradient_animation,
             auto_update=auto_update, style=style)
         # The above parameter `anchor` has no practical effect and is only used
         # to query the data of the widget.
         if image is not None and size is not None:
-            images.StillImage(self, anchor=anchor, image=image.scale(
+            images.StillImage(self, image=image.scale(
                 size[0]/image.width(), size[1]/image.height()))
         else:
-            images.StillImage(self, anchor=anchor, image=image)
+            images.StillImage(self, image=image)
 
     def get(self) -> enhanced.PhotoImage:
         """Get the image of the widget"""
