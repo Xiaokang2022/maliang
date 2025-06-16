@@ -523,6 +523,7 @@ class Canvas(tkinter.Canvas, Misc):
 
         self.bind("<Tab>", self._highlight_focus_widget)
         self.bind("<Shift-Tab>", self._highlight_focus_widget)
+        self.bind("<Return>", self._activate_focused_widget)
 
     @functools.cached_property
     def ratios(self) -> tuple[float, float]:
@@ -592,7 +593,7 @@ class Canvas(tkinter.Canvas, Misc):
 
     def _zoom_self(self) -> None:
         """Scale the `Canvas` itself."""
-        self._hide_focus_rect()
+        self.hide_focus()
 
         if not hasattr(self, "_size"):
             self._initialization()
@@ -699,7 +700,7 @@ class Canvas(tkinter.Canvas, Misc):
     def on_click(self, event: tkinter.Event, name: str) -> None:
         """Events to active the mouse"""
         self.focus_set()
-        self._hide_focus_rect()
+        self.hide_focus()
         self.trigger_focus.reset()
         for widget in reversed(self.widgets):
             if hasattr(widget, "feature") and not widget.disappeared:
@@ -762,8 +763,20 @@ class Canvas(tkinter.Canvas, Misc):
 
         return self.bind(name, handle_event, add)
 
+    def hide_focus(self) -> None:
+        """Hide the focus rectangle."""
+        self._focus_widget = None
+        self.tag_lower(self._focus_rect)
+        self.itemconfigure(self._focus_rect, width=0)
+
     def _highlight_focus_widget(self, event: tkinter.Event) -> None:
         """Highlight the widget that has focus."""
+        if self._focus_widget is not None:
+            self.focus("")
+            event.x, event.y = -9999, -9999
+            self._focus_widget.generate_event("<Motion>", event)
+            self._focus_widget.generate_event("<Button-1>", event)
+            self._focus_widget.generate_event("<ButtonRelease-1>", event)
         while True:
             self._focus_widget = self._get_focus_widget(event)
             if widget := self._focus_widget:  # Alias for self._focus_widget
@@ -785,8 +798,11 @@ class Canvas(tkinter.Canvas, Misc):
         index = self.widgets.index(self._focus_widget) + delta
         return self.widgets[index % len(self.widgets)]
 
-    def _hide_focus_rect(self) -> None:
-        """Hide the focus rectangle."""
-        self._focus_widget = None
-        self.tag_lower(self._focus_rect)
-        self.itemconfigure(self._focus_rect, width=0)
+    def _activate_focused_widget(self, event: tkinter.Event) -> None:
+        """Activate the focused widget."""
+        if self._focus_widget is None:
+            return
+        event.x, event.y = self._focus_widget.center()
+        self._focus_widget.generate_event("<Motion>", event)
+        self._focus_widget.generate_event("<Button-1>", event)
+        self._focus_widget.generate_event("<ButtonRelease-1>", event)

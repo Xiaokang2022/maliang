@@ -1063,6 +1063,11 @@ class Widget:
         x1, y1, x2, y2 = self.region()
         return x1 <= x <= x2 and y1 <= y <= y2
 
+    def center(self) -> tuple[int, int]:
+        """Return the center of the widget."""
+        x1, y1, x2, y2 = self.region()
+        return (x1+x2) >> 1, (y1+y2) >> 1
+
     def zoom(
         self,
         ratios: tuple[float, float] | None = None,
