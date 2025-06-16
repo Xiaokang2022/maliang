@@ -39,7 +39,6 @@ class TextFeature(virtual.Feature):
 
     def _motion(self, event: tkinter.Event, /) -> bool:
         if flag := self.widget.texts[0].detect(event.x, event.y):
-            self.widget.master.trigger_config.update(cursor="arrow")
             if self.widget.state != "hover":
                 self.widget.update("hover")
         else:
@@ -53,7 +52,6 @@ class ImageFeature(virtual.Feature):
 
     def _motion(self, event: tkinter.Event, /) -> bool:
         if flag := self.widget.images[0].detect(event.x, event.y):
-            self.widget.master.trigger_config.update(cursor="arrow")
             if self.widget.state != "hover":
                 self.widget.update("hover")
         else:
