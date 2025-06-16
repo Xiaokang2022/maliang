@@ -103,6 +103,7 @@ class Text(virtual.Widget):
             self, text=text, family=family, fontsize=fontsize, weight=weight,
             slant=slant, underline=underline, overstrike=overstrike,
             justify=justify, width=wrap_length)
+        self.feature = features.TextFeature(self)
 
     def get(self) -> str:
         """Get the text of the widget"""
@@ -153,6 +154,7 @@ class Image(virtual.Widget):
                 size[0]/image.width(), size[1]/image.height()))
         else:
             images.StillImage(self, image=image)
+        self.feature = features.ImageFeature(self)
 
     def get(self) -> enhanced.PhotoImage:
         """Get the image of the widget"""

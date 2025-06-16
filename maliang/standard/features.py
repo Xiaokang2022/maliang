@@ -3,6 +3,8 @@
 from __future__ import annotations as _
 
 __all__ = [
+    "TextFeature",
+    "ImageFeature",
     "LabelFeature",
     "ButtonFeature",
     "Underline",
@@ -30,6 +32,34 @@ from ..toolbox import utility
 if typing.TYPE_CHECKING:
     import collections.abc
     import tkinter
+
+
+class TextFeature(virtual.Feature):
+    """Feature of Text"""
+
+    def _motion(self, event: tkinter.Event, /) -> bool:
+        if flag := self.widget.texts[0].detect(event.x, event.y):
+            self.widget.master.trigger_config.update(cursor="arrow")
+            if self.widget.state != "hover":
+                self.widget.update("hover")
+        else:
+            if self.widget.state != "normal":
+                self.widget.update("normal")
+        return flag
+
+
+class ImageFeature(virtual.Feature):
+    """Feature of Image"""
+
+    def _motion(self, event: tkinter.Event, /) -> bool:
+        if flag := self.widget.images[0].detect(event.x, event.y):
+            self.widget.master.trigger_config.update(cursor="arrow")
+            if self.widget.state != "hover":
+                self.widget.update("hover")
+        else:
+            if self.widget.state != "normal":
+                self.widget.update("normal")
+        return flag
 
 
 class LabelFeature(virtual.Feature):
