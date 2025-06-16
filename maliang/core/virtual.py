@@ -716,6 +716,7 @@ class Widget:
         anchor: typing.Literal["n", "s", "w", "e", "nw", "ne", "sw", "se", "center"] = "nw",
         capture_events: bool | None = None,
         gradient_animation: bool | None = None,
+        auto_resize: bool | None = None,
         auto_update: bool | None = None,
         style: type[Style] | None = None,
     ) -> None:
@@ -726,6 +727,7 @@ class Widget:
         * `anchor`: layout anchor of the widget
         * `capture_events`: whether detect another widget under the widget
         * `gradient_animation`: whether enable animation
+        * `auto_resize`: whether to automatically resize after modifying the content of the widget
         * `auto_update`: whether the theme manager update it automatically
         * `style`: style of the widget
         """
@@ -743,6 +745,7 @@ class Widget:
             self.size: tuple[float, float] = (0, 0) if size is None else size
 
         self.anchor = anchor
+        self.auto_resize = auto_resize
 
         if capture_events is None and self.nested:
             self.capture_events = False  # bool indicates enforce the operation
@@ -1101,3 +1104,18 @@ class Widget:
         for element in self.elements:
             element.zoom(
                 ratios, zoom_position=zoom_position, zoom_size=zoom_size)
+
+    def resize(self, size: tuple[float, float] | None = None) -> None:
+        """Resize the widget.
+
+        * `size`: new size for the widget
+        """
+        # override this method to do something here
+        if size is not None:
+            self.size = size
+            position = self.position[0] - self.offset[0], \
+                self.position[1] - self.offset[1]
+        else:
+            position = None
+        for element in self.elements:
+            element.coords(size, position)

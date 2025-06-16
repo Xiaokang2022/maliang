@@ -87,14 +87,14 @@ class Text(virtual.Widget):
         * `auto_update`: whether the theme manager update it automatically
         * `style`: style of the widget
         """
-        if size is None:
+        if auto_resize := size is None:
             size = utility.get_text_size(
                 text, fontsize, family, weight=weight, slant=slant,
                 wrap_length=wrap_length, master=master)
         virtual.Widget.__init__(
             self, master, position, size, anchor=anchor,
             capture_events=capture_events, gradient_animation=gradient_animation,
-            auto_update=auto_update, style=style)
+            auto_resize=auto_resize, auto_update=auto_update, style=style)
         # The above parameter `anchor` has no practical effect and is only used
         # to query the data of the widget.
         if style is None:
@@ -111,7 +111,10 @@ class Text(virtual.Widget):
 
     def set(self, text: str) -> None:
         """Set the text of the widget"""
-        return self.texts[0].set(text)
+        self.texts[0].set(text)
+        if self.auto_resize:
+            self.resize(utility.get_text_size(
+                text, font=self.texts[0].font, master=self.master))
 
 
 class Image(virtual.Widget):
@@ -215,13 +218,13 @@ class Label(virtual.Widget):
         * `auto_update`: whether the theme manager update it automatically
         * `style`: style of the widget
         """
-        if size is None:
+        if auto_resize := size is None:
             size = utility.get_text_size(
                 text, fontsize, family, weight=weight, slant=slant, padding=6, master=master)
         virtual.Widget.__init__(
             self, master, position, size, anchor=anchor,
             capture_events=capture_events, gradient_animation=gradient_animation,
-            auto_update=auto_update, style=style)
+            auto_resize=auto_resize, auto_update=auto_update, style=style)
         if style is None:
             self.style = styles.LabelStyle(self)
         if configs.Env.system == "Windows10":
@@ -241,7 +244,10 @@ class Label(virtual.Widget):
 
     def set(self, text: str) -> None:
         """Set the text of the widget"""
-        return self.texts[0].set(text)
+        self.texts[0].set(text)
+        if self.auto_resize:
+            self.resize(utility.get_text_size(
+                text, font=self.texts[0].font, padding=6, master=self.master))
 
 
 class Button(virtual.Widget):
@@ -289,13 +295,13 @@ class Button(virtual.Widget):
         * `auto_update`: whether the theme manager update it automatically
         * `style`: style of the widget
         """
-        if size is None:
+        if auto_resize := size is None:
             size = utility.get_text_size(
                 text, fontsize, family, weight=weight, slant=slant, padding=6, master=master)
         virtual.Widget.__init__(
             self, master, position, size, anchor=anchor,
             capture_events=capture_events, gradient_animation=gradient_animation,
-            auto_update=auto_update, style=style)
+            auto_resize=auto_resize, auto_update=auto_update, style=style)
         if style is None:
             self.style = styles.ButtonStyle(self)
         if configs.Env.system == "Windows10":
@@ -315,7 +321,10 @@ class Button(virtual.Widget):
 
     def set(self, text: str) -> None:
         """Set the text of the widget"""
-        return self.texts[0].set(text)
+        self.texts[0].set(text)
+        if self.auto_resize:
+            self.resize(utility.get_text_size(
+                text, font=self.texts[0].font, padding=6, master=self.master))
 
 
 class Switch(virtual.Widget):
