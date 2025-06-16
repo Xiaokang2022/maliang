@@ -176,6 +176,7 @@ def get_text_size(
     family: str | None = None,
     *,
     padding: int = 0,
+    wrap_length: int | None = None,
     master: tkinter.Canvas | virtual.Widget | None = None,
     **kwargs,
 ) -> tuple[int, int]:
@@ -185,6 +186,7 @@ def get_text_size(
     * `fontsize`: font size of the text
     * `family`: font family of the text
     * `padding`: extra padding of the size
+    * `wrap_length`: limit the length of text, beyond which it will automatically wrap
     * `master`: default canvas or widget provided
     * `kwargs`: kwargs of `tkinter.font.Font`
 
@@ -194,6 +196,8 @@ def get_text_size(
         family = configs.Font.family
     if fontsize is None:
         fontsize = configs.Font.size
+    if wrap_length is None:
+        wrap_length = 0
 
     fontsize = -abs(fontsize)
     temp_cv = master if master else tkinter.Canvas(configs.Env.root)
@@ -202,7 +206,8 @@ def get_text_size(
         temp_cv = temp_cv.master
 
     font = tkinter.font.Font(temp_cv, family=family, size=fontsize, **kwargs)
-    item = temp_cv.create_text(-9999, -9999, text=text, font=font)
+    item = temp_cv.create_text(
+        -9999, -9999, text=text, font=font, width=wrap_length)
     x1, y1, x2, y2 = temp_cv.bbox(item)
     temp_cv.delete(item)
 
