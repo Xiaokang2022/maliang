@@ -132,7 +132,8 @@ class Information(virtual.Text):
     def display(self) -> None:
         """Display the `Element` on a `Canvas`"""
         self.items = [self.widget.master.create_text(
-            0, 0, text=self.text, font=self.font, tags=("fill", "fill"), **self.kwargs)]
+            0, 0, text=self.text, font=self.font, tags=("fill", "fill"),
+            anchor="center", **self.kwargs)]
 
     @typing_extensions.override
     def coords(

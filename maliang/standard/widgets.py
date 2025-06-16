@@ -51,6 +51,7 @@ class Text(virtual.Widget):
         self,
         master: containers.Canvas | virtual.Widget,
         position: tuple[int, int],
+        size: tuple[int, int] | None = None,
         *,
         text: str = "",
         family: str | None = None,
@@ -70,6 +71,7 @@ class Text(virtual.Widget):
         """
         * `master`: parent canvas
         * `position`: position of the widget
+        * `size`: size of the widget
         * `text`: text of the widget
         * `family`: font family
         * `fontsize`: font size
@@ -85,8 +87,12 @@ class Text(virtual.Widget):
         * `auto_update`: whether the theme manager update it automatically
         * `style`: style of the widget
         """
+        if size is None:
+            size = utility.get_text_size(
+                text, fontsize, family, weight=weight, slant=slant,
+                wrap_length=wrap_length, master=master)
         virtual.Widget.__init__(
-            self, master, position, (0, 0), anchor=anchor,
+            self, master, position, size, anchor=anchor,
             capture_events=capture_events, gradient_animation=gradient_animation,
             auto_update=auto_update, style=style)
         # The above parameter `anchor` has no practical effect and is only used
@@ -96,7 +102,7 @@ class Text(virtual.Widget):
         texts.Information(
             self, text=text, family=family, fontsize=fontsize, weight=weight,
             slant=slant, underline=underline, overstrike=overstrike,
-            justify=justify, anchor=anchor, width=wrap_length)
+            justify=justify, width=wrap_length)
 
     def get(self) -> str:
         """Get the text of the widget"""
