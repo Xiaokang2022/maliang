@@ -12,6 +12,37 @@
 > * 🟠 **Deprecated / 弃用**
 > * 🟤 **Refactored / 重构**
 
+## 🔖 `3.1.1`
+
+🕓 *Release Date / 发布日期 : 2025-06-16*
+
+🟢 **Added / 新增**
+
+* Keyboard <kbd>Tab</kbd> and <kbd>Shift</kbd>+<kbd>Tab</kbd> are supported to manipulate widgets, and <kbd>Enter</kbd> is used to simulate clicking on a widget with focus  
+支持通过键盘 <kbd>Tab</kbd> 和 <kbd>Shift</kbd>+<kbd>Tab</kbd> 来操控控件，并通过 <kbd>Enter</kbd> 来模拟点击具有焦点的控件  
+Issue: #70
+
+* Add method `region` to class `virtual.Widget` to get the display area of the current widget  
+类 `virtual.Widget` 新增方法 `region` 来获取当前控件的显示区域
+
+* Add method `center` to class `virtual.Widget` to get the center coordinates of the display area of the current widget  
+类 `virtual.Widget` 新增方法 `center` 来获取当前控件的显示区域的中心坐标
+
+* Add parameter `wrap_length` to function `utility.get_text_size`  
+函数 `utility.get_text_size` 新增参数 `wrap_length`
+
+* Improve some type hints  
+完善部分类型提示
+
+🟣 **Fixed / 修复**
+
+* Fix a bug where the widget `Tooltip` did not work for the widget `Text` and `Image`  
+修复控件 `Tooltip` 无法对控件 `Text` 和 `Image` 生效的 bug  
+Issue: #77
+
+* Fix some incorrect type hints  
+修复部分错误的类型提示
+
 ## 🔖 `3.1.0`
 
 🕓 *Release Date / 发布日期 : 2025-06-10*
