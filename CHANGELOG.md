@@ -12,6 +12,24 @@
 > * 🟠 **Deprecated / 弃用**
 > * 🟤 **Refactored / 重构**
 
+## 🔖 `3.1.2`
+
+🕓 *Release Date / 发布日期 : 2025-06-17*
+
+🟢 **Added / 新增**
+
+* Some widgets have added the ability to automatically and dynamically update the size  
+一些控件可以自动地动态更新大小  
+Issue: #119 (*Partially Resolved*)
+
+* Added parameter `font` to function `get_text_size`  
+函数 `get_text_size` 增加了参数 `font`
+
+🟣 **Fixed / 修复**
+
+* Fixed a bug where the widgets `Text` and `Image` would unexpectedly modify the mouse style (`3.1.1` regression)  
+修复了控件 `Text` 和 `Image` 会意外修改鼠标样式的 bug（`3.1.1` 回归）
+
 ## 🔖 `3.1.1`
 
 🕓 *Release Date / 发布日期 : 2025-06-16*
