@@ -25,6 +25,7 @@ __all__ = [
     "Tooltip",
 ]
 
+import decimal
 import itertools
 import math
 import typing
@@ -1213,7 +1214,7 @@ class SpinBox(virtual.Widget):
         size: tuple[int, int] | None = None,
         *,
         format_spec: str = "d",
-        step: int = 1,
+        step: float = 1,
         family: str | None = None,
         fontsize: int | None = None,
         weight: typing.Literal['normal', 'bold'] = "normal",
@@ -1279,23 +1280,21 @@ class SpinBox(virtual.Widget):
                fontsize=14,
                command=lambda: command(False) if command is not None else self.change(False))
         self.format = format_spec
-        self.step = step
+        self.step = decimal.Decimal(str(step))
         self.feature = features.SpinBoxFeature(self, command=command)
         if default is not None:
             self.set(default)
 
     def change(self, up: bool) -> None:
         """Try change the current value"""
-        if not (value := self.children[0].get()):
-            return self.children[0].set(("%"+self.format) % 0)
-        try:
-            value = float(value) + (self.step if up else -self.step)
-            if math.isclose(value, int_value := int(value)):
-                value = int_value
-            self.children[0].set(("%"+self.format) % value)
-        except ValueError:
-            pass
-        return None
+        if value := self.children[0].get():
+            try:
+                value = decimal.Decimal(value) + (self.step if up else -self.step)
+                self.children[0].set(("%"+self.format) % value)
+            except decimal.DecimalException:
+                pass
+        else:
+            self.children[0].set(("%"+self.format) % 0)
 
     def get(self) -> str:
         """Get the value of the Entry"""
