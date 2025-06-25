@@ -546,7 +546,8 @@ class Canvas(tkinter.Canvas, Misc):
                     widget.update()
 
         for canvas in self.canvases:
-            canvas.theme(value)
+            if canvas.auto_update:
+                canvas.theme(value)
 
     def _initialization(self) -> None:
         """Initialization of size data."""
