@@ -1041,8 +1041,6 @@ class Widget:
         """Destroy the widget."""
         self.master.widgets.remove(self)
 
-        del self.feature, self.style
-
         if self.widget is not None:
             self.widget.widgets.remove(self)
 
@@ -1051,6 +1049,12 @@ class Widget:
 
         for element in self.elements:
             element.destroy()
+
+        self.__dict__.clear()
+
+    def exists(self) -> bool:
+        """Check if the widget exists."""
+        return bool(self.__dict__)
 
     def region(self) -> tuple[int, int, int, int]:
         """Return the decision region of the `Widget`."""
