@@ -12,6 +12,31 @@
 > * 🟠 **Deprecated / 弃用**
 > * 🟤 **Refactored / 重构**
 
+## 🔖 `3.1.3`
+
+🕓 *Release Date / 发布日期 : 2025-06-29*
+
+🟢 **Added / 新增**
+
+* Added method `exists` to all widgets  
+为所有控件新增了方法 `exists`  
+Issue: #125
+
+🟣 **Fixed / 修复**
+
+* Fixed a bug where the value of the widget `SpinBox` could cause unexpected results when the value was large  
+修复了控件 `SpinBox` 在值比较大时会导致意外结果的 bug  
+Issue: #122
+
+* Fixed a bug where the widget `Canvas` would be updated unexpectedly  
+修复了控件 `Canvas` 会被意外更新的 bug  
+Issue: #124
+
+🔵 **Optimized / 优化**
+
+* Reduced the amount of memory used by the widget after calling the `destroy` method  
+降低了控件在调用方法 `destroy` 后所占用的内存量
+
 ## 🔖 `3.1.2`
 
 🕓 *Release Date / 发布日期 : 2025-06-17*
