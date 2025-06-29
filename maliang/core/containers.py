@@ -647,7 +647,7 @@ class Canvas(tkinter.Canvas, Misc):
 
         for widget in tuple(self.widgets):
             # Nested widget will be destroyed by its parent widget
-            if not widget.nested:
+            if widget.exists() and not widget.nested:
                 widget.destroy()
 
         return tkinter.Canvas.destroy(self)
