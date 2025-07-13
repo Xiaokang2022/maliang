@@ -25,6 +25,7 @@ __all__ = [
     "Tooltip",
 ]
 
+import contextlib
 import decimal
 import itertools
 import math
@@ -1288,11 +1289,9 @@ class SpinBox(virtual.Widget):
     def change(self, up: bool) -> None:
         """Try change the current value"""
         if value := self.children[0].get():
-            try:
+            with contextlib.suppress(decimal.DecimalException):
                 value = decimal.Decimal(value) + (self.step if up else -self.step)
                 self.children[0].set(("%"+self.format) % value)
-            except decimal.DecimalException:
-                pass
         else:
             self.children[0].set(("%"+self.format) % 0)
 

@@ -60,9 +60,10 @@ class Env:
     def get_default_system() -> str:
         """Get the system of environment."""
         if sys.platform == "win32":
-            # If Python version is 3.10, the function below gets an error result
-            # SYSTEM = f"Windows{platform.win32_ver()[0]}"
-            if int(platform.win32_ver()[1].split(".")[-1]) >= 22000:
+            if sys.version_info.minor >= 12:
+                return f"Windows{platform.win32_ver()[0]}"
+            # If Python version < 3.12, the value above gets an error result
+            if int(platform.win32_ver()[1].rsplit(".", maxsplit=1)[1]) >= 22000:
                 return "Windows11"
             return "Windows10"
         return platform.system()
