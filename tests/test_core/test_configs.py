@@ -1,5 +1,6 @@
 # pylint: disable=C0111
 
+import collections
 import unittest
 import unittest.mock
 
@@ -23,8 +24,14 @@ class TestEnv(unittest.TestCase):
 
     def test_get_default_system(self) -> None:
         with unittest.mock.patch('sys.platform', 'win32'):
-            with unittest.mock.patch('platform.win32_ver', return_value=('10', '10.1.22000', 'multiprocessor Free')):
-                self.assertEqual(configs.Env.get_default_system(), "Windows11")
+            with unittest.mock.patch('sys.version_info', collections.namedtuple("VersionInfo", ["minor"])(11)):
+                with unittest.mock.patch('platform.win32_ver', return_value=(':)', '10.1.19041', 'multiprocessor Free')):
+                    self.assertEqual(configs.Env.get_default_system(), "Windows10")
+                with unittest.mock.patch('platform.win32_ver', return_value=(':)', '10.1.22000', 'multiprocessor Free')):
+                    self.assertEqual(configs.Env.get_default_system(), "Windows11")
+            with unittest.mock.patch('sys.version_info', collections.namedtuple("VersionInfo", ["minor"])(12)):
+                with unittest.mock.patch('platform.win32_ver', return_value=(':)', '10.1.22000', 'multiprocessor Free')):
+                    self.assertEqual(configs.Env.get_default_system(), "Windows:)")
 
         with unittest.mock.patch('sys.platform', 'win32'):
             with unittest.mock.patch('platform.win32_ver', return_value=('10', '10.0.19041', 'multiprocessor Free')):
