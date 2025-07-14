@@ -1175,8 +1175,7 @@ class SegmentedButton(virtual.Widget):
         else:
             shapes.RoundedRectangle(self)
         total_side_length = 5
-        for i, pack in enumerate(itertools.zip_longest(sizes, text, image)):
-            size, text, image = pack
+        for i, (size, text, image) in enumerate(itertools.zip_longest(sizes, text, image)):
             position = (total_side_length, 5) if layout == "horizontal" else (5, total_side_length)
             position = tuple(i - j for i, j in zip(position, self.offset))
             ToggleButton(
