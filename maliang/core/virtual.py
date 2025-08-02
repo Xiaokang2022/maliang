@@ -600,6 +600,14 @@ class Style:
         for element in self.widget.elements:
             element.update()
 
+    def detach(self) -> typing_extensions.Self:
+        """Detach the style data from the class data."""
+        if self.light is self.__class__.light:
+            self.light = copy.deepcopy(self.__class__.light)
+        if self.dark is self.__class__.dark:
+            self.dark = copy.deepcopy(self.__class__.dark)
+        return self
+
     @staticmethod
     def _wrap_arg(
         arg: tuple[str | types.EllipsisType, ...] | str,
