@@ -496,9 +496,6 @@ class Style:
         else:
             self.auto_update = auto_update
 
-        self.light = copy.deepcopy(self.light)
-        self.dark = copy.deepcopy(self.dark)
-
         self._cache: dict[str, dict[str, dict[str, str]]] = {}
 
     def _get_key(self, key: Element | str | int) -> str:
@@ -593,10 +590,12 @@ class Style:
         * `theme`: the theme to be reset, None indicates both
         """
         if theme != "light":
-            self.dark = copy.deepcopy(self.__class__.dark)
+            if self.dark is not self.__class__.dark:
+                del self.dark
 
         if theme != "dark":
-            self.light = copy.deepcopy(self.__class__.light)
+            if self.light is not self.__class__.light:
+                del self.light
 
         for element in self.widget.elements:
             element.update()
@@ -641,8 +640,12 @@ class Style:
                     key, pair = self._get_key(key), {arg: color}
 
                     if theme != "dark":
+                        if self.light is self.__class__.light:
+                            self.light = copy.deepcopy(self.__class__.light)
                         self.get(theme="light")[key][state].update(pair)
                     if theme != "light":
+                        if self.dark is self.__class__.dark:
+                            self.dark = copy.deepcopy(self.__class__.dark)
                         self.get(theme="dark")[key][state].update(pair)
 
     def set(self) -> None:
