@@ -12,6 +12,21 @@
 > * 🟠 **Deprecated / 弃用**
 > * 🟤 **Refactored / 重构**
 
+## 🔖 `3.1.4`
+
+🕓 *Release Date / 发布日期 : 2025-08-02*
+
+🔵 **Optimized / 优化**
+
+* Share the style data of the object `Style`, reducing memory consumption and speeding up widget building  
+共享对象 `Style` 的样式数据，减少内存消耗并提升控件构建速度  
+Issue: #129
+
+🟤 **Refactored / 重构**
+
+* Improve code for readability and maintainability  
+改善代码，提高可读性和可维护性
+
 ## 🔖 `3.1.3`
 
 🕓 *Release Date / 发布日期 : 2025-06-29*
