@@ -82,7 +82,7 @@ class Tk(tkinter.Tk, Misc):
         """
         if not isinstance(self, Toplevel):
             # containers.Toplevel and its subclasses do not inherit tk.Tk
-            tkinter.Tk.__init__(self, **kwargs)
+            super().__init__(**kwargs)
 
         # ensure init_size is a tuple
         self.init_size: typing.Final[tuple[int, int]] = size[0], size[1]
@@ -392,7 +392,7 @@ class Toplevel(tkinter.Toplevel, Tk, Misc):
         * `focus`: whether direct input focus to this window
         * `**kwargs`: compatible with other parameters of class `tkinter.Toplevel`
         """
-        tkinter.Toplevel.__init__(self, master, **kwargs)
+        super().__init__(master, **kwargs)
 
         if icon is None:
             icon = getattr(self.master, "_icon", None)  # For some rare cases
@@ -455,7 +455,7 @@ class Canvas(tkinter.Canvas, Misc):
         * `zoom_all_items`: (Experimental) whether or not to scale its all items
         * `kwargs`: compatible with other parameters of class `tkinter.Canvas`
         """
-        tkinter.Canvas.__init__(self, master, **kwargs)
+        super().__init__(master, **kwargs)
 
         self.master: Tk | Toplevel | Canvas  # just for type hint
 

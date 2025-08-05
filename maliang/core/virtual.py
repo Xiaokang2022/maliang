@@ -378,8 +378,10 @@ class Text(Element):
 
         self._initial_fontsize = self.font.cget("size")
 
-        Element.__init__(self, widget, relative_position, size, name=name,
-                         gradient_animation=gradient_animation, **kwargs)
+        super().__init__(
+            widget, relative_position, size, name=name,
+            gradient_animation=gradient_animation, **kwargs
+        )
 
     def region(self) -> tuple[int, int, int, int]:
         """Return the decision region of the `Text`."""
@@ -433,10 +435,12 @@ class Image(Element):
         * `kwargs`: extra parameters for CanvasItem
         """
         self.image = image
-        self.initail_image = image
+        self.initial_image = image
 
-        Element.__init__(self, widget, relative_position, size, name=name,
-                         gradient_animation=gradient_animation, **kwargs)
+        super().__init__(
+            widget, relative_position, size, name=name,
+            gradient_animation=gradient_animation, **kwargs
+        )
 
     def region(self) -> tuple[int, int, int, int]:
         """Return the decision region of the `Image`."""
@@ -462,10 +466,10 @@ class Image(Element):
         Element.zoom(
             self, ratios, zoom_position=zoom_position, zoom_size=zoom_size)
 
-        if self.initail_image is None:
+        if self.initial_image is None:
             raise RuntimeError("Image is empty.")
 
-        self.image = self.initail_image.scale(*self.widget.master.ratios)
+        self.image = self.initial_image.scale(*self.widget.master.ratios)
 
         for item in self.items:
             self.widget.master.itemconfigure(item, image=self.image)

@@ -165,11 +165,11 @@ class Image(virtual.Widget):
         """Get the image of the widget"""
         if (image := self.images[0].image) is not None:
             return image
-        return self.images[0].initail_image
+        return self.images[0].initial_image
 
     def set(self, image: enhanced.PhotoImage | None) -> None:
         """Set the image of the widget"""
-        self.images[0].initail_image = image
+        self.images[0].initial_image = image
         if image is not None:
             self.master.update()
             image = image.scale(*self.master.ratios)

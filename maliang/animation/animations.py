@@ -189,8 +189,8 @@ class MoveWindow(Animation):
             def callback(p) -> None:
                 window.wm_geometry(f"+{round(x0+dx*p)}+{round(y0+dy*p)}")
 
-        Animation.__init__(
-            self, duration, callback, controller=controller, end=end, fps=fps,
+        super().__init__(
+            duration, callback, controller=controller, end=end, fps=fps,
             repeat=repeat, repeat_delay=repeat_delay,
         )
 
@@ -226,8 +226,8 @@ class MoveTkWidget(Animation):
             x0, y0, dx, dy = int(info["x"]), int(info["y"]), *offset
             anchor = info["anchor"]
 
-            Animation.__init__(
-                self, duration, lambda p: widget.place(
+            super().__init__(
+                duration, lambda p: widget.place(
                     x=x0+dx*p, y=y0+dy*p, anchor=anchor),
                 controller=controller, end=end, fps=fps, repeat=repeat,
                 repeat_delay=repeat_delay,
@@ -298,10 +298,9 @@ class MoveWidget(Animation):
             def command(p: float) -> None:
                 widget.move(offset[0]*p, offset[1]*p)
 
-        Animation.__init__(
-            self, duration, command,
-            controller=controller, end=end, fps=fps, repeat=repeat,
-            repeat_delay=repeat_delay, derivation=True,
+        super().__init__(
+            duration, command, controller=controller, end=end, fps=fps,
+            repeat=repeat, repeat_delay=repeat_delay, derivation=True,
         )
 
 
@@ -367,10 +366,9 @@ class MoveElement(Animation):
             def command(p: float) -> None:
                 element.move(offset[0]*p, offset[1]*p)
 
-        Animation.__init__(
-            self, duration, command,
-            controller=controller, end=end, fps=fps, repeat=repeat,
-            repeat_delay=repeat_delay, derivation=True,
+        super().__init__(
+            duration, command, controller=controller, end=end, fps=fps,
+            repeat=repeat, repeat_delay=repeat_delay, derivation=True,
         )
 
 
@@ -440,10 +438,9 @@ class MoveItem(Animation):
             def command(p: float) -> None:
                 canvas.move(item, offset[0]*p, offset[1]*p)
 
-        Animation.__init__(
-            self, duration, command,
-            controller=controller, end=end, fps=fps, repeat=repeat,
-            repeat_delay=repeat_delay, derivation=True,
+        super().__init__(
+            duration, command, controller=controller, end=end, fps=fps,
+            repeat=repeat, repeat_delay=repeat_delay, derivation=True,
         )
 
 
@@ -523,10 +520,9 @@ class GradientTkWidget(Animation):
                 widget.configure(
                     {parameter: convert.rgb_to_hex(rgb.transition(c1, c2, p))})
 
-        Animation.__init__(
-            self, duration, command,
-            controller=controller, end=end, fps=fps, repeat=repeat,
-            repeat_delay=repeat_delay, derivation=derivation,
+        super().__init__(
+            duration, command, controller=controller, end=end, fps=fps,
+            repeat=repeat, repeat_delay=repeat_delay, derivation=derivation,
         )
 
 
@@ -610,10 +606,9 @@ class GradientItem(Animation):
                 canvas.itemconfigure(
                     item, {parameter: convert.rgb_to_hex(rgb.transition(c1, c2, p))})
 
-        Animation.__init__(
-            self, duration, command,
-            controller=controller, end=end, fps=fps, repeat=repeat,
-            repeat_delay=repeat_delay, derivation=derivation,
+        super().__init__(
+            duration, command, controller=controller, end=end, fps=fps,
+            repeat=repeat, repeat_delay=repeat_delay, derivation=derivation,
         )
 
 
@@ -681,8 +676,8 @@ class ScaleFontSize(Animation):
             sizes = -abs(sizes[0]), -abs(sizes[1])
             sizes = sizes[0], sizes[1] - sizes[0]
 
-        Animation.__init__(
-            self, duration, lambda p: (
+        super().__init__(
+            duration, lambda p: (
                 text.font.config(size=round(sizes[0] + sizes[1]*p)),
                 text.update()),
             controller=controller, end=end, fps=fps, repeat=repeat,
