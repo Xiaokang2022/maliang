@@ -404,8 +404,7 @@ class Text(Element):
         * `zoom_position`: whether or not to zoom the location of the text
         * `zoom_size`: whether or not to zoom the size of the text
         """
-        Element.zoom(
-            self, ratios, zoom_position=zoom_position, zoom_size=zoom_size)
+        super().zoom(ratios, zoom_position=zoom_position, zoom_size=zoom_size)
 
         self.font.config(size=round(self._initial_fontsize*math.sqrt(
             self.widget.master.ratios[0]*self.widget.master.ratios[1])))
@@ -463,8 +462,7 @@ class Image(Element):
         * `zoom_position`: whether or not to zoom the location of the image
         * `zoom_size`: whether or not to zoom the size of the image
         """
-        Element.zoom(
-            self, ratios, zoom_position=zoom_position, zoom_size=zoom_size)
+        super().zoom(ratios, zoom_position=zoom_position, zoom_size=zoom_size)
 
         if self.initial_image is None:
             raise RuntimeError("Image is empty.")

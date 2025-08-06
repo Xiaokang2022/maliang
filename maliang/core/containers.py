@@ -338,7 +338,7 @@ class Tk(tkinter.Tk, Misc):
     def destroy(self) -> None:
         """Destroy this and all descendants widgets."""
         manager.remove_event(self.theme)
-        return tkinter.Tk.destroy(self)
+        return super().destroy()
 
     def at_exit(
         self,
@@ -409,7 +409,7 @@ class Toplevel(tkinter.Toplevel, Tk, Misc):
     def destroy(self) -> None:
         """Destroy this and all descendants widgets."""
         manager.remove_event(self.theme)
-        return tkinter.Toplevel.destroy(self)
+        return super().destroy()
 
 
 class Canvas(tkinter.Canvas, Misc):
@@ -650,7 +650,7 @@ class Canvas(tkinter.Canvas, Misc):
             if widget.exists() and not widget.nested:
                 widget.destroy()
 
-        return tkinter.Canvas.destroy(self)
+        return super().destroy()
 
     def clear(self) -> None:
         """Clear all things in the Canvas."""
@@ -683,7 +683,7 @@ class Canvas(tkinter.Canvas, Misc):
                 weight=font[2] if len(font) > 2 else "normal",
                 slant=font[3] if len(font) > 3 else "roman")
 
-        return tkinter.Canvas.create_text(self, x, y, *args, **kwargs)
+        return super().create_text(x, y, *args, **kwargs)
 
     def on_motion(self, event: tkinter.Event, name: str) -> None:
         """Events to move the mouse"""
