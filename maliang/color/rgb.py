@@ -9,6 +9,7 @@ __all__ = [
     "gradient",
 ]
 
+import operator
 import statistics
 import typing
 
@@ -66,7 +67,7 @@ def blend(
     total = sum(weights)
     weights = tuple(map(lambda x: x/total, weights))  # Different weights
 
-    return tuple(round(sum(map(lambda x: x[0]*x[1], zip(c, weights)))) for c in colors)
+    return tuple(round(sum(map(operator.mul, c, weights))) for c in colors)
 
 
 def gradient(
