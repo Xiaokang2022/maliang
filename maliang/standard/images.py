@@ -64,10 +64,10 @@ class Smoke(virtual.Image):
         if Image is None:
             raise RuntimeError("Package 'pillow' is missing.")
 
-        virtual.Image.__init__(self, widget, relative_position, size,
-                               name=name, gradient_animation=animation, **kwargs)
+        super().__init__(widget, relative_position, size, name=name,
+                         gradient_animation=animation, **kwargs)
 
-        self.image = self.initail_image = enhanced.PhotoImage(
+        self.image = self.initial_image = enhanced.PhotoImage(
             Image.new("RGBA", (round(self.size[0]), round(self.size[1])), color))
 
     @typing_extensions.override

@@ -229,10 +229,11 @@ class SingleLineText(virtual.Text):
         self.anchor = "w" if align == "left" else "e" if align == "right" else "center"
         self.ignore = ignore
         self.limit_width = limit_width
-        virtual.Text.__init__(
-            self, widget, relative_position, size, text=text, limit=limit, show=show,
-            placeholder=placeholder, family=family, fontsize=fontsize, weight=weight, slant=slant,
-            underline=underline, overstrike=overstrike, name=name,
+        super().__init__(
+            widget, relative_position, size, text=text, limit=limit, show=show,
+            placeholder=placeholder, family=family, fontsize=fontsize,
+            weight=weight, slant=slant, underline=underline,
+            overstrike=overstrike, name=name,
             gradient_animation=gradient_animation, **kwargs)
         self.text_proxy = _CanvasTextProxy(widget.master, self.items[0])
 

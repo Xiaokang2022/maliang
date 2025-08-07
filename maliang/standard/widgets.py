@@ -93,8 +93,8 @@ class Text(virtual.Widget):
             size = utility.get_text_size(
                 text, fontsize, family, weight=weight, slant=slant,
                 wrap_length=wrap_length, master=master)
-        virtual.Widget.__init__(
-            self, master, position, size, anchor=anchor,
+        super().__init__(
+            master, position, size, anchor=anchor,
             capture_events=capture_events, gradient_animation=gradient_animation,
             auto_resize=auto_resize, auto_update=auto_update, style=style)
         # The above parameter `anchor` has no practical effect and is only used
@@ -148,8 +148,8 @@ class Image(virtual.Widget):
         """
         if size is None and image is not None:
             size = image.width(), image.height()
-        virtual.Widget.__init__(
-            self, master, position, size if size else (0, 0), anchor=anchor,
+        super().__init__(
+            master, position, size if size else (0, 0), anchor=anchor,
             capture_events=capture_events, gradient_animation=gradient_animation,
             auto_update=auto_update, style=style)
         # The above parameter `anchor` has no practical effect and is only used
@@ -223,8 +223,8 @@ class Label(virtual.Widget):
         if auto_resize := size is None:
             size = utility.get_text_size(
                 text, fontsize, family, weight=weight, slant=slant, padding=6, master=master)
-        virtual.Widget.__init__(
-            self, master, position, size, anchor=anchor,
+        super().__init__(
+            master, position, size, anchor=anchor,
             capture_events=capture_events, gradient_animation=gradient_animation,
             auto_resize=auto_resize, auto_update=auto_update, style=style)
         if style is None:
@@ -300,8 +300,8 @@ class Button(virtual.Widget):
         if auto_resize := size is None:
             size = utility.get_text_size(
                 text, fontsize, family, weight=weight, slant=slant, padding=6, master=master)
-        virtual.Widget.__init__(
-            self, master, position, size, anchor=anchor,
+        super().__init__(
+            master, position, size, anchor=anchor,
             capture_events=capture_events, gradient_animation=gradient_animation,
             auto_resize=auto_resize, auto_update=auto_update, style=style)
         if style is None:
@@ -360,8 +360,8 @@ class Switch(virtual.Widget):
         * `auto_update`: whether the theme manager update it automatically
         * `style`: style of the widget
         """
-        virtual.Widget.__init__(
-            self, master, position, (length, length / 2),
+        super().__init__(
+            master, position, (length, length / 2),
             anchor=anchor, capture_events=capture_events, gradient_animation=gradient_animation,
             auto_update=auto_update, style=style)
         self.state = "normal-off"
@@ -452,8 +452,8 @@ class InputBox(virtual.Widget):
         if size is None:
             size = 200, utility.get_text_size(
                 "", fontsize, family, weight=weight, slant=slant, padding=6, master=master)[1]
-        virtual.Widget.__init__(
-            self, master, position, size, anchor=anchor,
+        super().__init__(
+            master, position, size, anchor=anchor,
             capture_events=capture_events, gradient_animation=gradient_animation,
             auto_update=auto_update, style=style)
         if style is None:
@@ -552,8 +552,8 @@ class CheckBox(virtual.Widget):
         * `auto_update`: whether the theme manager update it automatically
         * `style`: style of the widget
         """
-        virtual.Widget.__init__(
-            self, master, position, (length, length), anchor=anchor,
+        super().__init__(
+            master, position, (length, length), anchor=anchor,
             capture_events=capture_events, gradient_animation=gradient_animation,
             auto_update=auto_update, style=style)
         self.state = "normal-off"
@@ -633,8 +633,8 @@ class ToggleButton(virtual.Widget):
         if size is None:
             size = utility.get_text_size(
                 text, fontsize, family, weight=weight, slant=slant, padding=6, master=master)
-        virtual.Widget.__init__(
-            self, master, position, size, anchor=anchor,
+        super().__init__(
+            master, position, size, anchor=anchor,
             capture_events=capture_events, gradient_animation=gradient_animation,
             auto_update=auto_update, style=style)
         self.state = "normal-off"
@@ -698,8 +698,8 @@ class RadioBox(virtual.Widget):
         * `style`: style of the widget
         """
         self.groups: list[RadioBox] = [self]
-        virtual.Widget.__init__(
-            self, master, position, (length, length), anchor=anchor,
+        super().__init__(
+            master, position, (length, length), anchor=anchor,
             capture_events=capture_events, gradient_animation=gradient_animation,
             auto_update=auto_update, style=style)
         if style is None:
@@ -781,8 +781,8 @@ class ProgressBar(virtual.Widget):
         * `style`: style of the widget
         """
         self.value: float = 0
-        virtual.Widget.__init__(
-            self, master, position, size, anchor=anchor,
+        super().__init__(
+            master, position, size, anchor=anchor,
             capture_events=capture_events, gradient_animation=gradient_animation,
             auto_update=auto_update, style=style)
         if style is None:
@@ -873,8 +873,8 @@ class UnderlineButton(virtual.Widget):
         * `auto_update`: whether the theme manager update it automatically
         * `style`: style of the widget
         """
-        virtual.Widget.__init__(
-            self, master, position, utility.get_text_size(
+        super().__init__(
+            master, position, utility.get_text_size(
                 text, fontsize, family, weight=weight, slant=slant, master=master),
             anchor=anchor, capture_events=capture_events,
             gradient_animation=gradient_animation, auto_update=auto_update, style=style)
@@ -931,8 +931,8 @@ class HighlightButton(virtual.Widget):
         * `auto_update`: whether the theme manager update it automatically
         * `style`: style of the widget
         """
-        virtual.Widget.__init__(
-            self, master, position, utility.get_text_size(
+        super().__init__(
+            master, position, utility.get_text_size(
                 text, fontsize, family, weight=weight, slant=slant, master=master),
             anchor=anchor, capture_events=capture_events,
             gradient_animation=gradient_animation, auto_update=auto_update, style=style)
@@ -995,8 +995,8 @@ class IconButton(virtual.Widget):
             size = utility.get_text_size(
                 text, fontsize, family, weight=weight, slant=slant, padding=6, master=master)
             size = size[0] + size[1] - 6, size[1]
-        virtual.Widget.__init__(
-            self, master, position, size, anchor=anchor,
+        super().__init__(
+            master, position, size, anchor=anchor,
             capture_events=capture_events, gradient_animation=gradient_animation,
             auto_update=auto_update, style=style)
         if style is None:
@@ -1053,8 +1053,8 @@ class Slider(virtual.Widget):
         """
         self.value: float = 0
         self.command = command
-        virtual.Widget.__init__(
-            self, master, position, size, anchor=anchor,
+        super().__init__(
+            master, position, size, anchor=anchor,
             capture_events=capture_events, gradient_animation=gradient_animation,
             auto_update=auto_update, style=style)
         if style is None:
@@ -1164,8 +1164,8 @@ class SegmentedButton(virtual.Widget):
             total_size = sum(widths) + length*5 + 5, max(heights) + 10
         else:
             total_size = max(widths) + 10, sum(heights) + length*5 + 5
-        virtual.Widget.__init__(
-            self, master, position, total_size, anchor=anchor,
+        super().__init__(
+            master, position, total_size, anchor=anchor,
             capture_events=capture_events, gradient_animation=gradient_animation,
             auto_update=auto_update, style=style)
         if style is None:
@@ -1262,8 +1262,8 @@ class SpinBox(virtual.Widget):
         if size is None:
             size = 200, utility.get_text_size(
                 "", fontsize, family, weight=weight, slant=slant, padding=6, master=master)[1]
-        virtual.Widget.__init__(
-            self, master, position, size, anchor=anchor,
+        super().__init__(
+            master, position, size, anchor=anchor,
             capture_events=capture_events, gradient_animation=gradient_animation,
             auto_update=auto_update, style=style)
         h = size[1]/2 - 6
@@ -1368,8 +1368,8 @@ class OptionButton(virtual.Widget):
             size = sorted(utility.get_text_size(t, fontsize, family, weight=weight,
                           slant=slant, padding=6, master=master) for t in (list(text) + [""]))[-1]
         self.text = text
-        virtual.Widget.__init__(
-            self, master, position, size, anchor=anchor,
+        super().__init__(
+            master, position, size, anchor=anchor,
             capture_events=capture_events, gradient_animation=gradient_animation,
             auto_update=auto_update, style=style)
         if style is None:
@@ -1492,8 +1492,8 @@ class ComboBox(virtual.Widget):
                           slant=slant, padding=6, master=master) for t in (list(text) + [""]))[-1]
             size = size[0] + size[1] - 10, size[1]
         self.text = text
-        virtual.Widget.__init__(
-            self, master, position, size, anchor=anchor,
+        super().__init__(
+            master, position, size, anchor=anchor,
             capture_events=capture_events, gradient_animation=gradient_animation,
             auto_update=auto_update, style=style)
         h = size[1] - 10
@@ -1597,8 +1597,8 @@ class Spinner(virtual.Widget):
         * `style`: style of the widget
         """
         self.value: float = 0.
-        virtual.Widget.__init__(
-            self, master, position, size, anchor=anchor,
+        super().__init__(
+            master, position, size, anchor=anchor,
             capture_events=capture_events, gradient_animation=gradient_animation,
             auto_update=auto_update, style=style)
         if style is None:
@@ -1698,8 +1698,8 @@ class Tooltip(virtual.Widget):
             case "down":  position[1] += widget.size[1]/2 + size[1]/2 + padding
             case "right": position[0] += widget.size[0]/2 + size[0]/2 + padding
             case "left":  position[0] -= widget.size[0]/2 + size[0]/2 + padding
-        virtual.Widget.__init__(
-            self, widget.master, position, size,
+        super().__init__(
+            widget.master, position, size,
             capture_events=False, gradient_animation=gradient_animation,
             anchor="center", auto_update=auto_update, style=style)
         if style is None:

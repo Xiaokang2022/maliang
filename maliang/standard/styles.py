@@ -180,7 +180,7 @@ class ButtonStyle(LabelStyle):
 
         states: "normal", "hover", "active"
         """
-        LabelStyle.set(self, theme, fg=fg, bg=bg, ol=ol)
+        super().set(theme, fg=fg, bg=bg, ol=ol)
 
 
 class SwitchStyle(virtual.Style):

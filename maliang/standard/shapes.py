@@ -48,8 +48,8 @@ class Line(virtual.Shape):
         * `kwargs`: extra parameters for CanvasItem
         """
         self.points = [] if points is None else points
-        virtual.Shape.__init__(
-            self, widget, relative_position, size,
+        super().__init__(
+            widget, relative_position, size,
             name=name, gradient_animation=gradient_animation, **kwargs)
 
     @typing_extensions.override
@@ -168,8 +168,8 @@ class RegularPolygon(virtual.Shape):
         """
         self.side = side
         self.angle = angle
-        virtual.Shape.__init__(
-            self, widget, relative_position, size,
+        super().__init__(
+            widget, relative_position, size,
             name=name, gradient_animation=gradient_animation, **kwargs)
 
     @typing_extensions.override
@@ -223,8 +223,8 @@ class RoundedRectangle(virtual.Shape):
         * `kwargs`: extra parameters for CanvasItem
         """
         self.radius = radius
-        virtual.Shape.__init__(
-            self, widget, relative_position, size,
+        super().__init__(
+            widget, relative_position, size,
             name=name, gradient_animation=gradient_animation, **kwargs)
 
     @typing_extensions.override
@@ -324,8 +324,8 @@ class HalfRoundedRectangle(virtual.Shape):
         """
         self.radius = radius
         self.ignore = ignore
-        virtual.Shape.__init__(
-            self, widget, relative_position, size,
+        super().__init__(
+            widget, relative_position, size,
             name=name, gradient_animation=gradient_animation, **kwargs)
 
     @typing_extensions.override
@@ -504,8 +504,8 @@ class SharpRectangle(virtual.Shape):
             warnings.warn("Parameters are not suitable", UserWarning, 5)
         if math.isclose(abs(self.ratio[0] - self.ratio[1]), 1):
             warnings.warn("Parameters are not suitable", UserWarning, 5)
-        virtual.Shape.__init__(
-            self, widget, relative_position, size,
+        super().__init__(
+            widget, relative_position, size,
             name=name, gradient_animation=gradient_animation, **kwargs)
 
     @typing_extensions.override
@@ -573,8 +573,8 @@ class Parallelogram(virtual.Shape):
         self.theta = theta
         if not abs(theta) <= math.pi/3:
             warnings.warn("Parameters are not suitable", UserWarning, 5)
-        virtual.Shape.__init__(
-            self, widget, relative_position, size,
+        super().__init__(
+            widget, relative_position, size,
             name=name, gradient_animation=gradient_animation, **kwargs)
 
     @typing_extensions.override

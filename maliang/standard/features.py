@@ -89,7 +89,7 @@ class ButtonFeature(virtual.Feature):
         * `command`: callback function
         * `args`: arguments of callback function
         """
-        virtual.Feature.__init__(self, widget)
+        super().__init__(widget)
         self.command = command
         self._args = args
 
@@ -532,7 +532,7 @@ class SpinBoxFeature(virtual.Feature):
         * `widget`: parent widget
         * `command`: callback function
         """
-        virtual.Feature.__init__(self, widget)
+        super().__init__(widget)
         self.command = command
         if self.command is None:
             self.command = self.widget.change
