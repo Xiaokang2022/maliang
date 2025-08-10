@@ -2,12 +2,12 @@
 
 from __future__ import annotations as _
 
-__all__ = [
+__all__ = (
     "TkMessage",
     "TkColorChooser",
     "TkFontChooser",
     # "TkFileChooser",
-]
+)
 
 import tkinter
 import tkinter.colorchooser

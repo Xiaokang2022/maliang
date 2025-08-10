@@ -12,14 +12,14 @@ def f(t: float) -> float: ...
 
 from __future__ import annotations as _
 
-__all__ = [
+__all__ = (
     "generate",
     "linear",
     "smooth",
     "rebound",
     "ease_in",
     "ease_out",
-]
+)
 
 import functools
 import math

@@ -9,7 +9,7 @@
 
 from __future__ import annotations as _
 
-__all__ = [
+__all__ = (
     "rgb_to_hex",
     "hex_to_rgb",
     "rgba_to_hex",
@@ -38,7 +38,7 @@ __all__ = [
     "name2hex",
     "hex2name",
     "str2rgb",
-]
+)
 
 import colorsys
 import math

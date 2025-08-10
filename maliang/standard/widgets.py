@@ -2,7 +2,7 @@
 
 from __future__ import annotations as _
 
-__all__ = [
+__all__ = (
     "Text",
     "Image",
     "Label",
@@ -23,7 +23,7 @@ __all__ = [
     "ComboBox",
     "Spinner",
     "Tooltip",
-]
+)
 
 import contextlib
 import decimal

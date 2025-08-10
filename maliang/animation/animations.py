@@ -6,7 +6,7 @@ animation classes are best used by direct calls, rather than inheritance.
 
 from __future__ import annotations as _
 
-__all__ = [
+__all__ = (
     "Animation",
     "MoveWindow",
     "MoveTkWidget",
@@ -16,7 +16,7 @@ __all__ = [
     "GradientTkWidget",
     "GradientItem",
     "ScaleFontSize",
-]
+)
 
 import collections.abc
 import typing

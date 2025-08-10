@@ -2,7 +2,7 @@
 
 from __future__ import annotations as _
 
-__all__ = [
+__all__ = (
     "ButtonStyle",
     "CheckBoxStyle",
     "ToggleButtonStyle",
@@ -20,7 +20,7 @@ __all__ = [
     "TooltipStyle",
     "SpinnerStyle",
     "UnderlineButtonStyle",
-]
+)
 
 import copy
 import typing

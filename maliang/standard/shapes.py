@@ -2,7 +2,7 @@
 
 from __future__ import annotations as _
 
-__all__ = [
+__all__ = (
     "Line",
     "Rectangle",
     "Oval",
@@ -13,7 +13,7 @@ __all__ = [
     "SemicircularRectangle",
     "SharpRectangle",
     "Parallelogram",
-]
+)
 
 import math
 import typing

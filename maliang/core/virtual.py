@@ -14,7 +14,7 @@ abstract base class `Elements`.
 
 from __future__ import annotations as _
 
-__all__ = [
+__all__ = (
     "Element",
     "Shape",
     "Text",
@@ -22,7 +22,7 @@ __all__ = [
     "Style",
     "Feature",
     "Widget",
-]
+)
 
 import abc
 import copy

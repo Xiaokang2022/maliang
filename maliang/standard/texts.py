@@ -2,10 +2,10 @@
 
 from __future__ import annotations as _
 
-__all__ = [
+__all__ = (
     "Information",
     "SingleLineText",
-]
+)
 
 import bisect
 import itertools

@@ -2,12 +2,12 @@
 
 from __future__ import annotations as _
 
-__all__ = [
+__all__ = (
     "contrast",
     "transition",
     "blend",
     "gradient",
-]
+)
 
 import math
 import operator

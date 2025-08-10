@@ -2,7 +2,7 @@
 
 from __future__ import annotations as _
 
-__all__ = [
+__all__ = (
     "TextFeature",
     "ImageFeature",
     "LabelFeature",
@@ -18,7 +18,7 @@ __all__ = [
     "SliderFeature",
     "SegmentedButtonFeature",
     "SpinBoxFeature",
-]
+)
 
 import typing
 

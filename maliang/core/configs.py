@@ -7,12 +7,12 @@ immediately, but some need to take effect when the relevant option is invoked.
 
 from __future__ import annotations as _
 
-__all__ = [
+__all__ = (
     "Env",
     "Font",
     "Constant",
     "reset",
-]
+)
 
 import ctypes
 import math

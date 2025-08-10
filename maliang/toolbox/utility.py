@@ -2,7 +2,7 @@
 
 from __future__ import annotations as _
 
-__all__ = [
+__all__ = (
     "get_parent",
     "embed_window",
     "load_font",
@@ -10,7 +10,7 @@ __all__ = [
     "get_text_size",
     "fix_cursor",
     "create_smoke",
-]
+)
 
 import atexit
 import ctypes

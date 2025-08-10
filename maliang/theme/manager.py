@@ -8,7 +8,7 @@
 
 from __future__ import annotations as _
 
-__all__ = [
+__all__ = (
     "set_color_mode",
     "get_color_mode",
     "register_event",
@@ -16,7 +16,7 @@ __all__ = [
     "apply_file_dnd",
     "apply_theme",
     "customize_window",
-]
+)
 
 import ctypes.wintypes
 import platform
