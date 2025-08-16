@@ -85,7 +85,7 @@ figcaption {
     margin: 0 0;
 }
 
-/*代码块非高亮行模糊，鼠标移上去变清晰*/
+/*代码块非高亮行模糊，鼠标移上去变清晰，需要 .blur 搭配 hl_lines="..." 否则无效*/
 .blur.highlight .hll {
     background-color: unset;
     box-shadow: unset;
@@ -116,4 +116,32 @@ figcaption {
     audio.md-header__option {
         display: none;
     }
+}
+
+/*代码块最大高度，需要 .limit 搭配 linenums="0" 否则行号错位*/
+/*https://github.com/squidfunk/mkdocs-material/issues/3444*/
+.limit pre>code {
+    max-height: 25rem;
+}
+
+/*思维导图边框美化*/
+div.mkdocs-markmap {
+    border-radius: .2rem;
+}
+
+/*思维导图文本颜色暗色模式修复及字体修复*/
+.mkdocs-markmap div {
+    color: var(--md-typeset-color);
+    font-family: var(--md-code-font);
+}
+
+/*思维导图代码颜色暗色模式修复*/
+.mkdocs-markmap div code {
+    color: var(--md-code-fg-color);
+    background-color: var(--md-code-bg-color);
+}
+
+/*公式字体略微减小*/
+.arithmatex {
+    font-size: small;
 }
