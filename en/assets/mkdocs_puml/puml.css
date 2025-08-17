@@ -1,0 +1,52 @@
+@media (prefers-color-scheme: dark) {
+    body .puml.light {
+        display: none;
+    }
+
+    body .puml.dark {
+        display: block;
+    }
+}
+
+html[data-bs-theme="light"] .puml.light {
+    display: block;
+}
+html[data-bs-theme="dark"] .puml.light {
+    display: none;
+}
+
+html[data-bs-theme="light"] .puml.dark {
+    display: none;
+}
+html[data-md-color-scheme="dark"] .puml.dark {
+    display: block;
+}
+
+
+body[data-md-color-scheme="default"] .puml.light {
+    display: block;
+}
+body[data-md-color-scheme="slate"] .puml.light {
+    display: none;
+}
+
+body[data-md-color-scheme="default"] .puml.dark {
+    display: none;
+}
+body[data-md-color-scheme="slate"] .puml.dark {
+    display: block;
+}
+
+.puml {
+    display: block;
+    position: relative;
+}
+
+.puml .diagram {
+    width: 100% !important;
+    min-height: 300px !important;
+}
+
+.puml .diagram.wide-svg {
+    height: auto !important;
+}

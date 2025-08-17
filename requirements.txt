@@ -5,4 +5,8 @@ mkdocs-git-committers-plugin-2
 mkdocs-git-revision-date-localized-plugin
 mkdocs-statistics-plugin
 mkdocs-minify-plugin
+mkdocs-macros-plugin
 mkdocs-rss-plugin
+mkdocs-autorefs
+mkdocs-markmap
+mkdocs_puml
