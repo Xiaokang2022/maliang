@@ -1,5 +1,5 @@
 ---
-icon: octicons/sponsor-tiers-24
+icon: octicons/heart-24
 ---
 
 First of all, thank you for your idea of supporting this project! ❤️

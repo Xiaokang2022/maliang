@@ -1,5 +1,5 @@
 ---
-icon: material/clipboard-text
+icon: octicons/people-24
 ---
 
 首先，感谢您抽出宝贵时间做出贡献！❤️

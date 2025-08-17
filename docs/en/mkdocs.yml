@@ -86,16 +86,16 @@ extra:
           data: -1
           note: Thanks for your feedback!
 
-exclude_docs:
+exclude_docs: ""
 
 nav:
   - Home:
       - Home: index.md
       - License: LICENSE.md
-      - Changelog: CHANGELOG.md
+      - Code of Conduct: CODE_OF_CONDUCT.md
       - Contribution Guide: CONTRIBUTING.md
       - Security Policy: SECURITY.md
-      - Code of Conduct: CODE_OF_CONDUCT.md
+      - Changelog: CHANGELOG.md
       - Sponsor this Project: Sponsor.md
 
   - Tutorials & Documents:

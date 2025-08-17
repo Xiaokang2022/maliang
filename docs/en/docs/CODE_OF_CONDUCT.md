@@ -1,5 +1,5 @@
 ---
-icon: octicons/code-of-conduct-24
+icon: octicons/code-of-conduct-16
 ---
 
 ## Our Pledge

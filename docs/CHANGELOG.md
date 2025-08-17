@@ -1,5 +1,5 @@
 ---
-icon: material/history
+icon: octicons/history-24
 ---
 
 !!! tip "Tip / 提示"

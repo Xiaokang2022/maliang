@@ -1,5 +1,5 @@
 ---
-icon: material/clipboard-text
+icon: octicons/people-16
 ---
 
 First off, thanks for taking the time to contribute! ❤️

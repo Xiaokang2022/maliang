@@ -1,5 +1,5 @@
 ---
-icon: material/wechat
+icon: octicons/comment-discussion-24
 ---
 
 加入群聊，咨询更多信息！(1)

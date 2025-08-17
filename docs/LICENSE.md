@@ -1,5 +1,5 @@
 ---
-icon: material/scale-balance
+icon: octicons/law-24
 ---
 
 --8<-- "LICENSE.txt"
