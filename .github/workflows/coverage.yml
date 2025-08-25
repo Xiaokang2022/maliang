@@ -38,7 +38,7 @@ jobs:
         pytest --cov --cov-report=xml --junitxml=junit.xml
 
     - name: Upload coverage to Codecov
-      uses: codecov/codecov-action@0565863a31f2c772f9f0395002a31e3f06189574
+      uses: codecov/codecov-action@fdcc8476540edceab3de004e990f80d881c6cc00
       with:
         token: ${{ secrets.CODECOV_TOKEN }}
         fail_ci_if_error: false
