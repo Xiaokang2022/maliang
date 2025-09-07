@@ -72,8 +72,8 @@ class TestCase(unittest.TestCase):
 
     def test_fix_hex_length(self) -> None:
         self.assertEqual(convert.fix_hex_length("#FFF"), "#FFFFFF")
-        self.assertEqual(convert.fix_hex_length("#00ff00"), "#00ff00")  
-        self.assertEqual(convert.fix_hex_length("#00ff"), "#0000ffff")  
+        self.assertEqual(convert.fix_hex_length("#00ff00"), "#00ff00")
+        self.assertEqual(convert.fix_hex_length("#00ff"), "#0000ffff")
 
     def test_str_to_rgb(self) -> None:
         self.assertEqual(convert.str_to_rgb("#FFFFFF"), (255, 255, 255))

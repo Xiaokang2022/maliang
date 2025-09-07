@@ -3,7 +3,7 @@ site_url: https://Xiaokang2022.github.io/maliang/ # 站点链接
 repo_url: https://github.com/Xiaokang2022/maliang # 仓库地址
 repo_name: Xiaokang2022/maliang # 仓库名称
 edit_uri: edit/main/docs # 编辑地址
-edit_uri_template: null # 编辑地址模板（默认值）
+edit_uri_template: "" # 编辑地址模板（默认值）
 site_description: maliang 的官方网站 # 站点描述
 site_author: Xiaokang2022 # 站点作者
 copyright: <a href="#__consent">修改 Cookie 设置</a><br/>Copyright &copy; 2022 Xiaokang2022 # 版权信息和 Cookie 设置
