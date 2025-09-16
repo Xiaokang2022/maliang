@@ -75,6 +75,7 @@ pip install maliang[opt]
 * [`maliang-mpl`](https://github.com/Xiaokang2022/maliang-mpl): 提供 `matplotlib` 包的相关支持
 * [`maliang-media`](https://github.com/Xiaokang2022/maliang-media): 提供媒体文件的相关支持
 * [`maliang-three`](https://github.com/Xiaokang2022/maliang-three): 提供简单 3D 绘图的相关支持
+* [`maliang-table`](https://github.com/Xiaokang2022/maliang-table): 提供表格控件的相关支持
 
 用以下命令可以安装全部的官方扩展包：
 
@@ -82,7 +83,7 @@ pip install maliang[opt]
 pip install maliang[ext]
 ```
 
-此外，你还可以在[这里](https://xiaokang2022.github.io/maliang/t%26d/third-party/)找到所有已被我们收集到的第三方扩展包。
+此外，你还可以在 [这里](https://xiaokang2022.github.io/maliang/t%26d/third-party/) 找到所有已被我们收集到的第三方扩展包。
 
 > [!WARNING]  
 > 上述包并不包含在本项目的源代码中，如果你使用了它们并想要再分发，请遵循它们的开源协议！
@@ -95,7 +96,7 @@ pip install maliang[ext]
 
 ### 🖼️ 画廊
 
-下面是一些可以用该项目实现的演示，它们可能是用该项目的最新版本构建的，也可能是用旧版构建的，但无论怎样，它们的代码都可以在[演示存储库](https://github.com/Xiaokang2022/maliang-demos)中找到！
+下面是一些可以用该项目实现的演示，它们可能是用该项目的最新版本构建的，也可能是用旧版构建的，但无论怎样，它们的代码都可以在演示存储库 [`maliang-demos`](https://github.com/Xiaokang2022/maliang-demos) 中找到！
 
 > [!TIP]  
 > 请点击 **“展开”** 来查看画廊

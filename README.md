@@ -75,6 +75,7 @@ In addition to the basic functionality, we also offer a number of extension pack
 * [`maliang-mpl`](https://github.com/Xiaokang2022/maliang-mpl): support for `matplotlib`
 * [`maliang-media`](https://github.com/Xiaokang2022/maliang-media): support for media files
 * [`maliang-three`](https://github.com/Xiaokang2022/maliang-three): support for simple 3D drawings
+* [`maliang-table`](https://github.com/Xiaokang2022/maliang-table): support for table widget
 
 You can install all the official extensions with the following command:
 
@@ -95,7 +96,7 @@ The logo of this project is taken from the open source project: [`fluentui-emoji
 
 ### 🖼️ Gallery
 
-The demos below are some of the things that can be achieved with the project, they may be built with the latest version of the project, or they may be built with an older version, but either way, the code for the demo below can be found in the [demo repository](https://github.com/Xiaokang2022/maliang-demos)!
+The demos below are some of the things that can be achieved with the project, they may be built with the latest version of the project, or they may be built with an older version, but either way, the code for the demo below can be found in the demo repository [`maliang-demos`](https://github.com/Xiaokang2022/maliang-demos)!
 
 > [!TIP]  
 > Please click **"Expand"** to view the gallery

@@ -75,6 +75,7 @@ pip install maliang[opt]
 * [`maliang-mpl`](https://github.com/Xiaokang2022/maliang-mpl): 提供 `matplotlib` 包的相關支持
 * [`maliang-media`](https://github.com/Xiaokang2022/maliang-media): 提供媒體文件的相關支持
 * [`maliang-three`](https://github.com/Xiaokang2022/maliang-three): 提供簡單 3D 繪圖的相關支持
+* [`maliang-table`](https://github.com/Xiaokang2022/maliang-table): 提供表格控制項的相關支持
 
 用以下命令可以安裝全部的官方擴展包：
 
@@ -82,7 +83,7 @@ pip install maliang[opt]
 pip install maliang[ext]
 ```
 
-此外，你還可以在[這裡](https://xiaokang2022.github.io/maliang/t%26d/third-party/)找到所有已被我們收集到的第三方擴展包。
+此外，你還可以在 [這裡](https://xiaokang2022.github.io/maliang/t%26d/third-party/) 找到所有已被我們收集到的第三方擴展包。
 
 > [!WARNING]  
 > 上面提到的包並不包含在本專案的原始程式碼中，如果你使用了它們並想要再分發，請遵循它們的開源協定！
@@ -91,11 +92,11 @@ pip install maliang[ext]
 
 ### ℹ️ 關於
 
-本專案的徽標取自開源專案：[`fluentui-emoji`](https://github.com/microsoft/fluentui-emoji)，名稱取自中國童話故事：[*《神笔马良》*](https://baike.baidu.com/item/%E7%A5%9E%E7%AC%94%E9%A9%AC%E8%89%AF/14821387)
+本專案的徽標取自開源專案：[`fluentui-emoji`](https://github.com/microsoft/fluentui-emoji)，名稱取自中國童話故事：[*《神筆馬良》*](https://baike.baidu.com/item/%E7%A5%9E%E7%AC%94%E9%A9%AC%E8%89%AF/14821387)
 
 ### 🖼️ 畫廊
 
-下面是一些可以用該項目實現的演示，它們可能是用該專案的最新版本構建的，也可能是用舊版構建的，但無論怎樣，它們的代碼都可以在[演示存儲庫](https://github.com/Xiaokang2022/maliang-demos)中找到！
+下面是一些可以用該項目實現的演示，它們可能是用該專案的最新版本構建的，也可能是用舊版構建的，但無論怎樣，它們的代碼都可以在演示存儲庫 [`maliang-demos`](https://github.com/Xiaokang2022/maliang-demos) 中找到！
 
 > [!TIP]  
 > 請點擊 **“展開”** 來查看畫廊

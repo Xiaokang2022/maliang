@@ -45,6 +45,7 @@ optional-dependencies.ext = [
     "maliang-mpl>=1.2.3",
     "maliang-media>=1.1.3",
     "maliang-three>=1.0.3",
+    "maliang-table"
 ]
 urls."Bug tracker" = "https://github.com/Xiaokang2022/maliang/issues"
 urls."Changelog" = "https://xiaokang2022.github.io/maliang/CHANGELOG/"
