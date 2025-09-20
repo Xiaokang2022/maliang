@@ -14,12 +14,12 @@ __all__ = (
 
 import operator
 import statistics
-import typing
+from typing import TYPE_CHECKING
 
 from ..animation import controllers
 
-if typing.TYPE_CHECKING:
-    import collections.abc
+if TYPE_CHECKING:
+    from collections.abc import Callable
 
 
 def contrast(
@@ -30,8 +30,12 @@ def contrast(
 ) -> tuple[int, int, int]:
     """Get the contrasting color of a RGB code.
 
-    * `value`: a RGB code
-    * `channels`: three color channels
+    Args:
+        value: a RGB code.
+        channels: three color channels.
+
+    Returns:
+        The contrasting color of the input RGB code.
     """
     return tuple(255-v if c else v for v, c in zip(value, channels))
 
@@ -45,10 +49,14 @@ def transition(
 ) -> tuple[int, int, int]:
     """Transition one color to another proportionally.
 
-    * `first`: the first RGB code
-    * `second`: the second RGB code
-    * `rate`: transition rate
-    * `channels`: three color channels
+    Args:
+        first: the first RGB code.
+        second: the second RGB code.
+        rate: transition rate.
+        channels: three color channels.
+
+    Returns:
+        The transitioned RGB code.
     """
     return tuple(first[i] + round((second[i]-first[i]) * rate * v) for i, v in enumerate(channels))
 
@@ -59,8 +67,12 @@ def blend(
 ) -> tuple[int, int, int]:
     """Mix colors by weight.
 
-    * `values`: RGB codes
-    * `weights`: weight list, default value indicates the same weights
+    Args:
+        values: RGB codes.
+        weights: weight list, default value indicates the same weights.
+
+    Returns:
+        The blended RGB code.
     """
     colors = zip(*values)
 
@@ -80,21 +92,26 @@ def gradient(
     rate: float = 1,
     *,
     channels: tuple[bool, bool, bool] = (True, True, True),
-    contoller: collections.abc.Callable[[float], float] = controllers.linear,
+    controller: Callable[[float], float] = controllers.linear,
 ) -> list[tuple[int, int, int]]:
     """Get a list of color gradients from one color to another proportionally.
 
-    * `first`: the first RGB code
-    * `second`: the second RGB code
-    * `count`: the number of gradients
-    * `rate`: transition rate
-    * `channels`: three color channels
-    * `controller`: control function
+    Args:
+        first: the first RGB code.
+        second: the second RGB code.
+        count: the number of gradients.
+        rate: transition rate.
+        channels: three color channels.
+        controller: control function, default is linear.
+
+    Returns:
+        A list of color gradients from the first RGB code to the second RGB
+            code.
     """
     rgb_list: list[tuple[int, int, int]] = []
     delta = tuple(rate * (j-i) * k for i, j, k in zip(first, second, channels))
 
-    for x in (contoller(i/count) for i in range(count)):
+    for x in (controller(i/count) for i in range(count)):
         rgb_list.append(tuple(c + round(x*r) for c, r in zip(first, delta)))
 
     return rgb_list

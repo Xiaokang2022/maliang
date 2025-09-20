@@ -1,7 +1,7 @@
 # Copyright (c) 2024-2025 Xiaokang2022. All rights reserved.
 # Licensed under the MIT License. See LICENSE in the project root for details.
 
-"""Support for theme
+"""Support for theme.
 
 * ``darkdetect``: https://pypi.org/project/darkdetect/
 * ``pywinstyles``: https://pypi.org/project/pywinstyles/
@@ -26,8 +26,8 @@ import platform
 import sys
 import threading
 import traceback
-import typing
 import warnings
+from typing import TYPE_CHECKING
 
 from ..core import configs
 from ..toolbox import utility
@@ -61,35 +61,34 @@ try:
 except ImportError:
     darkdetect = None
 
-if typing.TYPE_CHECKING:
-    import collections.abc
+if TYPE_CHECKING:
     import tkinter
+    from collections.abc import Callable
+    from typing import Any, Literal
 
-_callback_events: dict[collections.abc.Callable[..., typing.Any], tuple] = {}
+_callback_events: dict[Callable[..., Any], tuple] = {}
 """Events that are responded to when the system theme changes."""
 
-_color_mode: typing.Literal["light", "dark", "system"] = "system"
-"""The color mode of the current program, `"system"` is the following system,
-`"light"` is the light color, and `"dark"` is the dark color."""
+_color_mode: Literal["light", "dark", "system"] = "system"
+"""The color mode of the current program, ``"system"`` is the following system,
+``"light"`` is the light color, and ``"dark"`` is the dark color."""
 
 
-def set_color_mode(
-    mode: typing.Literal["system", "dark", "light"] = "system",
-) -> None:
-    """Set the color mode of the program
+def set_color_mode(mode: Literal["system", "dark", "light"] = "system") -> None:
+    """Set the color mode of the program.
 
-    * `mode`: it can be `"light"`, `"dark"`, and `"system"`
+    Args:
+        mode: it can be ``"light"``, ``"dark"``, and ``"system"``.
 
-    TIP:
-
-    `"system"` is the following system
+    Tip:
+        ``"system"`` is the following system.
     """
     global _color_mode  # pylint: disable=W0603
     _color_mode = mode
     _process_event(configs.Env.theme if mode == "system" else mode)
 
 
-def get_color_mode() -> typing.Literal["dark", "light"]:
+def get_color_mode() -> Literal["dark", "light"]:
     """Get the color mode of the program."""
     if _color_mode == "system":
         return configs.Env.theme
@@ -97,24 +96,25 @@ def get_color_mode() -> typing.Literal["dark", "light"]:
     return _color_mode
 
 
-def register_event(
-    func: collections.abc.Callable[..., typing.Any],
-    *args: typing.Any,
-) -> None:
-    """When the system accent color changes, the registered function will be
+def register_event(func: Callable[..., Any], *args: Any) -> None:
+    """Register a function to be called when the system accent color changes.
+
+    When the system accent color changes, the registered function will be
     called, and the parameter is a boolean value indicating whether it is
     currently a dark theme.
 
-    * `func`: callback function
-    * `args`: extra arguments
+    Args:
+        func: callback function.
+        args: extra arguments.
     """
     _callback_events[func] = args
 
 
-def remove_event(func: collections.abc.Callable[..., typing.Any]) -> None:
+def remove_event(func: Callable[..., Any]) -> None:
     """Remove a registered function.
 
-    * `func`: callback function
+    Args:
+        func: callback function.
     """
     if _callback_events.get(func) is not None:
         del _callback_events[func]
@@ -123,15 +123,17 @@ def remove_event(func: collections.abc.Callable[..., typing.Any]) -> None:
 def apply_file_dnd(
     window: tkinter.Tk,
     *,
-    command: collections.abc.Callable[[str], typing.Any],
+    command: Callable[[str], Any],
 ) -> None:
     """Apply file drag and drop in a widget.
 
-    * `window`: the window which being customized
-    * `command`: callback function, accept a parameter that represents the path
-    of the file
+    Args:
+        window: the window which being customized.
+        command: callback function, accept a parameter that represents the path
+            of the file.
 
-    This function is only works on Windows OS!
+    Warning:
+        This function is only works on Windows OS!
     """
     if pywinstyles is None:
         warnings.warn("Package 'pywinstyles' is missing.", UserWarning, 2)
@@ -143,15 +145,17 @@ def apply_file_dnd(
 def apply_theme(
     window: tkinter.Tk,
     *,
-    theme: typing.Literal["mica", "acrylic", "acrylic2", "aero", "transparent", "optimised", "win7", "inverse", "native", "popup", "dark", "normal"],
+    theme: Literal["mica", "acrylic", "acrylic2", "aero", "transparent", "optimised", "win7", "inverse", "native", "popup", "dark", "normal"],
 ) -> None:
     """Apply some Windows themes to the window.
 
-    * `window`: the window which being customized
-    * `theme`: different themes for windows
+    Args:
+        window: the window which being customized.
+        theme: different themes for windows.
 
-    This function is only works on Windows OS! And some parameters are useless
-    on Windows 7/10!
+    Warning:
+        This function is only works on Windows OS! And some parameters are
+        useless on Windows 7/10!
     """
     if theme in ("mica", "acrylic2"):
         if win32material is None:
@@ -188,25 +192,27 @@ def customize_window(
     header_color: str | None = None,
     title_color: str | None = None,
     hide_title_bar: bool | None = None,
-    hide_button: typing.Literal["all", "maxmin", "none"] | None = None,
+    hide_button: Literal["all", "maxmin", "none"] | None = None,
     disable_minimize_button: bool | None = None,
     disable_maximize_button: bool | None = None,
-    border_type: typing.Literal["rectangular", "smallround", "round"] | None = None,
+    border_type: Literal["rectangular", "smallround", "round"] | None = None,
 ) -> None:
     """Customize the relevant properties of the window
 
-    * `window`: the window which being customized
-    * `border_color`: border color of the window
-    * `header_color`: header color of the window
-    * `title_color`: title color of the window
-    * `hide_title_bar`: whether hide the whole title bar
-    * `hide_button`: whether hide part of buttons on title bar
-    * `disable_minimize_button`: whether disable minimize button
-    * `disable_maximize_button`: whether disable maximize button
-    * `border_type`: border type of the window
+    Args:
+        window: the window which being customized.
+        border_color: border color of the window.
+        header_color: header color of the window.
+        title_color: title color of the window.
+        hide_title_bar: whether hide the whole title bar.
+        hide_button: whether hide part of buttons on title bar.
+        disable_minimize_button: whether disable minimize button.
+        disable_maximize_button: whether disable maximize button.
+        border_type: border type of the window.
 
-    This function is only works on Windows OS! And some parameters are useless
-    on Windows 7/10!
+    Warning:
+        This function is only works on Windows OS! And some parameters are
+        useless on Windows 7/10!
     """
     if pywinstyles is not None:
         if border_color is not None:
@@ -259,10 +265,11 @@ def customize_window(
         warnings.warn("Package 'win32material' is missing.", UserWarning, 2)
 
 
-def _process_event(theme: typing.Literal["light", "dark"]) -> None:
+def _process_event(theme: Literal["light", "dark"]) -> None:
     """Handle registered callback functions.
 
-    * `theme`: theme name
+    Args:
+        theme: theme name
     """
     for func, args in _callback_events.items():
         try:  # Prevent detection thread from crashing
@@ -275,7 +282,8 @@ def _callback(theme: str) -> None:
     """Callback function that is triggered when a system theme is switched.
     Valid only if the theme mode is set to follow system.
 
-    * `theme`: theme name
+    Args:
+        theme: theme name.
     """
     configs.Env.theme = "dark" if theme == "Dark" else "light"
 

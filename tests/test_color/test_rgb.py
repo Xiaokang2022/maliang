@@ -22,7 +22,7 @@ class TestCase(unittest.TestCase):
 
     def test_gradient(self) -> None:
         self.assertEqual(rgb.gradient((0, 0, 0), (100, 100, 100), 3, 0.6), [(0, 0, 0), (20, 20, 20), (40, 40, 40)])
-        self.assertEqual(rgb.gradient((0, 0, 0), (100, 100, 100), 2, contoller=lambda _: 1), [(100, 100, 100), (100, 100, 100)])
+        self.assertEqual(rgb.gradient((0, 0, 0), (100, 100, 100), 2, controller=lambda _: 1), [(100, 100, 100), (100, 100, 100)])
         self.assertEqual(rgb.gradient((0, 0, 0), (100, 100, 100), 2, channels=(True, True, False)), [(0, 0, 0), (50, 50, 0)])
 
 

@@ -5,14 +5,14 @@
 
 Definition of control function:
 
-    def control_function(t: float) -> float:
+    def control_function(t: float, /) -> float:
         \"""Control function for animation.
 
         Args:
-            t: the percentage of time
+            t: the percentage of time.
 
         Returns:
-            a multiple of the cardinality of the animation
+            a multiple of the cardinality of the animation.
         \"""
 """
 
@@ -29,21 +29,23 @@ __all__ = (
 
 import functools
 import math
-import typing
 import warnings
+from typing import TYPE_CHECKING, overload
 
-if typing.TYPE_CHECKING:
-    import collections.abc
+if TYPE_CHECKING:
+    from collections.abc import Callable
+    from typing import Literal
 
 
-def _map_t(
-    start: float,
-    end: float,
-) -> collections.abc.Callable[[float], float]:
-    """Map parameters in any range between 0 and 1.
+def _map_t(start: float, end: float) -> Callable[[float], float]:
+    """Map parameters in any range between ``0`` and ``1``.
 
-    * `start`: the first value of the parameter of the base function
-    * `end`: the last value of the parameter of the base function
+    Args:
+        start: the first value of the parameter of the base function.
+        end: the last value of the parameter of the base function.
+
+    Returns:
+        A function that maps parameters in any range between ``0`` and ``1``.
     """
     def _mapper(t: float) -> float:
         return start + t * (end-start)
@@ -52,13 +54,17 @@ def _map_t(
 
 
 def _map_y(
-    base: collections.abc.Callable[[float], float],
+    base: Callable[[float], float],
     end: float,
-) -> collections.abc.Callable[[float], float]:
-    """Map the final return value to 1.
+) -> Callable[[float], float]:
+    """Map the final return value to ``1``.
 
-    * `base`: base function
-    * `end`: the last value of the parameter of the base function
+    Args:
+        base: base function.
+        end: the last value of the parameter of the base function.
+
+    Returns:
+        A function that maps the final return value to ``1``.
     """
     @functools.wraps(base)
     def _mapper(t: float) -> float:
@@ -67,37 +73,41 @@ def _map_y(
     return _mapper
 
 
-@typing.overload
+@overload
 def generate(
-    base: collections.abc.Callable[[float], float],
+    base: Callable[[float], float],
     start: float,
     end: float,
-) -> collections.abc.Callable[[float], float]: ...
+) -> Callable[[float], float]: ...
 
 
-@typing.overload
+@overload
 def generate(
-    base: collections.abc.Callable[[float], float],
+    base: Callable[[float], float],
     start: float,
     end: float,
     *,
-    map_y: typing.Literal[False] = False,
-) -> collections.abc.Callable[[float], float]: ...
+    map_y: Literal[False] = False,
+) -> Callable[[float], float]: ...
 
 
 def generate(
-    base: collections.abc.Callable[[float], float],
+    base: Callable[[float], float],
     start: float,
     end: float,
     *,
     map_y: bool = True,
-) -> collections.abc.Callable[[float], float]:
+) -> Callable[[float], float]:
     """Generate a control function from an ordinary mathematical function.
 
-    * `base`: base function, an ordinary mathematical function
-    * `start`: the first value of the parameter of the base function
-    * `end`: the last value of the parameter of the base function
-    * `map_y`: whether map the final return value to 1
+    Args:
+        base: base function, an ordinary mathematical function.
+        start: the first value of the parameter of the base function.
+        end: the last value of the parameter of the base function.
+        map_y: whether map the final return value to ``1``.
+
+    Returns:
+        A control function.
     """
     if map_y:
         if math.isclose(base(end), 0, abs_tol=1e-9):
@@ -117,49 +127,26 @@ def generate(
     return _mapper
 
 
-@typing.overload
-def linear(t: int) -> int: ...
-
-
-@typing.overload
-def linear(t: float) -> float: ...
-
-
-def linear(t: float) -> float:
-    """Speed remains the same.
-
-    * `t`: the percentage of time
-    """
+def linear(t: float, /) -> float:
+    """Speed remains the same."""
     return t
 
 
-def smooth(t: float) -> float:
-    """Speed is slow first, then fast and then slow. (slow -> fast -> slow)
-
-    * `t`: the percentage of time
-    """
+def smooth(t: float, /) -> float:
+    """Speed is slow first, then fast and then slow. (slow -> fast -> slow)"""
     return (1 - math.cos(t*math.pi)) / 2
 
 
-def rebound(t: float) -> float:
-    """Before the end, displacement will bounce off a bit.
-
-    * `t`: the percentage of time
-    """
+def rebound(t: float, /) -> float:
+    """Before the end, displacement will bounce off a bit."""
     return generate(math.sin, 0, (math.pi+1) / 2)(t)
 
 
-def ease_in(t: float) -> float:
-    """Gradually accelerate. (slow -> fast)
-
-    * `t`: the percentage of time
-    """
+def ease_in(t: float, /) -> float:
+    """Gradually accelerate. (slow -> fast)"""
     return generate((lambda x: math.pow(2, 10*x - 10)), 0, 1)(t)
 
 
-def ease_out(t: float) -> float:
-    """Gradually decelerate. (fast -> slow)
-
-    * `t`: the percentage of time
-    """
+def ease_out(t: float, /) -> float:
+    """Gradually decelerate. (fast -> slow)"""
     return generate((lambda x: 1 - math.pow(2, -10*x)), 0, 1)(t)

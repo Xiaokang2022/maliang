@@ -28,7 +28,7 @@ class TestCase(unittest.TestCase):
             for j in range(3):
                 self.assertAlmostEqual(list_1[i][j], list_2[i][j])
 
-        self.assertEqual(hsl.gradient((0, 0, 0), (1, 1, 1), 2, contoller=lambda _: 1), [(1, 1, 1), (1, 1, 1)])
+        self.assertEqual(hsl.gradient((0, 0, 0), (1, 1, 1), 2, controller=lambda _: 1), [(1, 1, 1), (1, 1, 1)])
         self.assertEqual(hsl.gradient((0, 0, 0), (1, 1, 1), 2, channels=(True, True, False)), [(0, 0, 0), (0.5, 0.5, 0)])
 
 

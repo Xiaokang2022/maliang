@@ -24,7 +24,7 @@ import sys
 import tkinter
 import tkinter.font
 import traceback
-import typing
+from typing import TYPE_CHECKING
 
 from ..core import configs, virtual
 from . import enhanced
@@ -34,8 +34,9 @@ try:
 except ImportError:
     Image = None
 
-if typing.TYPE_CHECKING:
-    import collections.abc
+if TYPE_CHECKING:
+    from collections.abc import Callable
+    from typing import Any
 
 
 class Trigger:
@@ -45,12 +46,10 @@ class Trigger:
     invalid. When triggered, the callback function is called.
     """
 
-    def __init__(
-        self,
-        command: collections.abc.Callable[..., typing.Any],
-    ) -> None:
+    def __init__(self, command: Callable[..., Any]) -> None:
         """
-        * `command`: the function that is called when triggered
+        Args:
+            command: the function that is called when triggered.
         """
         self._flag: bool = False
         self._lock: bool = False
@@ -73,12 +72,13 @@ class Trigger:
         """Unlock this trigger so that it can be updated again."""
         self._lock = False
 
-    def update(self, value: bool = True, /, *args, **kwargs) -> None:
+    def update(self, value: bool = True, /, *args: Any, **kwargs: Any) -> None:
         """Update the status of the trigger.
 
-        * `value`: updated value
-        * `args`: args of the command
-        * `kwargs`: kwargs of the command
+        Args:
+            value: updated value.
+            *args: args of the command.
+            **kwargs: kwargs of the command.
         """
         if not self._lock and not self._flag and value:
             self._flag = True
@@ -86,9 +86,13 @@ class Trigger:
 
 
 def get_parent(widget: tkinter.Misc) -> int:
-    """Get the HWND of `tkinter.Widget`.
+    """Get the HWND of ``tkinter.Widget``.
 
-    * `widget`: the widget
+    Args:
+        widget: the widget.
+
+    Returns:
+        The HWND of the widget.
     """
     return ctypes.windll.user32.GetParent(widget.winfo_id())
 
@@ -101,9 +105,11 @@ def embed_window(
 ) -> None:
     """Embed a widget into another widget.
 
-    * `window`: Widget that will be embedded in
-    * `parent`: parent widget, `None` indicates that the parent widget is the screen
-    * `focus`: whether direct input focus to this window
+    Args:
+        window: Widget that will be embedded in.
+        parent: parent widget, ``None`` indicates that the parent widget is the
+            screen.
+        focus: whether direct input focus to this window.
     """
     ctypes.windll.user32.SetParent(
         get_parent(window), parent.winfo_id() if parent else None)
@@ -118,18 +124,24 @@ def load_font(
     private: bool = True,
     enumerable: bool = False,
 ) -> bool:
-    """Make fonts located in file `font_path` available to the font system, and
-    return `True` if the operation succeeds, `False` otherwise.
+    """Make fonts located in file ``font_path`` available to the font system.
 
-    * `font_path`: the font file path
-    * `private`: if True, other processes cannot see this font(Only Windows OS),
-    and this font will be unloaded when the process dies
-    * `enumerable`: if True, this font will appear when enumerating fonts(Only Windows OS)
+    Args:
+        font_path: the font file path.
+        private: if True, other processes cannot see this font(Only Windows OS),
+            and this font will be unloaded when the process dies.
+        enumerable: if True, this font will appear when enumerating
+            fonts(Only Windows OS).
 
-    This function only works on Windows and Linux OS.
+    Returns:
+        Whether the operation succeeds.
 
-    This function is referenced from `customtkinter.FontManager.load_font`,
-    CustomTkinter: https://github.com/TomSchimansky/CustomTkinter.
+    Warning:
+        This function only works on Windows and Linux OS.
+
+    Note:
+        This function is referenced from ``customtkinter.load_font``,
+            ``customtkinter``: https://github.com/TomSchimansky/CustomTkinter.
     """
     if sys.platform == "win32":
         if isinstance(font_path, str):
@@ -182,20 +194,23 @@ def get_text_size(
     wrap_length: int | None = None,
     font: tkinter.font.Font | None = None,
     master: tkinter.Canvas | virtual.Widget | None = None,
-    **kwargs,
+    **kwargs: Any,
 ) -> tuple[int, int]:
     """Get the size of a text with a special font family and font size.
 
-    * `text`: the text
-    * `fontsize`: font size of the text
-    * `family`: font family of the text
-    * `padding`: extra padding of the size
-    * `wrap_length`: limit the length of text, beyond which it will automatically wrap
-    * `font`: the font object, if provided, other font options will have no effect
-    * `master`: default canvas or widget provided
-    * `kwargs`: kwargs of `tkinter.font.Font`
+    Args:
+        text: the text.
+        fontsize: font size of the text.
+        family: font family of the text.
+        padding: extra padding of the size.
+        wrap_length: limit the length of text, beyond which it will
+            automatically wrap.
+        font: font object to use (if ``None``, a new font will be created).
+        master: default canvas or widget provided.
+        **kwargs: additional keyword arguments for the font.
 
-    This function only works when the fontsize is negative number!
+    Warning:
+        This function only works when the fontsize is negative number!
     """
     if wrap_length is None:
         wrap_length = 0
@@ -227,7 +242,11 @@ def get_text_size(
 def fix_cursor(name: str, /) -> str:
     """Fix the cursor name.
 
-    * `name`: name of cursor
+    Args:
+        name: name of cursor
+
+    Returns:
+        Fixed cursor name.
     """
     if name == "disabled":
         match platform.system():
@@ -243,14 +262,23 @@ def create_smoke(
     *,
     color: str | tuple[int, int, int, int] = "#00000066",
 ) -> enhanced.PhotoImage:
-    """Create a temporary smoke zone. Return the `enhanced.PhotoImage`.
+    """Create a temporary smoke zone. Return the ``enhanced.PhotoImage``.
 
-    * `size`: size of the smoke zone
-    * `color`: color of the smoke zone
+    Args:
+        size: size of the smoke zone.
+        color: color of the smoke zone.
 
-    This function need `PIL` to run.
+    Returns:
+        Enhanced photo image of the smoke zone.
 
-    About the "smoke", see: https://fluent2.microsoft.design/material#smoke
+    Raises:
+        RuntimeError: If the ``PIL`` package is not installed.
+
+    Warning:
+        This function need ``PIL`` to run.
+
+    Tip:
+        About the "smoke", see: https://fluent2.microsoft.design/material#smoke
     """
     if Image is None:
         raise RuntimeError("Package 'pillow' is missing.")

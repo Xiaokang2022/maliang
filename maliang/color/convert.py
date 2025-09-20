@@ -53,7 +53,11 @@ from . import colortable, rgb
 def rgb_to_hex(value: tuple[int, int, int], /) -> str:
     """Convert a RGB code to a hexadecimal code.
 
-    * `value`: a RGB code
+    Args:
+        value: a RGB code.
+
+    Returns:
+        A hexadecimal code.
     """
     return f"#{value[0]:02X}{value[1]:02X}{value[2]:02X}"
 
@@ -61,7 +65,11 @@ def rgb_to_hex(value: tuple[int, int, int], /) -> str:
 def hex_to_rgb(value: str, /) -> tuple[int, int, int]:
     """Convert a hexadecimal code to a RGB code.
 
-    * `value`: a hexadecimal code
+    Args:
+        value: a hexadecimal code.
+
+    Returns:
+        A RGB code.
     """
     _, b = divmod(int(value[1:], 16), 256)
     r, g = divmod(_, 256)
@@ -71,7 +79,11 @@ def hex_to_rgb(value: str, /) -> tuple[int, int, int]:
 def rgba_to_hex(value: tuple[int, int, int, float], /) -> str:
     """Convert a RGBA code to a hexadecimal code.
 
-    * `value`: a RGBA code
+    Args:
+        value: a RGBA code.
+
+    Returns:
+        A hexadecimal code.
     """
     return f"#{value[0]:02X}{value[1]:02X}{value[2]:02X}{round(value[3]*255):02X}"
 
@@ -79,7 +91,11 @@ def rgba_to_hex(value: tuple[int, int, int, float], /) -> str:
 def hex_to_rgba(value: str, /) -> tuple[int, int, int, float]:
     """Convert a hexadecimal code to a RGBA code.
 
-    * `value`: a hexadecimal code
+    Args:
+        value: a hexadecimal code.
+
+    Returns:
+        A RGBA code.
     """
     _, a = divmod(int(value[1:], 16), 256)
     _, b = divmod(_, 256)
@@ -90,7 +106,11 @@ def hex_to_rgba(value: str, /) -> tuple[int, int, int, float]:
 def rgb_to_rgba(value: tuple[int, int, int], /) -> tuple[int, int, int, float]:
     """Convert a RGB code to a RGBA code.
 
-    * `value`: a RGB code
+    Args:
+        value: a RGB code.
+
+    Returns:
+        A RGBA code with alpha channel ``0``.
     """
     return *value, 0.
 
@@ -103,8 +123,12 @@ def rgba_to_rgb(
 ) -> tuple[int, int, int]:
     """Convert a RGBA code to a RGB code.
 
-    * `value`: a RGBA code
-    * `refer`: a RGB code 
+    Args:
+        value: a RGBA code.
+        refer: a RGB code as the background.
+
+    Returns:
+        A RGB code blended with the background.
     """
     return rgb.transition(value[:-1], refer, 1-value[-1])
 
@@ -112,7 +136,11 @@ def rgba_to_rgb(
 def hsl_to_rgb(value: tuple[float, float, float], /) -> tuple[int, int, int]:
     """Convert a HSL code to a RGB code.
 
-    * `value`: a HSL code
+    Args:
+        value: a HSL code.
+
+    Returns:
+        A RGB code.
     """
     c = colorsys.hls_to_rgb(value[0]/math.tau, value[1], value[2])
     return round(c[0]*255), round(c[1]*255), round(c[2]*255)
@@ -121,7 +149,11 @@ def hsl_to_rgb(value: tuple[float, float, float], /) -> tuple[int, int, int]:
 def rgb_to_hsl(value: tuple[int, int, int], /) -> tuple[float, float, float]:
     """Convert a RGB code to a HSL code.
 
-    * `value`: a RGB code
+    Args:
+        value: a RGB code.
+
+    Returns:
+        A HSL code.
     """
     c = colorsys.rgb_to_hls(value[0]/255, value[1]/255, value[2]/255)
     return c[0]*math.tau, c[1], c[2]
@@ -130,7 +162,11 @@ def rgb_to_hsl(value: tuple[int, int, int], /) -> tuple[float, float, float]:
 def hsl_to_hex(value: tuple[float, float, float], /) -> str:
     """Convert a HSL code to a hexadecimal code.
 
-    * `value`: a HSL code
+    Args:
+        value: a HSL code.
+
+    Returns:
+        A hexadecimal code.
     """
     return rgb_to_hex(hsl_to_rgb(value))
 
@@ -138,7 +174,11 @@ def hsl_to_hex(value: tuple[float, float, float], /) -> str:
 def hex_to_hsl(value: str, /) -> tuple[float, float, float]:
     """Convert a hexadecimal code to a HSL code.
 
-    * `value`: a hexadecimal code
+    Args:
+        value: a hexadecimal code.
+
+    Returns:
+        A HSL code.
     """
     return rgb_to_hsl(hex_to_rgb(value))
 
@@ -146,7 +186,11 @@ def hex_to_hsl(value: str, /) -> tuple[float, float, float]:
 def name_to_rgb(value: str, /) -> tuple[int, int, int]:
     """Convert a color name to a RGB code.
 
-    * `value`: a color name
+    Args:
+        value: a color name.
+
+    Returns:
+        A RGB code.
     """
     if rgb_code := colortable.MAPPING_TABLE.get(value.lower()):
         return rgb_code
@@ -157,7 +201,11 @@ def name_to_rgb(value: str, /) -> tuple[int, int, int]:
 def rgb_to_name(value: tuple[int, int, int], /) -> list[str]:
     """Convert a RGB code to a color name.
 
-    * `value`: a RGB code
+    Args:
+        value: a RGB code.
+
+    Returns:
+        A list of color names.
     """
     str_list: list[str] = []
 
@@ -171,7 +219,11 @@ def rgb_to_name(value: tuple[int, int, int], /) -> list[str]:
 def name_to_hex(value: str, /) -> str:
     """Convert a color name to a hexadecimal code.
 
-    * `value`: a color name
+    Args:
+        value: a color name.
+
+    Returns:
+        A hexadecimal code.
     """
     return rgb_to_hex(name_to_rgb(value))
 
@@ -179,7 +231,11 @@ def name_to_hex(value: str, /) -> str:
 def hex_to_name(value: str, /) -> list[str]:
     """Convert a hexadecimal code to a color name.
 
-    * `value`: a hexadecimal code
+    Args:
+        value: a hexadecimal code.
+
+    Returns:
+        A list of color names.
     """
     return rgb_to_name(hex_to_rgb(value))
 
@@ -187,7 +243,11 @@ def hex_to_name(value: str, /) -> list[str]:
 def fix_hex_length(value: str, /) -> str:
     """Fix the length of a hexadecimal code.
 
-    * `value`: a hexadecimal code
+    Args:
+        value: a hexadecimal code.
+
+    Returns:
+        A fixed hexadecimal code.
     """
     if len(value) == 4:
         return f"#{value[1]*2}{value[2]*2}{value[3]*2}"
@@ -201,7 +261,11 @@ def fix_hex_length(value: str, /) -> str:
 def str_to_rgb(value: str, /) -> tuple[int, int, int]:
     """Convert a color name or a hexadecimal code to a RGB code.
 
-    * `value`: a color name or a hexadecimal code
+    Args:
+        value: a color name or a hexadecimal code.
+
+    Returns:
+        A RGB code.
     """
     if value.startswith("#"):
         return hex_to_rgb(fix_hex_length(value))

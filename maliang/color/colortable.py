@@ -9,9 +9,9 @@ __all__ = (
     "MAPPING_TABLE",
 )
 
-import typing
+from typing import Final
 
-MAPPING_TABLE: typing.Final[dict[str, tuple[int, int, int]]] = {
+MAPPING_TABLE: Final[dict[str, tuple[int, int, int]]] = {
     'alice blue': (240, 248, 255),
     'aliceblue': (240, 248, 255),
     'antique white': (250, 235, 215),
