@@ -1,8 +1,15 @@
 # pylint: disable=C0111
 
+import doctest
 import unittest
 
 from maliang.color import rgb
+
+
+def load_tests(loader: unittest.TestLoader, tests: unittest.TestSuite, pattern: str | None) -> unittest.TestSuite:
+    del loader, pattern
+    tests.addTests(doctest.DocTestSuite(rgb))
+    return tests
 
 
 class TestCase(unittest.TestCase):

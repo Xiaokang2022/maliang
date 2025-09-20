@@ -1,5 +1,6 @@
 # pylint: disable=C0111
 
+import doctest
 import importlib
 import pathlib
 import unittest
@@ -7,6 +8,12 @@ import unittest.mock
 
 from maliang.core import containers
 from maliang.toolbox import enhanced
+
+
+def load_tests(loader: unittest.TestLoader, tests: unittest.TestSuite, pattern: str | None) -> unittest.TestSuite:
+    del loader, pattern
+    tests.addTests(doctest.DocTestSuite(enhanced))
+    return tests
 
 
 class TestPhotoImage(unittest.TestCase):

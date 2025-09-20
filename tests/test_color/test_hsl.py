@@ -1,9 +1,16 @@
 # pylint: disable=C0111
 
+import doctest
 import math
 import unittest
 
 from maliang.color import hsl
+
+
+def load_tests(loader: unittest.TestLoader, tests: unittest.TestSuite, pattern: str | None) -> unittest.TestSuite:
+    del loader, pattern
+    tests.addTests(doctest.DocTestSuite(hsl))
+    return tests
 
 
 class TestCase(unittest.TestCase):

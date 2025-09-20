@@ -1,6 +1,7 @@
 # pylint: disable=C0111
 
 import contextlib
+import doctest
 import io
 import platform
 import tkinter
@@ -10,6 +11,12 @@ import unittest.mock
 from maliang.core import containers
 from maliang.standard import widgets
 from maliang.toolbox import enhanced
+
+
+def load_tests(loader: unittest.TestLoader, tests: unittest.TestSuite, pattern: str | None) -> unittest.TestSuite:
+    del loader, pattern
+    tests.addTests(doctest.DocTestSuite(containers))
+    return tests
 
 
 class TestTk(unittest.TestCase):

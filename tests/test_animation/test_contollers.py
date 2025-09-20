@@ -1,9 +1,16 @@
 # pylint: disable=C0111
 
+import doctest
 import math
 import unittest
 
 from maliang.animation import controllers
+
+
+def load_tests(loader: unittest.TestLoader, tests: unittest.TestSuite, pattern: str | None) -> unittest.TestSuite:
+    del loader, pattern
+    tests.addTests(doctest.DocTestSuite(controllers))
+    return tests
 
 
 class TestCase(unittest.TestCase):

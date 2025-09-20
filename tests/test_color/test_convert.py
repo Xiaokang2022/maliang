@@ -1,10 +1,17 @@
 # pylint: disable=C0111
 
 import colorsys
+import doctest
 import tkinter
 import unittest
 
 from maliang.color import convert
+
+
+def load_tests(loader: unittest.TestLoader, tests: unittest.TestSuite, pattern: str | None) -> unittest.TestSuite:
+    del loader, pattern
+    tests.addTests(doctest.DocTestSuite(convert))
+    return tests
 
 
 class TestCase(unittest.TestCase):

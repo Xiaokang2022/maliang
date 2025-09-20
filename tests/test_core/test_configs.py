@@ -1,10 +1,17 @@
 # pylint: disable=C0111
 
 import collections
+import doctest
 import unittest
 import unittest.mock
 
 from maliang.core import configs
+
+
+def load_tests(loader: unittest.TestLoader, tests: unittest.TestSuite, pattern: str | None) -> unittest.TestSuite:
+    del loader, pattern
+    tests.addTests(doctest.DocTestSuite(configs))
+    return tests
 
 
 class TestEnv(unittest.TestCase):

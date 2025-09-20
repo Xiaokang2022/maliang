@@ -1,6 +1,7 @@
 # pylint: disable=C0111
 
 import contextlib
+import doctest
 import importlib
 import io
 import platform
@@ -9,6 +10,12 @@ import unittest.mock
 
 from maliang.core import configs, containers
 from maliang.theme import manager
+
+
+def load_tests(loader: unittest.TestLoader, tests: unittest.TestSuite, pattern: str | None) -> unittest.TestSuite:
+    del loader, pattern
+    tests.addTests(doctest.DocTestSuite(manager))
+    return tests
 
 
 class TestCase(unittest.TestCase):
