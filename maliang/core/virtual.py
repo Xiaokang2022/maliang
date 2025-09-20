@@ -1,15 +1,19 @@
+# Copyright (c) 2024-2025 Xiaokang2022. All rights reserved.
+# Licensed under the MIT License. See LICENSE in the project root for details.
+
 """All virtual classes.
 
-The `virtual.Widget` consists of five parts, which are `Shape`, `Text`, `Image`,
-`Style` and `Feature`. In addition, they can be nested within each other.
+The ``virtual.Widget`` consists of five parts, which are ``Shape``, ``Text``,
+``Image``, ``Style`` and ``Feature``. In addition, they can be nested within
+each other.
 
-Where `Feature` is the function of widgets, `Style` control the color of the
-widget, and each widget can be bound to up to one `Feature` and one `Style`,
-but in terms of appearance, there is no limit to the number of `Shape`, `Text`,
-and `Image`.
+Where ``Feature`` is the function of widgets, ``Style`` control the color of the
+widget, and each widget can be bound to up to one ``Feature`` and one ``Style``,
+but in terms of appearance, there is no limit to the number of ``Shape``,
+``Text``, and ``Image``.
 
-`Shape`, `Text`, and `Image` are all appearance elements that inherit from
-abstract base class `Elements`.
+``Shape``, ``Text``, and ``Image`` are all appearance elements that inherit from
+abstract base class ``Elements``.
 """
 
 from __future__ import annotations as _

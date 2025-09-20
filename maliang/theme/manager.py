@@ -1,9 +1,12 @@
+# Copyright (c) 2024-2025 Xiaokang2022. All rights reserved.
+# Licensed under the MIT License. See LICENSE in the project root for details.
+
 """Support for theme
 
-* darkdetect: https://github.com/albertosottile/darkdetect
-* pywinstyles: https://github.com/Akascape/py-window-styles
-* win32material: https://github.com/littlewhitecloud/win32material
-* hPyT: https://github.com/Zingzy/hPyT
+* ``darkdetect``: https://pypi.org/project/darkdetect/
+* ``pywinstyles``: https://pypi.org/project/pywinstyles/
+* ``win32material``: https://pypi.org/project/win32material/
+* ``hPyT``: https://pypi.org/project/hPyT/
 """
 
 from __future__ import annotations as _

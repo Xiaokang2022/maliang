@@ -1,13 +1,19 @@
+# Copyright (c) 2024-2025 Xiaokang2022. All rights reserved.
+# Licensed under the MIT License. See LICENSE in the project root for details.
+
 """Controller generator and standard control functions.
 
 Definition of control function:
 
-```python
-def f(t: float) -> float: ...
-```
+    def control_function(t: float) -> float:
+        \"""Control function for animation.
 
-* `t`: 0% ~ 100%, indicates the percentage of time
-* return: real number, indicates a multiple of the cardinality of the animation
+        Args:
+            t: the percentage of time
+
+        Returns:
+            a multiple of the cardinality of the animation
+        \"""
 """
 
 from __future__ import annotations as _

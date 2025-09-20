@@ -1,10 +1,13 @@
+# Copyright (c) 2024-2025 Xiaokang2022. All rights reserved.
+# Licensed under the MIT License. See LICENSE in the project root for details.
+
 """All containers.
 
-There are two containers at the window level: `Tk` and `Toplevel`. `Tk` is
-generally used for the main window, while `Toplevel` is a pop-up window.
+There are two containers at the window level: ``Tk`` and ``Toplevel``. ``Tk`` is
+generally used for the main window, while ``Toplevel`` is a pop-up window.
 
-There is another container at the canvas level: `Canvas`. `Canvas` is the main
-container carrier.
+There is another container at the canvas level: ``Canvas``. ``Canvas`` is the
+main container carrier.
 """
 
 from __future__ import annotations as _
