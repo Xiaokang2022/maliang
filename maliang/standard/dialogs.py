@@ -1,7 +1,7 @@
 # Copyright (c) 2023-2025 Xiaokang2022. All rights reserved.
 # Licensed under the MIT License. See LICENSE in the project root for details.
 
-"""All standard dialog classes"""
+"""All standard dialog classes."""
 
 from __future__ import annotations as _
 

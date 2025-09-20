@@ -36,25 +36,28 @@ import tkinter
 import tkinter.font
 import traceback
 import types
-import typing
 import warnings
+from typing import TYPE_CHECKING
 
-import typing_extensions
+from typing_extensions import override
 
 from ..animation import animations
 from ..color import convert, rgb
 from ..theme import manager
 from . import configs
 
-if typing.TYPE_CHECKING:
-    import collections.abc
+if TYPE_CHECKING:
+    from collections.abc import Callable
+    from typing import Any, Literal
+
+    from typing_extensions import Self
 
     from ..toolbox import enhanced
     from . import containers
 
 
 class Element(abc.ABC):
-    """The basic visible part of a `virtual.Widget`."""
+    """The basic visible part of a ``virtual.Widget``."""
 
     def __init__(
         self,
@@ -64,15 +67,16 @@ class Element(abc.ABC):
         *,
         name: str | None = None,
         gradient_animation: bool | None = None,
-        **kwargs,
+        **kwargs: Any,
     ) -> None:
         """
-        * `widget`: parent widget
-        * `position`: position relative to its widgets
-        * `size`: size of element
-        * `name`: name of element
-        * `gradient_animation`: whether use animation to change color
-        * `kwargs`: extra parameters for CanvasItem
+        Args:
+            widget: parent widget.
+            position: position relative to its widgets.
+            size: size of element.
+            name: name of element.
+            gradient_animation: whether use animation to change color.
+            kwargs: extra parameters for element.
         """
         self.widget = widget
 
@@ -102,10 +106,11 @@ class Element(abc.ABC):
         widget.register_elements(self)
 
     def move(self, dx: float, dy: float) -> None:
-        """Move the `Element`.
+        """Move the ``Element``.
 
-        * `dx`: x-coordinate offset
-        * `dy`: y-coordinate offset
+        Args:
+            dx: x-coordinate offset.
+            dy: y-coordinate offset.
         """
         self.position = self.position[0]+dx, self.position[1]+dy
 
@@ -113,15 +118,16 @@ class Element(abc.ABC):
             self.widget.master.move(item, dx, dy)
 
     def moveto(self, x: float, y: float) -> None:
-        """Move the `Element` to a certain position.
+        """Move the ``Element`` to a certain position.
 
-        * `x`: x-coordinate of the target location
-        * `y`: y-coordinate of the target location
+        Args:
+            x: x-coordinate of the target location.
+            y: y-coordinate of the target location.
         """
         return self.move(x-self.position[0], y-self.position[1])
 
     def destroy(self) -> None:
-        """Destroy the `Element`."""
+        """Destroy the ``Element``."""
         for gradient in self.gradients:
             gradient.stop()
 
@@ -129,19 +135,20 @@ class Element(abc.ABC):
         self.widget.master.delete(*self.items)
 
     def center(self) -> tuple[float, float]:
-        """Return the geometric center of the `Element`."""
+        """Return the geometric center of the ``Element``."""
         return self.position[0] + self.size[0]/2, self.position[1] + self.size[1]/2
 
     def region(self) -> tuple[int, int, int, int]:
-        """Return the decision region of the `Element`."""
+        """Return the decision region of the ``Element``."""
         x, y, w, h = *self.position, *self.size
         return round(x), round(y), round(x+w), round(y+h)
 
     def detect(self, x: float, y: float) -> bool:
-        """Detect whether the specified coordinates are within `Element`.
+        """Detect whether the specified coordinates are within ``Element``.
 
-        * `x`: x-coordinate of the location to be detected
-        * `y`: y-coordinate of the location to be detected
+        Args:
+            x: x-coordinate of the location to be detected.
+            y: y-coordinate of the location to be detected.
         """
         x1, y1, x2, y2 = self.region()
         return x1 <= x <= x2 and y1 <= y <= y2
@@ -152,10 +159,11 @@ class Element(abc.ABC):
         *,
         gradient_animation: bool = False,
     ) -> None:
-        """Update the style of the `Element` to the corresponding state.
+        """Update the style of the ``Element`` to the corresponding state.
 
-        * `state`: the state of the `Element`
-        * `gradient_animation`: whether use gradient animation
+        Args:
+            state: the state of the ``Element``.
+            gradient_animation: whether use gradient animation.
         """
         if not self.visible:
             return
@@ -172,10 +180,11 @@ class Element(abc.ABC):
         *,
         gradient_animation: bool = True,
     ) -> None:
-        """Configure properties of `Element` and update them immediately.
+        """Configure properties of ``Element`` and update them immediately.
 
-        * `style`: style data
-        * `gradient_animation`: whether use gradient animation
+        Args:
+            style: style data.
+            gradient_animation: whether use gradient animation.
         """
         for gradient in self.gradients:
             gradient.stop()
@@ -225,8 +234,9 @@ class Element(abc.ABC):
     ) -> None:
         """Let the element to forget.
 
-        * `value`: whether to forget
-        * `gradient_animation`: whether use gradient animation
+        Args:
+            value: whether to forget.
+            gradient_animation: whether use gradient animation.
         """
         self.visible = not value
 
@@ -251,11 +261,12 @@ class Element(abc.ABC):
         zoom_position: bool = True,
         zoom_size: bool = True,
     ) -> None:
-        """Zoom the `Element`.
+        """Zoom the ``Element``.
 
-        * `ratios`: ratios of zooming
-        * `zoom_position`: whether or not to zoom the location of the element
-        * `zoom_size`: whether or not to zoom the size of the element
+        Args:
+            ratios: ratios of zooming.
+            zoom_position: whether or not to zoom the location of the element.
+            zoom_size: whether or not to zoom the size of the element.
         """
         if not zoom_position and not zoom_size:
             warnings.warn("This is a no-effect call.", UserWarning, 2)
@@ -280,7 +291,7 @@ class Element(abc.ABC):
 
     @abc.abstractmethod
     def display(self) -> None:
-        """Display the `Element` on a `Canvas`."""
+        """Display the ``Element`` on a ``Canvas``."""
 
     @abc.abstractmethod
     def coords(
@@ -288,10 +299,11 @@ class Element(abc.ABC):
         size: tuple[float, float] | None = None,
         position: tuple[float, float] | None = None,
     ) -> None:
-        """Resize the `Element`.
+        """Resize the ``Element``.
 
-        * `size`: new size of the element
-        * `position`: new position of the element
+        Args:
+            size: new size of the element.
+            position: new position of the element.
         """
         if size is not None:
             self.size = size
@@ -303,9 +315,9 @@ class Element(abc.ABC):
 
 
 class Shape(Element):
-    """The Shape of a `Widget`"""
+    """The Shape of a ``Widget``."""
 
-    @typing_extensions.override
+    @override
     def zoom(
         self,
         ratios: tuple[float, float],
@@ -315,9 +327,10 @@ class Shape(Element):
     ) -> None:
         """Scale the shape.
 
-        * `ratios`: ratios of zooming
-        * `zoom_position`: whether or not to zoom the location of the shape
-        * `zoom_size`: whether or not to zoom the size of the shape
+        Args:
+            ratios: ratios of zooming.
+            zoom_position: whether or not to zoom the location of the shape.
+            zoom_size: whether or not to zoom the size of the shape.
         """
         if zoom_size:
             self.size = self.size[0]*ratios[0], self.size[1]*ratios[1]
@@ -329,7 +342,7 @@ class Shape(Element):
 
 
 class Text(Element):
-    """The Text of a `Widget`."""
+    """The Text of a ``Widget``."""
 
     def __init__(
         self,
@@ -343,31 +356,32 @@ class Text(Element):
         placeholder: str = "",
         family: str | None = None,
         fontsize: int | None = None,
-        weight: typing.Literal["normal", "bold"] = "normal",
-        slant: typing.Literal["roman", "italic"] = "roman",
+        weight: Literal["normal", "bold"] = "normal",
+        slant: Literal["roman", "italic"] = "roman",
         underline: bool = False,
         overstrike: bool = False,
         name: str | None = None,
         gradient_animation: bool = True,
-        **kwargs,
+        **kwargs: Any,
     ) -> None:
         """
-        * `widget`: parent widget
-        * `relative_position`: position relative to its widgets
-        * `size`: size of element
-        * `text`: text value
-        * `family`: font family
-        * `fontsize`: font size
-        * `weight`: weight of the font
-        * `slant`: slant of the font
-        * `underline`: whether text is underline
-        * `overstrike`: whether text is overstrike
-        * `limit`: limit on the number of characters
-        * `show`: display a value that obscures the original content
-        * `placeholder`: a placeholder for the prompt
-        * `name`: name of element
-        * `gradient_animation`: whether use animation to change color
-        * `kwargs`: extra parameters for CanvasItem
+        Args:
+            widget: parent widget.
+            relative_position: position relative to its widgets.
+            size: size of element.
+            text: text value.
+            family: font family.
+            fontsize: font size.
+            weight: weight of the font.
+            slant: slant of the font.
+            underline: whether text is underline.
+            overstrike: whether text is overstrike.
+            limit: limit on the number of characters.
+            show: display a value that obscures the original content.
+            placeholder: a placeholder for the prompt.
+            name: name of element.
+            gradient_animation: whether use animation to change color.
+            kwargs: extra parameters for CanvasItem.
         """
         self.text = text
         self.show = show
@@ -388,13 +402,13 @@ class Text(Element):
         )
 
     def region(self) -> tuple[int, int, int, int]:
-        """Return the decision region of the `Text`."""
+        """Return the decision region of the ``Text``."""
         if self.items:
             return self.widget.master.bbox(self.items[0])
 
         return Element.region(self)
 
-    @typing_extensions.override
+    @override
     def zoom(
         self,
         ratios: tuple[float, float],
@@ -404,9 +418,10 @@ class Text(Element):
     ) -> None:
         """Scale the text.
 
-        * `ratios`: ratios of zooming
-        * `zoom_position`: whether or not to zoom the location of the text
-        * `zoom_size`: whether or not to zoom the size of the text
+        Args:
+            ratios: ratios of zooming.
+            zoom_position: whether or not to zoom the location of the text.
+            zoom_size: whether or not to zoom the size of the text.
         """
         super().zoom(ratios, zoom_position=zoom_position, zoom_size=zoom_size)
 
@@ -415,7 +430,7 @@ class Text(Element):
 
 
 class Image(Element):
-    """The Image of a `Widget`."""
+    """The Image of a ``Widget``."""
 
     def __init__(
         self,
@@ -426,16 +441,17 @@ class Image(Element):
         image: enhanced.PhotoImage | None = None,
         name: str | None = None,
         gradient_animation: bool = True,
-        **kwargs,
+        **kwargs: Any,
     ) -> None:
         """
-        * `widget`: parent widget
-        * `relative_position`: position relative to its widgets
-        * `size`: size of element
-        * `image`: image object of the element
-        * `name`: name of element
-        * `gradient_animation`: whether use animation to change color
-        * `kwargs`: extra parameters for CanvasItem
+        Args:
+            widget: parent widget.
+            relative_position: position relative to its widgets.
+            size: size of element.
+            image: image object of the element.
+            name: name of element.
+            gradient_animation: whether use animation to change color.
+            kwargs: extra parameters for CanvasItem.
         """
         self.image = image
         self.initial_image = image
@@ -446,13 +462,13 @@ class Image(Element):
         )
 
     def region(self) -> tuple[int, int, int, int]:
-        """Return the decision region of the `Image`."""
+        """Return the decision region of the ``Image``."""
         if self.items:
             return self.widget.master.bbox(self.items[0])
 
         return Element.region(self)
 
-    @typing_extensions.override
+    @override
     def zoom(
         self,
         ratios: tuple[float, float],
@@ -462,9 +478,13 @@ class Image(Element):
     ) -> None:
         """Scale the image.
 
-        * `ratios`: ratios of zooming
-        * `zoom_position`: whether or not to zoom the location of the image
-        * `zoom_size`: whether or not to zoom the size of the image
+        Args:
+            ratios: ratios of zooming.
+            zoom_position: whether or not to zoom the location of the image.
+            zoom_size: whether or not to zoom the size of the image.
+
+        Raises:
+            RuntimeError: if the image is empty.
         """
         super().zoom(ratios, zoom_position=zoom_position, zoom_size=zoom_size)
 
@@ -478,9 +498,15 @@ class Image(Element):
 
 
 class Style:
-    """The styles of a `Widget`."""
+    """The styles of a ``Widget``.
 
-    states = "normal", "hover", "active", "disabled"
+    Attributes:
+        states (tuple[str, ...]): all states of the widget.
+        light (dict[str, dict[str, dict[str, str]]]): style data of light theme.
+        dark (dict[str, dict[str, dict[str, str]]]): style data of dark theme.
+    """
+
+    states: tuple[str, ...] = ("normal", "hover", "active", "disabled")
 
     light: dict[str, dict[str, dict[str, str]]] = {}
     dark: dict[str, dict[str, dict[str, str]]] = {}
@@ -492,8 +518,9 @@ class Style:
         auto_update: bool | None = None,
     ) -> None:
         """
-        * `widget`: parent widget
-        * `auto_update`: whether the theme manager update it automatically
+        Args:
+            widget: parent widget.
+            auto_update: whether the theme manager update it automatically.
         """
         self.widget = widget
 
@@ -507,7 +534,11 @@ class Style:
     def _get_key(self, key: Element | str | int) -> str:
         """Get the key.
 
-        * `key`: the object related to the key
+        Args:
+            key: the object related to the key.
+
+        Returns:
+            the key.
         """
         if isinstance(key, Element):
             key = key.name
@@ -526,7 +557,11 @@ class Style:
     def get_disabled_style(self, *, element: Element) -> dict[str, str]:
         """Get the style data of disabled state.
 
-        * `element`: element that style to be calculated
+        Args:
+            element: element that style to be calculated.
+
+        Returns:
+            style data of disabled state.
         """
         if style := self[element].get("disabled"):
             return style
@@ -555,12 +590,13 @@ class Style:
         self,
         key: Element | str | int,
         *,
-        theme: typing.Literal["light", "dark"] | None = None,
+        theme: Literal["light", "dark"] | None = None,
     ) -> None:
         """Initialize some style of an element.
 
-        * `name`: the key of the element
-        * `theme`: the theme name, None indicates both
+        Args:
+            key: the object related to the key.
+            theme: the theme name, ``None`` indicates both.
         """
         name = self._get_key(key)
 
@@ -574,11 +610,16 @@ class Style:
     def get(
         self,
         *,
-        theme: typing.Literal["light", "dark"] | None = None,
+        theme: Literal["light", "dark"] | None = None,
     ) -> dict[str, dict[str, dict[str, str]]]:
         """Return the style of the widget.
 
-        * `theme`: the theme of the widget, None indicates the current theme
+        Args:
+            theme: the theme of the widget, ``None`` indicates the current
+                theme.
+
+        Returns:
+            the style of the widget.
         """
         if not self._cache or self.auto_update:
             self._cache = getattr(
@@ -589,11 +630,12 @@ class Style:
     def reset(
         self,
         *,
-        theme: typing.Literal["light", "dark"] | None = None,
+        theme: Literal["light", "dark"] | None = None,
     ) -> None:
         """Reset the style of the widget and update.
 
-        * `theme`: the theme to be reset, None indicates both
+        Args:
+            theme: the theme to be reset, ``None`` indicates both.
         """
         if theme != "light":
             if self.dark is not self.__class__.dark:
@@ -606,7 +648,7 @@ class Style:
         for element in self.widget.elements:
             element.update()
 
-    def detach(self) -> typing_extensions.Self:
+    def detach(self) -> Self:
         """Detach the style data from the class data."""
         if self.light is self.__class__.light:
             self.light = copy.deepcopy(self.__class__.light)
@@ -619,10 +661,7 @@ class Style:
         arg: tuple[str | types.EllipsisType, ...] | str,
         /,
     ) -> tuple[str | types.EllipsisType, ...]:
-        """Wrap the argument to a tuple.
-
-        * `arg`: argument
-        """
+        """Wrap the argument to a tuple."""
         if isinstance(arg, str):
             return (arg,)
 
@@ -630,15 +669,17 @@ class Style:
 
     def _set(
         self,
-        theme: typing.Literal["light", "dark"] | None = None,
+        theme: Literal["light", "dark"] | None = None,
         data: tuple[str | types.EllipsisType, ...] | str | None = None,
         **kwargs: tuple[Element | str | int, ...] | Element | str | int,
     ) -> None:
         """Set the color of a style conveniently.
 
-        * `theme`: the theme name, None indicates both
-        * `data`: data of color
-        * `kwargs`: { arg name: element key or element keys tuple }
+
+        Args:
+            theme: the theme name, ``None`` indicates both.
+            data: data of color.
+            kwargs: ``{ arg name: element key or element keys tuple }``.
         """
         if data is None:
             return
@@ -668,35 +709,45 @@ class Style:
 
 
 class Feature:
-    """The features of a `Widget`."""
+    """The features of a ``Widget``."""
 
     def __init__(self, widget: Widget) -> None:
         """
-        * `widget`: parent widget
+        Args:
+            widget: parent widget.
         """
         self.widget = widget
-        self.extra_commands: dict[str, list[collections.abc.Callable[[tkinter.Event], typing.Any]]] = {}
+        self.extra_commands: dict[str, list[Callable[[tkinter.Event], Any]]] = {}
 
     @staticmethod
     def _parse_method_name(name: str) -> str:
         """Parse the name to method name.
 
-        * `name`: original name
+        Args:
+            name: original name.
 
-        Example:
+        Returns:
+            method name.
 
-        * `"<Ctrl-C>"` -> `"_ctrl_c"`
-        * `"<MouseWheel>"` -> `"_mouse_wheel"`
+        Examples:
+            >>> Feature._parse_method_name("<Ctrl-C>")
+            '_ctrl_c'
+            >>> Feature._parse_method_name("<MouseWheel>")
+            '_mouse_wheel'
         """
         name = re.sub("[<\\->]", "", name)
         name = re.sub("([0-9A-Z])", "_\\1", name)
 
         return name.lower()
 
-    def get_method(self, name: str) -> collections.abc.Callable:
+    def get_method(self, name: str) -> Callable:
         """Return method by name.
 
-        * `name`: name of the method
+        Args:
+            name: name of the method.
+
+        Returns:
+            method.
         """
         extra_commands = self.extra_commands.get(name)
         method = getattr(self, self._parse_method_name(name), lambda _: False)
@@ -704,7 +755,7 @@ class Feature:
         if extra_commands is None:
             return method
 
-        def wrapper(event: tkinter.Event) -> typing.Any:
+        def wrapper(event: tkinter.Event) -> Any:
             result = method(event)
 
             for command in extra_commands:
@@ -721,7 +772,7 @@ class Feature:
 class Widget:
     """Base Widget Class.
 
-    `Widget` = `Element` + `Style` + `Feature`
+    ``Widget`` = ``Element`` + ``Style`` + ``Feature``
     """
 
     def __init__(
@@ -730,7 +781,7 @@ class Widget:
         position: tuple[int, int] = (0, 0),
         size: tuple[int, int] | None = None,
         *,
-        anchor: typing.Literal["n", "s", "w", "e", "nw", "ne", "sw", "se", "center"] = "nw",
+        anchor: Literal["n", "s", "w", "e", "nw", "ne", "sw", "se", "center"] = "nw",
         capture_events: bool | None = None,
         gradient_animation: bool | None = None,
         auto_resize: bool | None = None,
@@ -738,15 +789,17 @@ class Widget:
         style: type[Style] | None = None,
     ) -> None:
         """
-        * `master`: parent canvas
-        * `position`: position of the widget
-        * `size`: size of the widget
-        * `anchor`: layout anchor of the widget
-        * `capture_events`: whether detect another widget under the widget
-        * `gradient_animation`: whether enable animation
-        * `auto_resize`: whether to automatically resize after modifying the content of the widget
-        * `auto_update`: whether the theme manager update it automatically
-        * `style`: style of the widget
+        Args:
+            master: parent canvas.
+            position: position of the widget.
+            size: size of the widget.
+            anchor: layout anchor of the widget.
+            capture_events: whether detect another widget under the widget.
+            gradient_animation: whether enable animation.
+            auto_resize: whether to automatically resize after modifying the
+                content of the widget.
+            auto_update: whether the theme manager update it automatically.
+            style: style of the widget.
         """
         if isinstance(master, Widget):
             self.master, self.widget = master.master, master
@@ -790,18 +843,18 @@ class Widget:
         self.state_before_disabled: str = ""
         self.disappeared: bool = False
 
-        self._update_hooks: list[collections.abc.Callable[[str, bool], typing.Any]] = []
+        self._update_hooks: list[Callable[[str, bool], Any]] = []
 
         self.master.widgets.append(self)
 
     @property
     def elements(self) -> tuple[Element, ...]:
-        """Return all elements of the widget."""
+        """All elements of the widget."""
         return tuple(self.shapes + self.texts + self.images)
 
     @property
     def children(self) -> tuple[Widget, ...]:
-        """Return all child widgets of the widget."""
+        """All child widgets of the widget."""
         return tuple(self.widgets)
 
     @property
@@ -811,7 +864,7 @@ class Widget:
 
     @property
     def offset(self) -> tuple[float, float]:
-        """Return the offset of the anchor relative to "nw"."""
+        """The offset of the anchor relative to "nw"."""
         match self.anchor:
             case "n": result = self.size[0]/2, 0
             case "w": result = 0, self.size[1]/2
@@ -828,7 +881,8 @@ class Widget:
     def register_elements(self, *elements: Element) -> None:
         """Register elements to the widget.
 
-        * `elements`: elements to be registered
+        Args:
+            elements: elements to be registered.
         """
         for element in elements:
             if isinstance(element, Shape):
@@ -845,7 +899,8 @@ class Widget:
     def deregister_elements(self, *elements: Element) -> None:
         """Deregister a element from the widget.
 
-        * `elements`: elements to be deregistered
+        Args:
+            elements: elements to be deregistered.
         """
         for element in elements:
             if isinstance(element, Shape):
@@ -864,9 +919,10 @@ class Widget:
     ) -> None:
         """Update the widget.
 
-        * `state`: state of the widget
-        * `gradient_animation`: whether use gradient animation
-        * `nested`: whether nested
+        Args:
+            state: state of the widget.
+            gradient_animation: whether use gradient animation.
+            nested: whether nested.
         """
         if state != "disabled" and self.state_before_disabled:
             return  # It is currently disabled
@@ -894,44 +950,47 @@ class Widget:
 
     def bind_on_update(
         self,
-        command: collections.abc.Callable[[str, bool], typing.Any],
+        command: Callable[[str, bool], Any],
     ) -> None:
         """Bind an extra function to the widget on update.
 
         This extra function has two positional arguments, both of which are
-        arguments to the method `update`. And this extra function will be
+        arguments to the method ``update``. And this extra function will be
         called when the widget is updated (whether it's automatically updated
         or manually updated).
 
-        * `command`: the extra function that is bound
+        Args:
+            command: the extra function that is bound.
         """
         self._update_hooks.append(command)
 
     def unbind_on_update(
         self,
-        command: collections.abc.Callable[[str, bool], typing.Any],
+        command: Callable[[str, bool], Any],
     ) -> None:
         """Unbind an extra function to the widget on update.
 
-        * `command`: the extra function that is bound
+        Args:
+            command: the extra function that is bound.
         """
         self._update_hooks.remove(command)
 
     def bind(
         self,
         sequence: str,
-        command: collections.abc.Callable[[tkinter.Event], typing.Any],
-        add: bool | typing.Literal["", "+"] | None = None,
+        command: Callable[[tkinter.Event], Any],
+        add: bool | Literal["", "+"] | None = None,
         *,
         auto_detect: bool = True,
     ) -> None:
         """Bind to this widget at event sequence a call to function command.
 
-        * `sequence`: event name
-        * `command`: callback function
-        * `add`: if True, original callback function will not be overwritten
-        * `auto_detect`: Automatically determine whether to execute binding
-        events based on the method `detect`
+        Args:
+            sequence: event name
+            command: callback function
+            add: if True, original callback function will not be overwritten
+            auto_detect: Automatically determine whether to execute binding
+                events based on the method ``detect``
         """
         if sequence not in configs.Constant.PREDEFINED_EVENTS:
             if sequence not in configs.Constant.PREDEFINED_VIRTUAL_EVENTS:
@@ -940,7 +999,7 @@ class Widget:
                     self.master.register_event(sequence)
 
         if auto_detect:
-            def wrapper(event: tkinter.Event) -> typing.Any:
+            def wrapper(event: tkinter.Event) -> Any:
                 if self.detect(event.x, event.y):
                     return command(event)
                 return None
@@ -957,12 +1016,13 @@ class Widget:
     def unbind(
         self,
         sequence: str,
-        command: collections.abc.Callable[[tkinter.Event], typing.Any],
+        command: Callable[[tkinter.Event], Any],
     ) -> None:
         """Unbind for this widget the event sequence.
 
-        * `sequence`: event name
-        * `command`: callback function
+        Args:
+            sequence: event name.
+            command: callback function.
         """
         if self.feature.extra_commands.get(sequence) is not None:
             self.feature.extra_commands[sequence].remove(command)
@@ -971,14 +1031,15 @@ class Widget:
         self,
         sequence: str,
         event: tkinter.Event | None = None,
-        **kwargs,
+        **kwargs: Any,
     ) -> None:
         """Generate an event sequence. Additional keyword arguments specify
         parameter of the event.
 
-        * `sequence`: event name
-        * `event`: event
-        * `kwargs`: attr of event
+        Args:
+            sequence: event name.
+            event: event.
+            kwargs: attr of event.
         """
         if event is None:
             event = tkinter.Event()
@@ -991,7 +1052,8 @@ class Widget:
     def disable(self, value: bool = True, /) -> None:
         """Disable the widget.
 
-        * `value`: whether to disable
+        Args:
+            value: whether to disable.
         """
         if value:
             if not self.state_before_disabled:
@@ -1012,7 +1074,8 @@ class Widget:
     def forget(self, value: bool = True, /) -> None:
         """Let all elements of the widget to forget.
 
-        * `value`: whether to forget the widget
+        Args:
+            value: whether to forget the widget.
         """
         self.disappeared = value
 
@@ -1035,8 +1098,9 @@ class Widget:
     def move(self, dx: float, dy: float) -> None:
         """Move the widget.
 
-        * `dx`: x-coordinate offset
-        * `dy`: y-coordinate offset
+        Args:
+            dx: x-coordinate offset.
+            dy: y-coordinate offset.
         """
         self.position = self.position[0]+dx, self.position[1]+dy
 
@@ -1049,8 +1113,9 @@ class Widget:
     def moveto(self, x: float, y: float) -> None:
         """Move the Widget to a certain position.
 
-        * `x`: x-coordinate of the target location
-        * `y`: y-coordinate of the target location
+        Args:
+            x: x-coordinate of the target location.
+            y: y-coordinate of the target location.
         """
         return self.move(x-self.position[0], y-self.position[1])
 
@@ -1074,15 +1139,19 @@ class Widget:
         return bool(self.__dict__)
 
     def region(self) -> tuple[int, int, int, int]:
-        """Return the decision region of the `Widget`."""
+        """Return the decision region of the ``Widget``."""
         x, y, w, h, dx, dy = *self.position, *self.size, *self.offset
         return round(x-dx), round(y-dy), round(x+w-dx), round(y+h-dy)
 
     def detect(self, x: float, y: float) -> bool:
-        """Detect whether the specified coordinates are within the `Widget`.
+        """Detect whether the specified coordinates are within the ``Widget``.
 
-        * `x`: x-coordinate of the location to be detected
-        * `y`: y-coordinate of the location to be detected
+        Args:
+            x: x-coordinate of the location to be detected.
+            y: y-coordinate of the location to be detected.
+
+        Returns:
+            whether the location is within the widget.
         """
         x1, y1, x2, y2 = self.region()
         return x1 <= x <= x2 and y1 <= y <= y2
@@ -1101,9 +1170,10 @@ class Widget:
     ) -> None:
         """Zoom widget ifself.
 
-        * `ratios`: ratios of zooming
-        * `zoom_position`: whether or not to zoom the location of the widget
-        * `zoom_size`: whether or not to zoom the size of the widget
+        Args:
+            ratios: ratios of zooming.
+            zoom_position: whether or not to zoom the location of the widget.
+            zoom_size: whether or not to zoom the size of the widget.
         """
         if not zoom_position and not zoom_size:
             warnings.warn("This is a no-effect call.", UserWarning, 2)
@@ -1129,7 +1199,8 @@ class Widget:
     def resize(self, size: tuple[float, float] | None = None) -> None:
         """Resize the widget.
 
-        * `size`: new size for the widget
+        Args:
+            size: new size for the widget.
         """
         # override this method to do something here
         if size is not None:

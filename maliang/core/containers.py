@@ -24,16 +24,19 @@ import sys
 import tkinter
 import tkinter.font
 import traceback
-import typing
+from typing import TYPE_CHECKING
 
-import typing_extensions
+from typing_extensions import override
 
 from ..theme import manager
 from ..toolbox import enhanced, utility
 from . import configs
 
-if typing.TYPE_CHECKING:
-    import collections.abc
+if TYPE_CHECKING:
+    from collections.abc import Callable
+    from typing import Any, Final, Literal
+
+    from typing_extensions import Self
 
     from . import virtual
 
@@ -41,7 +44,7 @@ if typing.TYPE_CHECKING:
 class Misc(abc.ABC):
     """An abstract miscellaneous class that implements some details.
 
-    Currently, this class implements the ability to use the `with` statement
+    Currently, this class implements the ability to use the ``with`` statement
     for its subclasses for testing.
     """
 
@@ -49,7 +52,7 @@ class Misc(abc.ABC):
     def destroy(self) -> None:
         """Destroy the object."""
 
-    def __enter__(self) -> typing_extensions.Self:
+    def __enter__(self) -> Self:
         return self
 
     def __exit__(self, *args, **kwargs) -> None:
@@ -61,10 +64,14 @@ class Tk(tkinter.Tk, Misc):
 
     In general, there is only one main window. But after destroying it, another
     one can be created.
+
+    Attributes:
+        light (dict[str, str]): the color theme of light mode.
+        dark (dict[str, str]): the color theme of dark mode.
     """
 
-    light = {"bg": "#F1F1F1"}
-    dark = {"bg": "#202020"}
+    light: dict[str, str] = {"bg": "#F1F1F1"}
+    dark: dict[str, str] = {"bg": "#202020"}
 
     def __init__(
         self,
@@ -73,22 +80,23 @@ class Tk(tkinter.Tk, Misc):
         *,
         title: str | None = None,
         icon: str | enhanced.PhotoImage | None = None,
-        **kwargs,
+        **kwargs: Any,
     ) -> None:
         """
-        * `size`: size of the window
-        * `position`: position of the window, based on the upper left (nw)
-        corner. And negative numbers are based on the bottom right (se) corner.
-        * `title`: title of the window, default value is `"tk"`
-        * `icon`: icon of the window, default value is the icon of tk
-        * `**kwargs`: compatible with other parameters of class `tkinter.Tk`
+        Args:
+            size: size of the window.
+            position: position of the window, based on the upper left corner.
+                And negative numbers are based on the bottom right corner.
+            title: title of the window, default value is ``"tk"``.
+            icon: icon of the window, default value is the icon of tk.
+            kwargs: additional keyword arguments for ``tkinter.Tk``.
         """
         if not isinstance(self, Toplevel):
             # containers.Toplevel and its subclasses do not inherit tk.Tk
             super().__init__(**kwargs)
 
         # ensure init_size is a tuple
-        self.init_size: typing.Final[tuple[int, int]] = size[0], size[1]
+        self.init_size: Final[tuple[int, int]] = size[0], size[1]
         self.canvases: list[Canvas] = []
         self.size = self.init_size
 
@@ -116,18 +124,22 @@ class Tk(tkinter.Tk, Misc):
 
     @functools.cached_property
     def ratios(self) -> tuple[float, float]:
-        """Return the aspect zoom ratio of the container."""
+        """The aspect zoom ratio of the container."""
         return self.size[0]/self.init_size[0], self.size[1]/self.init_size[1]
 
     @staticmethod
-    def _fixed_theme(method) -> collections.abc.Callable:
+    def _fixed_theme(method) -> Callable:
         """This is a decorator that to fix a problem that some methods cause
         the window to lose its theme.
 
-        * `method`: the method of being decorated
+        Args:
+            method: the method of being decorated.
+
+        Returns:
+            A wrapper function that applies the fixed theme.
         """
         @functools.wraps(method)
-        def wrapper(tk: Tk, *args, **kwargs) -> typing.Any:
+        def wrapper(tk: Tk, *args: Any, **kwargs: Any) -> Any:
             result = method(tk, *args, **kwargs)
 
             if result is None:
@@ -142,13 +154,14 @@ class Tk(tkinter.Tk, Misc):
     def _wrap_method(self, method_name: str) -> None:
         """Some problems can be fixed by decorating the original method.
 
-        * `method_name`: the name of the method to be decorated
+        Args:
+            method_name: the name of the method to be decorated.
         """
         method = getattr(tkinter.Wm, method_name)
 
         @Tk._fixed_theme
         @functools.wraps(method)
-        def wrapper(*args, **kwargs) -> typing.Any:
+        def wrapper(*args: Any, **kwargs: Any) -> Any:
             result = method(*args, **kwargs)
 
             return None if result == "" else result
@@ -174,16 +187,17 @@ class Tk(tkinter.Tk, Misc):
 
     def theme(
         self,
-        value: typing.Literal["light", "dark"],
+        value: Literal["light", "dark"],
         *,
         include_children: bool = True,
         include_canvases: bool = True,
     ) -> None:
-        """Change the color theme of the window
+        """Change the color theme of the window.
 
-        * `value`: theme name
-        * `include_children`: whether include its children, like Toplevel
-        * `include_canvases`: whether include its canvases
+        Args:
+            value: theme name.
+            include_children: whether include its children, like ``Toplevel``.
+            include_canvases: whether include its canvases.
         """
         self.update()
         self.configure(bg=getattr(self, value)["bg"])
@@ -213,11 +227,19 @@ class Tk(tkinter.Tk, Misc):
         """Change the size and position of the window and return the current
         size and position of the window.
 
-        * `size`: the size of the window, if it is None, does not change anything
-        * `position`: the position of the window, if it is None, does not change anything
+        Args:
+            size: the size of the window, if it is ``None``, does not change
+                anything.
+            position: the position of the window, if it is ``None``, does not
+                change anything.
 
-        If you want to use `tkinter.Tk.geometry`, please use
-        `tkinter.Tk.wm_geometry` instead.
+        Returns:
+            The current size and position of the window if ``size`` or
+                ``position`` is not ``None``. Otherwise, returns ``None``.
+
+        Note:
+            If you want to use ``tkinter.Tk.geometry``, please use
+                ``tkinter.Tk.wm_geometry`` instead.
         """
         if size is not None and position is not None:
             self.wm_geometry(f"{size[0]}x{size[1]}+{position[0]}+{position[1]}")
@@ -229,10 +251,11 @@ class Tk(tkinter.Tk, Misc):
         return *self.size, self.winfo_x(), self.winfo_y()
 
     def center(self, *, refer: tkinter.Misc | None = None) -> None:
-        """Center the container
+        """Center the container.
 
-        `refer`: The area of the reference widget, if it is None, means that
-        the reference area is the entire screen.
+        Args:
+            refer: The area of the reference widget, if it is None, means that
+                the reference area is the entire screen.
         """
         if refer is None:  # center self in whole screen
             w, h = self.winfo_screenwidth(), self.winfo_screenheight()
@@ -247,7 +270,8 @@ class Tk(tkinter.Tk, Misc):
     def icon(self, value: str | enhanced.PhotoImage) -> None:
         """Set the icon of the window.
 
-        * `value`: the icon
+        Args:
+            value: the icon.
         """
         self.update()  # wm_iconbitmap will not take effect without this line
         self._icon = value
@@ -262,17 +286,27 @@ class Tk(tkinter.Tk, Misc):
                 self.call("wm", "iconbitmap", self, "-default", value)
 
     def alpha(self, value: float | None = None) -> float | None:
-        """Set or get the transparency of the window
+        """Set or get the transparency of the window.
 
-        * `value`: the transparency of the window, range is 0~1
+        Args:
+            value: the transparency of the window, range is ``0`` ~ ``1``.
+
+        Returns:
+            The current transparency of the window if ``value`` is not
+                ``None``. Otherwise, returns ``None``.
         """
         result = self.wm_attributes("-alpha", value)
         return None if result == "" else result
 
     def topmost(self, value: bool | None = True) -> bool | None:
-        """Set or get whether the window is pinned or not
+        """Set or get whether the window is pinned or not.
 
-        * `value`: indicate whether the window is topmost
+        Args:
+            value: indicate whether the window is topmost.
+
+        Returns:
+            The current topmost state of the window if ``value`` is not
+                ``None``. Otherwise, returns ``None``.
         """
         result = self.wm_attributes("-topmost", value)
         return None if result == "" else bool(result)
@@ -281,10 +315,16 @@ class Tk(tkinter.Tk, Misc):
     def fullscreen(self, value: bool | None = True) -> bool | None:
         """Set or get whether the window is full-screen.
 
-        * `value`: indicate whether the window is full-screen
+        Args:
+            value: indicate whether the window is full-screen.
 
-        The method should be called at the end of the code, or after some time
-        after the program has started.
+        Returns:
+            The current full-screen state of the window if ``value`` is not
+                ``None``. Otherwise, returns ``None``.
+
+        Note:
+            The method should be called at the end of the code, or after some
+            time after the program has started.
         """
         if value is False and sys.platform == "darwin":  # patch for Darwin
             value = not self.fullscreen(None)
@@ -298,9 +338,15 @@ class Tk(tkinter.Tk, Misc):
         def toolwindow(self, value: bool | None = True) -> bool | None:
             """Set or get whether the window is tool-window.
 
-            * `value`: indicate whether the window is tool-window
+            Args:
+                value: indicate whether the window is tool-window.
 
-            This method only works on Windows!
+            Returns:
+                The current tool-window state of the window if ``value`` is not
+                    ``None``. Otherwise, returns ``None``.
+
+            Warning:
+                This method only works on Windows!
             """
             result = self.wm_attributes("-toolwindow", value)
             return None if result == "" else bool(result)
@@ -308,9 +354,15 @@ class Tk(tkinter.Tk, Misc):
         def transparentcolor(self, value: str | None = None) -> str | None:
             """Set or get the penetration color of the window.
 
-            * `value`: the penetration color of the window
+            Args:
+                value: the penetration color of the window.
 
-            This method only works on Windows!
+            Returns:
+                The current penetration color of the window if ``value`` is not
+                    ``None``. Otherwise, returns ``None``.
+
+            Warning:
+                This method only works on Windows!
             """
             result = self.wm_attributes("-transparentcolor", value)
             return None if result == "" else result
@@ -320,9 +372,15 @@ class Tk(tkinter.Tk, Misc):
         def modified(self, value: bool | None = None) -> bool | None:
             """Set or get whether the window is modified.
 
-            * `value`: indicate whether the window is modified
+            Args:
+                value: indicate whether the window is modified.
 
-            This method only works on macOS!
+            Returns:
+                The current modified state of the window if ``value`` is not
+                    ``None``. Otherwise, returns ``None``.
+
+            Warning:
+                This method only works on macOS!
             """
             result = self.wm_attributes("-modified", value)
             return None if result == "" else bool(result)
@@ -330,29 +388,35 @@ class Tk(tkinter.Tk, Misc):
         def transparent(self, value: bool | None = None) -> bool | None:
             """Set or get whether the window is transparent.
 
-            * `value`: indicate whether the window is transparent
+            Args:
+                value: indicate whether the window is transparent.
 
-            This method only works on macOS!
+            Returns:
+                The current transparent state of the window if ``value`` is not
+                    ``None``. Otherwise, returns ``None``.
+
+            Warning:
+                This method only works on macOS!
             """
             result = self.wm_attributes("-transparent", value)
             return None if result == "" else bool(result)
 
-    @typing_extensions.override
+    @override
     def destroy(self) -> None:
-        """Destroy this and all descendants widgets."""
         manager.remove_event(self.theme)
         return super().destroy()
 
     def at_exit(
         self,
-        command: collections.abc.Callable[[], typing.Any],
+        command: Callable[[], Any],
         *,
         ensure_destroy: bool = True,
     ) -> None:
         """Set a function that will be called when the window is closed.
 
-        * `command`: the function that was called
-        * `ensure_destroy`: whether the window is guaranteed to be closed
+        Args:
+            command: the function that will be called.
+            ensure_destroy: whether the window is guaranteed to be closed.  
         """
         def wrapper() -> None:
             try:
@@ -383,17 +447,19 @@ class Toplevel(tkinter.Toplevel, Tk, Misc):
         icon: str | enhanced.PhotoImage | None = None,
         grab: bool = False,
         focus: bool = True,
-        **kwargs,
+        **kwargs: Any,
     ) -> None:
         """
-        * `master`: parent widget
-        * `size`: size of the window, default value is 960x540(px)
-        * `position`: position of the window, default value indicates random
-        * `title`: title of window, default is the same as title of master
-        * `icon`: icon of the window, default is the same as title of master
-        * `grab`: set grab for this window
-        * `focus`: whether direct input focus to this window
-        * `**kwargs`: compatible with other parameters of class `tkinter.Toplevel`
+        Args:
+            master: parent widget.
+            size: size of the window, default value is 960x540(px).
+            position: position of the window, default value indicates random.
+            title: title of window, default is the same as title of master.
+            icon: icon of the window, default is the same as title of master.
+            grab: whether to grab the window.
+            focus: whether direct input focus to this window.
+            kwargs: compatible with other parameters of class
+                ``tkinter.Toplevel``.
         """
         super().__init__(master, **kwargs)
 
@@ -408,9 +474,8 @@ class Toplevel(tkinter.Toplevel, Tk, Misc):
         if focus:
             self.focus_set()
 
-    @typing_extensions.override
+    @override
     def destroy(self) -> None:
-        """Destroy this and all descendants widgets."""
         manager.remove_event(self.theme)
         return super().destroy()
 
@@ -418,17 +483,21 @@ class Toplevel(tkinter.Toplevel, Tk, Misc):
 class Canvas(tkinter.Canvas, Misc):
     """Main contrainer: Canvas.
 
-    The parent widget of all virtual widgets is `Canvas`.
+    The parent widget of all virtual widgets is ``Canvas``.
+
+    Attributes:
+        light (dict[str, str | int]): light theme colors.
+        dark (dict[str, str | int]): dark theme colors.
     """
 
-    light = {
+    light: dict[str, str | int] = {
         "bg": "#F1F1F1",
         "insertbackground": "#000000",
         "highlightthickness": 0,
         "selectborderwidth": 0,
     }
 
-    dark = {
+    dark: dict[str, str | int] = {
         "bg": "#202020",
         "insertbackground": "#FFFFFF",
         "highlightthickness": 0,
@@ -439,24 +508,27 @@ class Canvas(tkinter.Canvas, Misc):
         self,
         master: Tk | Toplevel | Canvas | None = None,
         *,
-        expand: typing.Literal["", "x", "y", "xy"] = "xy",
+        expand: Literal["", "x", "y", "xy"] = "xy",
         auto_zoom: bool = False,
-        keep_ratio: typing.Literal["min", "max"] | None = None,
+        keep_ratio: Literal["min", "max"] | None = None,
         free_anchor: bool = False,
         auto_update: bool | None = None,
         zoom_all_items: bool = False,
-        **kwargs,
+        **kwargs: Any,
     ) -> None:
         """
-        * `master`: parent widget
-        * `expand`: the mode of expand, `x` is horizontal, and `y` is vertical
-        * `auto_zoom`: whether or not to scale its items automatically
-        * `keep_ratio`: the mode of aspect ratio, `min` follows the minimum
-        value, `max` follows the maximum value
-        * `free_anchor`: whether the anchor point is free-floating
-        * `auto_update`: whether the theme manager update it automatically
-        * `zoom_all_items`: (Experimental) whether or not to scale its all items
-        * `kwargs`: compatible with other parameters of class `tkinter.Canvas`
+        Args:
+            master: parent widget.
+            expand: the mode of expand, ``x`` is horizontal, and ``y`` is
+                vertical.
+            auto_zoom: whether or not to scale its items automatically.
+            keep_ratio: the mode of aspect ratio, ``min`` follows the minimum
+                value, ``max`` follows the maximum value.
+            free_anchor: whether the anchor point is free-floating.
+            auto_update: whether the theme manager update it automatically.
+            zoom_all_items: whether or not to scale its allitems.
+            kwargs: compatible with other parameters of class
+                ``tkinter.Canvas``.
         """
         super().__init__(master, **kwargs)
 
@@ -483,10 +555,10 @@ class Canvas(tkinter.Canvas, Misc):
         else:
             self.auto_update = auto_update
 
-        self._expand: typing.Literal["", "x", "y", "xy"] = expand
+        self._expand: Literal["", "x", "y", "xy"] = expand
         self._auto_zoom = auto_zoom
         self._free_anchor = free_anchor
-        self._keep_ratio: typing.Literal["min", "max"] | None = keep_ratio
+        self._keep_ratio: Literal["min", "max"] | None = keep_ratio
         self._zoom_all_items = zoom_all_items
 
         self._focus_widget: virtual.Widget | None = None
@@ -530,13 +602,14 @@ class Canvas(tkinter.Canvas, Misc):
 
     @functools.cached_property
     def ratios(self) -> tuple[float, float]:
-        """Return the aspect zoom ratio of the widget."""
+        """The aspect zoom ratio of the widget."""
         return self._size[0]/self.init_size[0], self._size[1]/self.init_size[1]
 
-    def theme(self, value: typing.Literal["light", "dark"]) -> None:
-        """Change the color theme of the Canvas and its items
+    def theme(self, value: Literal["light", "dark"]) -> None:
+        """Change the color theme of the Canvas and its items.
 
-        * `value`: theme name
+        Args:
+            value: theme name.
         """
         self.update()
         self.configure(getattr(self, manager.get_color_mode(), {}))
@@ -572,7 +645,7 @@ class Canvas(tkinter.Canvas, Misc):
         self._position = self.init_position
 
     def zoom(self) -> None:
-        """Resize and position the `Canvas` based on the relevant parameters.
+        """Resize and position the ``Canvas`` based on the relevant parameters.
 
         This method only works for Canvas with Place layout.
         """
@@ -596,7 +669,7 @@ class Canvas(tkinter.Canvas, Misc):
                 self.place(kwargs)
 
     def _zoom_self(self) -> None:
-        """Scale the `Canvas` itself."""
+        """Scale the ``Canvas`` itself."""
         self.hide_focus()
 
         if not hasattr(self, "_size"):
@@ -629,9 +702,10 @@ class Canvas(tkinter.Canvas, Misc):
             canvas.zoom()
 
     def _zoom_tk_widgets(self, rel_ratio: tuple[float, float]) -> None:
-        """Scale the tkinter widgets of the Canvas.
+        """Scale the ``tkinter`` widgets of the ``Canvas``.
 
-        * `rel_ratio`: the ratio of the current size to the previous size
+        Args:
+            rel_ratio: the ratio of the current size to the previous size.
         """
         for tk_widgets in tuple(self.children.values()):
             if tk_widgets in self.canvases:
@@ -643,9 +717,8 @@ class Canvas(tkinter.Canvas, Misc):
                 y = tk_widgets.winfo_y()*rel_ratio[1]
                 tk_widgets.place(width=width, height=height, x=x, y=y)
 
-    @typing_extensions.override
+    @override
     def destroy(self) -> None:
-        """Destroy this and all descendants widgets."""
         self.master.canvases.remove(self)
 
         for widget in tuple(self.widgets):
@@ -665,9 +738,8 @@ class Canvas(tkinter.Canvas, Misc):
 
         self.delete(*self.find_all())
 
-    @typing_extensions.override
+    @override
     def create_text(self, x: float, y: float, /, *args, **kwargs) -> int:
-        """Create text with coordinates x, y."""
         font = kwargs.get("font")
         if not font:
             kwargs["font"] = tkinter.font.Font(
@@ -689,7 +761,7 @@ class Canvas(tkinter.Canvas, Misc):
         return super().create_text(x, y, *args, **kwargs)
 
     def on_motion(self, event: tkinter.Event, name: str) -> None:
-        """Events to move the mouse"""
+        """Events to move the mouse."""
         self.trigger_config.reset()
         for widget in reversed(self.widgets):
             if hasattr(widget, "feature") and not widget.disappeared:
@@ -702,7 +774,7 @@ class Canvas(tkinter.Canvas, Misc):
         self.trigger_config.update(cursor="arrow")
 
     def on_click(self, event: tkinter.Event, name: str) -> None:
-        """Events to active the mouse"""
+        """Events to active the mouse."""
         self.focus_set()
         self.hide_focus()
         self.trigger_focus.reset()
@@ -715,14 +787,14 @@ class Canvas(tkinter.Canvas, Misc):
         self.trigger_focus.update(True, "")
 
     def on_release(self, event: tkinter.Event, name: str) -> None:
-        """Events to release the mouse"""
+        """Events to release the mouse."""
         for widget in reversed(self.widgets):
             if hasattr(widget, "feature") and not widget.disappeared:
                 if widget.feature.get_method(name)(event) and widget.capture_events:
                     event.x = 9999
 
     def on_wheel(self, event: tkinter.Event, type_: bool | None) -> None:
-        """Events to scroll the mouse wheel"""
+        """Events to scroll the mouse wheel."""
         if type_ is not None:
             event.delta = 120 if type_ else -120
         for widget in reversed(self.widgets):
@@ -731,14 +803,14 @@ class Canvas(tkinter.Canvas, Misc):
                     event.x = 9999
 
     def on_key_press(self, event: tkinter.Event) -> None:
-        """Events for typing"""
+        """Events for typing."""
         for widget in reversed(self.widgets):
             if hasattr(widget, "feature") and not widget.disappeared:
                 if widget.feature.get_method("<KeyPress>")(event) and widget.capture_events:
                     event.x = 9999
 
     def on_key_release(self, event: tkinter.Event) -> None:
-        """Events for typing"""
+        """Events for typing."""
         for widget in reversed(self.widgets):
             if hasattr(widget, "feature") and not widget.disappeared:
                 if widget.feature.get_method("<KeyRelease>")(event) and widget.capture_events:
@@ -748,16 +820,17 @@ class Canvas(tkinter.Canvas, Misc):
         self,
         name: str,
         *,
-        add: bool | typing.Literal["", "+"] | None = None,
+        add: bool | Literal["", "+"] | None = None,
     ) -> str:
         """Register a event to process.
-
-        * `name`: event name, such as "<Alt-A>"
-        * `add`: whether it is an attached call
 
         In general, you don't need to call this method, but when the event to
         be bound is not in the predefined event, you need to manually call the
         method once.
+
+        Args:
+            name: the name of the event to register.
+            add: whether it is an attached call.
         """
         def handle_event(event: tkinter.Event) -> None:
             for widget in reversed(self.widgets):

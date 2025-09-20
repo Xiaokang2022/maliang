@@ -22,27 +22,42 @@ import math
 import platform
 import sys
 import tkinter
-import typing
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from typing import Any, Final, Literal
 
 
 class _DefaultRootDescriptor:
-    """A simple descriptor for `tkinter._default_root`."""
+    """A simple descriptor for ``tkinter._default_root``."""
 
-    def __get__(self, *args, **kwargs) -> tkinter.Tk:
+    def __get__(self, *args: Any, **kwargs: Any) -> tkinter.Tk:
         """Returns the current default root.
 
-        In some cases, the method also returns `tkinter.Tk` and `None`, but
+        In some cases, the method also returns ``tkinter.Tk`` and ``None``, but
         this can happen if the usage is not recommended.
         """
+        del args, kwargs
         return tkinter._get_default_root()
 
 
 class Env:
-    """Configurations for default environment values."""
+    """Configurations for default environment values.
+
+    Attributes:
+        system (str): The system of environment, such as ``"Windows10"``,
+            ``"Windows11"``, ``"Linux"``, ``"Darwin"`` (macOS).
+        theme (Literal["light", "dark"]): The theme of the application.
+        gradient_animation (bool): Whether to enable gradient animation for
+            widgets that support it by default.
+        auto_update (bool): Whether to check for updates automatically on
+            startup.
+        root (tkinter.Tk): The current default root window. It is READ-ONLY.
+    """
 
     # Global configurations
     system: str
-    theme: typing.Literal["light", "dark"]
+    theme: Literal["light", "dark"]
 
     # Default parameters for widgets
     gradient_animation: bool
@@ -73,7 +88,12 @@ class Env:
 
 
 class Font:
-    """Configurations for default font."""
+    """Configurations for default font.
+    
+    Attributes:
+        family (str): The default font family.
+        size (int): The default font size, negative value means size in pixels.
+    """
 
     family: str
     size: int
@@ -97,11 +117,11 @@ class Font:
 class Constant:
     """All Constants."""
 
-    GOLDEN_RATIO: typing.Final[float] = (math.sqrt(5)-1) / 2
+    GOLDEN_RATIO: Final[float] = (math.sqrt(5)-1) / 2
     """The golden ratio, which is needed to automatically calculate the color
-    of widget on `"disabled"` state. It is READ-ONLY."""
+    of widget on ``"disabled"`` state. It is READ-ONLY."""
 
-    PREDEFINED_EVENTS: typing.Final[tuple[str, ...]] = (
+    PREDEFINED_EVENTS: Final[tuple[str, ...]] = (
         "<KeyPress>",
         "<KeyRelease>",
         "<Button-1>",
@@ -122,7 +142,7 @@ class Constant:
     """Predefined events that can be used directly without registration. It is
     READ-ONLY."""
 
-    PREDEFINED_VIRTUAL_EVENTS: typing.Final[tuple[str, ...]] = (
+    PREDEFINED_VIRTUAL_EVENTS: Final[tuple[str, ...]] = (
         "<<Copy>>",
         "<<Paste>>",
         "<<Cut>>",
