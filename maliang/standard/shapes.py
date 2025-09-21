@@ -27,7 +27,7 @@ from typing_extensions import override
 from ..core import virtual
 
 if TYPE_CHECKING:
-    from typing import Literal
+    from typing import Any, Literal
 
 
 class Line(virtual.Shape):
@@ -42,7 +42,7 @@ class Line(virtual.Shape):
         points: list[tuple[float, float]] | None = None,
         name: str | None = None,
         gradient_animation: bool = True,
-        **kwargs,
+        **kwargs: Any,
     ) -> None:
         """
         Args:
@@ -161,7 +161,7 @@ class RegularPolygon(virtual.Shape):
         angle: float = 0,
         name: str | None = None,
         gradient_animation: bool = True,
-        **kwargs,
+        **kwargs: Any,
     ) -> None:
         """
         Args:
@@ -219,7 +219,7 @@ class RoundedRectangle(virtual.Shape):
         radius: int = 5,
         name: str | None = None,
         gradient_animation: bool = True,
-        **kwargs,
+        **kwargs: Any,
     ) -> None:
         """
         Args:
@@ -319,7 +319,7 @@ class HalfRoundedRectangle(virtual.Shape):
         ignore: Literal["left", "right"] = "left",
         name: str | None = None,
         gradient_animation: bool = True,
-        **kwargs,
+        **kwargs: Any,
     ) -> None:
         """
         Args:
@@ -496,7 +496,7 @@ class SharpRectangle(virtual.Shape):
         ratio: tuple[float, float] = (0.5, 0.5),
         name: str | None = None,
         gradient_animation: bool = True,
-        **kwargs,
+        **kwargs: Any,
     ) -> None:
         """
         Args:
@@ -570,7 +570,7 @@ class Parallelogram(virtual.Shape):
         theta: float = math.pi/6,
         name: str | None = None,
         gradient_animation: bool = True,
-        **kwargs,
+        **kwargs: Any,
     ) -> None:
         """
         Args:

@@ -1158,7 +1158,7 @@ class SegmentedButton(virtual.Widget):
         Args:
             master: parent canvas.
             position: position of the widget.
-            size: size of the widget.
+            sizes: size of the widget.
             text: text of the widget.
             family: font family.
             fontsize: font size.

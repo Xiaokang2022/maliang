@@ -21,7 +21,7 @@ from typing_extensions import override
 from ..core import virtual
 
 if TYPE_CHECKING:
-    from typing import Literal
+    from typing import Any, Literal
 
     from ..core import containers
 
@@ -206,7 +206,7 @@ class SingleLineText(virtual.Text):
         overstrike: bool = False,
         name: str | None = None,
         gradient_animation: bool = True,
-        **kwargs,
+        **kwargs: Any,
     ) -> None:
         """
         Args:

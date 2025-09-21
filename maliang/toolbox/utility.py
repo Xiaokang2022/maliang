@@ -77,8 +77,8 @@ class Trigger:
 
         Args:
             value: updated value.
-            *args: args of the command.
-            **kwargs: kwargs of the command.
+            args: args of the command.
+            kwargs: kwargs of the command.
         """
         if not self._lock and not self._flag and value:
             self._flag = True
@@ -207,7 +207,7 @@ def get_text_size(
             automatically wrap.
         font: font object to use (if ``None``, a new font will be created).
         master: default canvas or widget provided.
-        **kwargs: additional keyword arguments for the font.
+        kwargs: additional keyword arguments for the font.
 
     Warning:
         This function only works when the fontsize is negative number!
