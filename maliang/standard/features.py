@@ -23,22 +23,23 @@ __all__ = (
     "SpinBoxFeature",
 )
 
-import typing
+from typing import TYPE_CHECKING
 
-import typing_extensions
+from typing_extensions import override
 
 from ..animation import animations, controllers
 from ..core import virtual
 from ..standard import shapes
 from ..toolbox import utility
 
-if typing.TYPE_CHECKING:
-    import collections.abc
+if TYPE_CHECKING:
     import tkinter
+    from collections.abc import Callable
+    from typing import Any
 
 
 class TextFeature(virtual.Feature):
-    """Feature of Text"""
+    """Feature of Text."""
 
     def _motion(self, event: tkinter.Event, /) -> bool:
         if flag := self.widget.texts[0].detect(event.x, event.y):
@@ -51,7 +52,7 @@ class TextFeature(virtual.Feature):
 
 
 class ImageFeature(virtual.Feature):
-    """Feature of Image"""
+    """Feature of Image."""
 
     def _motion(self, event: tkinter.Event, /) -> bool:
         if flag := self.widget.images[0].detect(event.x, event.y):
@@ -64,7 +65,7 @@ class ImageFeature(virtual.Feature):
 
 
 class LabelFeature(virtual.Feature):
-    """Feature of Label"""
+    """Feature of Label."""
 
     def _motion(self, event: tkinter.Event, /) -> bool:
         if flag := self.widget.shapes[0].detect(event.x, event.y):
@@ -78,19 +79,20 @@ class LabelFeature(virtual.Feature):
 
 
 class ButtonFeature(virtual.Feature):
-    """Feature of Button"""
+    """Feature of Button."""
 
     def __init__(
         self,
         widget: virtual.Widget,
         *,
-        command: collections.abc.Callable | None = None,
+        command: Callable | None = None,
         args: tuple = (),
     ) -> None:
         """
-        * `widget`: parent widget
-        * `command`: callback function
-        * `args`: arguments of callback function
+        Args:
+            widget: parent widget.
+            command: callback function.
+            args: arguments of callback function.
         """
         super().__init__(widget)
         self.command = command
@@ -132,9 +134,9 @@ class ButtonFeature(virtual.Feature):
 
 
 class Underline(ButtonFeature):
-    """Feature of underline"""
+    """Feature of underline."""
 
-    @typing_extensions.override
+    @override
     def _motion(self, event: tkinter.Event, /) -> bool:
         if flag := self.widget.texts[0].detect(event.x, event.y):
             cursor = utility.fix_cursor(
@@ -149,13 +151,13 @@ class Underline(ButtonFeature):
                 self.widget.texts[0].font.config(underline=False)
         return flag
 
-    @typing_extensions.override
+    @override
     def _button_1(self, _: tkinter.Event, /) -> bool:
         if flag := self.widget.state == "hover":
             self.widget.update("active")
         return flag
 
-    @typing_extensions.override
+    @override
     def _button_release_1(self, event: tkinter.Event, /) -> bool:
         if flag := self.widget.texts[0].detect(event.x, event.y):
             if self.widget.state == "active":
@@ -167,9 +169,9 @@ class Underline(ButtonFeature):
 
 
 class Highlight(ButtonFeature):
-    """Feature of highlight"""
+    """Feature of highlight."""
 
-    @typing_extensions.override
+    @override
     def _motion(self, event: tkinter.Event, /) -> bool:
         if flag := self.widget.texts[0].detect(event.x, event.y):
             cursor = utility.fix_cursor(
@@ -184,14 +186,14 @@ class Highlight(ButtonFeature):
                 animations.ScaleFontSize(self.widget.texts[0], 24, 150).start()
         return flag
 
-    @typing_extensions.override
+    @override
     def _button_1(self, _: tkinter.Event, /) -> bool:
         if flag := self.widget.state == "hover":
             self.widget.update("active")
             animations.ScaleFontSize(self.widget.texts[0], 26, 150).start()
         return flag
 
-    @typing_extensions.override
+    @override
     def _button_release_1(self, event: tkinter.Event, /) -> bool:
         if flag := self.widget.texts[0].detect(event.x, event.y):
             if self.widget.state == "active":
@@ -203,9 +205,9 @@ class Highlight(ButtonFeature):
 
 
 class SwitchFeature(ButtonFeature):
-    """Feature of Switch"""
+    """Feature of Switch."""
 
-    @typing_extensions.override
+    @override
     def _motion(self, event: tkinter.Event, /) -> bool:
         if flag := self.widget.shapes[0].detect(event.x, event.y):
             cursor = utility.fix_cursor(
@@ -228,13 +230,13 @@ class SwitchFeature(ButtonFeature):
                 self.widget.update(f"normal-{'on' if self.widget.get() else 'off'}")
         return flag
 
-    @typing_extensions.override
+    @override
     def _button_1(self, _: tkinter.Event, /) -> bool:
         if flag := self.widget.state.startswith("hover"):
             self.widget.update(f"active-{'on' if self.widget.get() else 'off'}", gradient_animation=True)
         return flag
 
-    @typing_extensions.override
+    @override
     def _button_release_1(self, event: tkinter.Event, /) -> bool:
         if flag := self.widget.shapes[0].detect(event.x, event.y):
             if self.widget.state.startswith("active"):
@@ -247,9 +249,9 @@ class SwitchFeature(ButtonFeature):
 
 
 class ToggleButtonFeature(ButtonFeature):
-    """Feature of ToggleButton"""
+    """Feature of ToggleButton."""
 
-    @typing_extensions.override
+    @override
     def _motion(self, event: tkinter.Event, /) -> bool:
         if flag := self.widget.shapes[0].detect(event.x, event.y):
             cursor = utility.fix_cursor(
@@ -262,13 +264,13 @@ class ToggleButtonFeature(ButtonFeature):
                 self.widget.update(f"normal-{'on' if self.widget.get() else 'off'}")
         return flag
 
-    @typing_extensions.override
+    @override
     def _button_1(self, _: tkinter.Event, /) -> bool:
         if flag := self.widget.state.startswith("hover"):
             self.widget.update(f"active-{'on' if self.widget.get() else 'off'}")
         return flag
 
-    @typing_extensions.override
+    @override
     def _button_release_1(self, event: tkinter.Event, /) -> bool:
         if flag := self.widget.shapes[0].detect(event.x, event.y):
             if self.widget.state.startswith("active"):
@@ -281,19 +283,19 @@ class ToggleButtonFeature(ButtonFeature):
 
 
 class CheckBoxFeature(ToggleButtonFeature):
-    """Feature of CheckButton"""
+    """Feature of CheckButton."""
 
 
 class RadioBoxFeature(ButtonFeature):
-    """Feature of RadioButton"""
+    """Feature of RadioButton."""
 
-    @typing_extensions.override
+    @override
     def _button_1(self, _: tkinter.Event, /) -> bool:
         if flag := self.widget.state == "hover":
             self.widget.update("active", gradient_animation=True)
         return flag
 
-    @typing_extensions.override
+    @override
     def _button_release_1(self, event: tkinter.Event, /) -> bool:
         if flag := self.widget.shapes[0].detect(event.x, event.y):
             if self.widget.state.startswith("active"):
@@ -313,24 +315,24 @@ class RadioBoxFeature(ButtonFeature):
 
 
 class ProgressBarFeature(LabelFeature):
-    """Feature of ProgressBar"""
+    """Feature of ProgressBar."""
 
 
 class InputBoxFeature(ButtonFeature):
-    """Feature of input box"""
+    """Feature of input box."""
 
     def __init__(
         self,
         widget: virtual.Widget,
         *,
-        command: collections.abc.Callable[..., typing.Any] | None = None,
+        command: Callable[..., Any] | None = None,
         args: tuple = (),
     ) -> None:
         super().__init__(widget, command=command, args=args)
         self._start_index: int | None = None
         self._end_index: int | None = None
 
-    @typing_extensions.override
+    @override
     def _motion(self, event: tkinter.Event, /) -> bool:
         if flag := self.widget.shapes[0].detect(event.x, event.y):
             cursor = utility.fix_cursor(
@@ -343,7 +345,7 @@ class InputBoxFeature(ButtonFeature):
                 self.widget.update("normal")
         return flag
 
-    @typing_extensions.override
+    @override
     def _button_1(self, event: tkinter.Event, /) -> bool:
         if flag := self.widget.shapes[0].detect(event.x, event.y):
             self.widget.update("active")
@@ -357,7 +359,7 @@ class InputBoxFeature(ButtonFeature):
         self.widget.texts[0].text_proxy.select_clear()
         return flag
 
-    @typing_extensions.override
+    @override
     def _b_1_motion(self, event: tkinter.Event, /) -> bool:
         if self.widget.state == "active":
             cursor = utility.fix_cursor(
@@ -374,7 +376,7 @@ class InputBoxFeature(ButtonFeature):
             return True
         return False
 
-    @typing_extensions.override
+    @override
     def _button_release_1(self, _: tkinter.Event, /) -> bool:
         return False
 
@@ -449,7 +451,7 @@ class InputBoxFeature(ButtonFeature):
 
 
 class SliderFeature(virtual.Feature):
-    """Feature of Slider"""
+    """Feature of Slider."""
 
     def __init__(self, widget: virtual.Widget) -> None:
         super().__init__(widget)
@@ -516,24 +518,25 @@ class SliderFeature(virtual.Feature):
 
 
 class SegmentedButtonFeature(virtual.Feature):
-    """Feature of SegmentedButton"""
+    """Feature of SegmentedButton."""
 
     def _motion(self, event: tkinter.Event, /) -> bool:
         return self.widget.shapes[0].detect(event.x, event.y)
 
 
 class SpinBoxFeature(virtual.Feature):
-    """Feature of SpinBox"""
+    """Feature of SpinBox."""
 
     def __init__(
         self,
         widget: virtual.Widget,
         *,
-        command: collections.abc.Callable[[bool], typing.Any] | None = None,
+        command: Callable[[bool], Any] | None = None,
     ) -> None:
         """
-        * `widget`: parent widget
-        * `command`: callback function
+        Args:
+            widget: parent widget.
+            command: callback function.
         """
         super().__init__(widget)
         self.command = command

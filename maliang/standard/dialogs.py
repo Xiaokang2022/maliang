@@ -15,11 +15,12 @@ __all__ = (
 import tkinter
 import tkinter.colorchooser
 import tkinter.filedialog
-import typing
 import warnings
+from typing import TYPE_CHECKING
 
-if typing.TYPE_CHECKING:
-    import collections.abc
+if TYPE_CHECKING:
+    from collections.abc import Callable, Sequence
+    from typing import Any, Literal
 
 
 def _get_temp_root() -> tkinter.Tk:
@@ -30,7 +31,7 @@ def _get_temp_root() -> tkinter.Tk:
 
 
 class TkMessage:
-    """Message pop-up"""
+    """Message pop-up."""
 
     def __init__(
         self,
@@ -38,21 +39,22 @@ class TkMessage:
         detail: str | None = None,
         *,
         title: str | None = None,
-        icon: typing.Literal["error", "info", "question", "warning"] = "info",
-        option: typing.Literal["abortretryignore", "ok", "okcancel", "retrycancel", "yesno", "yesnocancel"] = "ok",
-        default: typing.Literal["abort", "retry", "ignore", "ok", "cancel", "yes", "no"] | None = None,
+        icon: Literal["error", "info", "question", "warning"] = "info",
+        option: Literal["abortretryignore", "ok", "okcancel", "retrycancel", "yesno", "yesnocancel"] = "ok",
+        default: Literal["abort", "retry", "ignore", "ok", "cancel", "yes", "no"] | None = None,
         master: tkinter.Tk | None = None,
-        command: collections.abc.Callable[[typing.Literal["abort", "retry", "ignore", "ok", "cancel", "yes", "no"]], typing.Any] | None = None,
+        command: Callable[[Literal["abort", "retry", "ignore", "ok", "cancel", "yes", "no"]], Any] | None = None,
     ) -> None:
         """
-        * `message`: message
-        * `detail`: detail message
-        * `title`: title of the window
-        * `icon`: icon
-        * `option`: type of the message pop-up
-        * `default`: button where the focus is, default is the leftmost one
-        * `master`: parent widget of the window
-        * `command`: callback function
+        Args:
+            message: message.
+            detail: detail message.
+            title: title of the window.
+            icon: icon.
+            option: type of the message pop-up.
+            default: button where the focus is, default is the leftmost one.
+            master: parent widget.
+            command: callback function.
         """
         if master is None:
             master = _get_temp_root()
@@ -80,7 +82,7 @@ class TkMessage:
 
 
 class TkColorChooser:
-    """Color chooser pop-up"""
+    """Color chooser pop-up."""
 
     def __init__(
         self,
@@ -88,13 +90,14 @@ class TkColorChooser:
         title: str | None = None,
         color: str | None = None,
         master: tkinter.Tk | None = None,
-        command: collections.abc.Callable[[str], typing.Any] | None = None,
+        command: Callable[[str], Any] | None = None,
     ) -> None:
         """
-        * `title`: title of the window
-        * `color`: default color
-        * `master`: parent widget of the window
-        * `command`: callback function
+        Args:
+            title: title of the window.
+            color: default color.
+            master: parent widget of the window.
+            command: callback function.
         """
         colors = tkinter.colorchooser.askcolor(
             initialcolor=color, parent=master, title=title)
@@ -104,7 +107,7 @@ class TkColorChooser:
 
 
 class TkFontChooser:
-    """Font chooser pop-up"""
+    """Font chooser pop-up."""
 
     def __init__(
         self,
@@ -112,13 +115,14 @@ class TkFontChooser:
         title: str | None = None,
         font: str | None = None,
         master: tkinter.Tk | None = None,
-        command: collections.abc.Callable[[str], typing.Any] | None = None,
+        command: Callable[[str], Any] | None = None,
     ) -> None:
         """
-        * `title`: title of the window
-        * `font`: default font
-        * `master`: parent widget of the window
-        * `command`: callback function
+        Args:
+            title: title of the window.
+            font: default font.
+            master: parent widget of the window.
+            command: callback function.
         """
         if master is None:
             master = _get_temp_root()
@@ -140,31 +144,35 @@ class TkFontChooser:
 
 
 class _TkFileChooser:
-    """File chooser pop-up"""
+    """File chooser pop-up."""
 
     def __init__(
         self,
         is_dir: bool,
-        mode: typing.Literal["save", "open"],
+        mode: Literal["save", "open"],
         *,
         title: str | None = None,
         initialdir: str | None = None,
         initialfile: str | None = None,
-        filetypes: collections.abc.Sequence[tuple[str, str]] | None = None,
+        filetypes: Sequence[tuple[str, str]] | None = None,
         defaultextension: str | None = None,
         multiple: bool = False,
         master: tkinter.Tk | None = None,
-        command: collections.abc.Callable[[str | tuple[str, ...]], typing.Any] | None = None,
+        command: Callable[[str | tuple[str, ...]], Any] | None = None,
     ) -> None:
         """
-        * `is_dir`: whether to select a directory
-        * `mode`: whether to save or open a file, must be "save" or "open"
-        * `initialfile`: initial file
-        * `filetypes`: file types to filter (e.g., [("Text Files", "*.txt"), ("All Files", "*.*")])
-        * `defaultextension`: default file extension
-        * `multiple`: whether to allow multiple file selection
-        * `master`: parent widget of the window
-        * `command`: callback function
+        Args:
+            is_dir: whether to select a directory.
+            mode: whether to save or open a file.
+            title: title of the window.
+            initialdir: initial directory.
+            initialfile: initial file.
+            filetypes: file types to filter.
+                (e.g., ``[("Text Files", "*.txt"), ("All Files", "*.*")]``)
+            defaultextension: default file extension.
+            multiple: whether to allow multiple file selection.
+            master: parent widget of the window.
+            command: callback function.
         """
         warnings.warn(
             "This class is not fully implemented yet.", FutureWarning, 2)

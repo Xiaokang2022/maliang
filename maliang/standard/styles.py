@@ -26,53 +26,71 @@ __all__ = (
 )
 
 import copy
-import typing
+from typing import TYPE_CHECKING
 
-import typing_extensions
+from typing_extensions import override
 
 from ..core import virtual
 
-if typing.TYPE_CHECKING:
+if TYPE_CHECKING:
     import types
+    from typing import Literal
 
 
 class TextStyle(virtual.Style):
-    """Style of Text"""
+    """Style of Text.
 
-    light = {
+    Attributes:
+        states (tuple[str, ...]): all states of the widget.
+        light (dict[str, dict[str, dict[str, str]]]):
+            The light theme style dictionary.
+        dark (dict[str, dict[str, dict[str, str]]]):
+            The dark theme style dictionary.
+    """
+
+    light: dict[str, dict[str, dict[str, str]]] = {
         "Information": {
             "normal": {"fill": "#1A1A1A"},
         }
     }
 
-    dark = {
+    dark: dict[str, dict[str, dict[str, str]]] = {
         "Information": {
             "normal": {"fill": "#F1F1F1"},
         }
     }
 
-    @typing_extensions.override
+    @override
     def set(
         self,
-        theme: typing.Literal["light", "dark"] | None = None,
+        theme: Literal["light", "dark"] | None = None,
         *,
         fg: tuple[str | types.EllipsisType, ...] | str | None = None,
     ) -> None:
         """Set the style of the widget.
 
-        * `theme`: the theme name, None indicates both
-        * `fg`: the foreground color of the widget
+        states: ``"normal"``
 
-        states: "normal"
+        Args:
+            theme: The theme to apply the style to.
+            fg: The foreground color of the widget.
         """
         self._set(theme, fg, fill=-1)
         self.widget.update()
 
 
 class LabelStyle(virtual.Style):
-    """Style of Label"""
+    """Style of Label.
 
-    light = {
+    Attributes:
+        states (tuple[str, ...]): all states of the widget.
+        light (dict[str, dict[str, dict[str, str]]]):
+            The light theme style dictionary.
+        dark (dict[str, dict[str, dict[str, str]]]):
+            The dark theme style dictionary.
+    """
+
+    light: dict[str, dict[str, dict[str, str]]] = {
         "Information": {
             "normal": {"fill": "#1A1A1A"},
             "hover": {"fill": "#1A1A1A"},
@@ -87,7 +105,7 @@ class LabelStyle(virtual.Style):
         }
     }
 
-    dark = {
+    dark: dict[str, dict[str, dict[str, str]]] = {
         "Information": {
             "normal": {"fill": "#F1F1F1"},
             "hover": {"fill": "#F1F1F1"},
@@ -102,10 +120,10 @@ class LabelStyle(virtual.Style):
         }
     }
 
-    @typing_extensions.override
+    @override
     def set(
         self,
-        theme: typing.Literal["light", "dark"] | None = None,
+        theme: Literal["light", "dark"] | None = None,
         *,
         fg: tuple[str | types.EllipsisType, ...] | str | None = None,
         bg: tuple[str | types.EllipsisType, ...] | str | None = None,
@@ -113,12 +131,13 @@ class LabelStyle(virtual.Style):
     ) -> None:
         """Set the style of the widget.
 
-        * `theme`: the theme name, None indicates both
-        * `fg`: the foreground color of the widget.
-        * `bg`: the background color of the widget.
-        * `ol`: the outline color of the widget.
+        states: ``"normal"``, ``"hover"``
 
-        states: "normal", "hover"
+        Args:
+            theme: The theme to apply the style to.
+            fg: The foreground color of the widget.
+            bg: The background color of the widget.
+            ol: The outline color of the widget.
         """
         self._set(theme, fg, fill=-1)
         self._set(theme, bg, fill=0)
@@ -127,9 +146,17 @@ class LabelStyle(virtual.Style):
 
 
 class ButtonStyle(LabelStyle):
-    """Style of Button"""
+    """Style of Button.
 
-    light = {
+    Attributes:
+        states (tuple[str, ...]): all states of the widget.
+        light (dict[str, dict[str, dict[str, str]]]):
+            The light theme style dictionary.
+        dark (dict[str, dict[str, dict[str, str]]]):
+            The dark theme style dictionary.
+    """
+
+    light: dict[str, dict[str, dict[str, str]]] = {
         "Information": {
             "normal": {"fill": "#1A1A1A"},
             "hover": {"fill": "#1A1A1A"},
@@ -147,7 +174,7 @@ class ButtonStyle(LabelStyle):
         }
     }
 
-    dark = {
+    dark: dict[str, dict[str, dict[str, str]]] = {
         "Information": {
             "normal": {"fill": "#F1F1F1"},
             "hover": {"fill": "#F1F1F1"},
@@ -165,10 +192,10 @@ class ButtonStyle(LabelStyle):
         }
     }
 
-    @typing_extensions.override
+    @override
     def set(
         self,
-        theme: typing.Literal["light", "dark"] | None = None,
+        theme: Literal["light", "dark"] | None = None,
         *,
         fg: tuple[str | types.EllipsisType, ...] | str | None = None,
         bg: tuple[str | types.EllipsisType, ...] | str | None = None,
@@ -176,23 +203,33 @@ class ButtonStyle(LabelStyle):
     ) -> None:
         """Set the style of the widget.
 
-        * `theme`: the theme name, None indicates both
-        * `fg`: the foreground color of the widget.
-        * `bg`: the background color of the widget.
-        * `ol`: the outline color of the widget.
+        states: ``"normal"``, ``"hover"``, ``"active"``
 
-        states: "normal", "hover", "active"
+        Args:
+            theme: the theme name, None indicates both.
+            fg: the foreground color of the widget.
+            bg: the background color of the widget.
+            ol: the outline color of the widget.
         """
         super().set(theme, fg=fg, bg=bg, ol=ol)
 
 
 class SwitchStyle(virtual.Style):
-    """Style of Switch"""
+    """Style of Switch.
 
-    states = ("normal-off", "hover-off", "active-off",
-              "normal-on", "hover-on", "active-on", "disabled")
+    Attributes:
+        states (tuple[str, ...]): all states of the widget.
+        light (dict[str, dict[str, dict[str, str]]]):
+            The light theme style dictionary.
+        dark (dict[str, dict[str, dict[str, str]]]):
+            The dark theme style dictionary.
+    """
 
-    light = {
+    states: tuple[str, ...] = (
+        "normal-off", "hover-off", "active-off",
+        "normal-on", "hover-on", "active-on", "disabled")
+
+    light: dict[str, dict[str, dict[str, str]]] = {
         "Oval": {
             "normal-off": {"fill": "#5D5D5E", "outline": "#5D5D5E"},
             "hover-off": {"fill": "#585859", "outline": "#585859"},
@@ -227,7 +264,7 @@ class SwitchStyle(virtual.Style):
         }
     }
 
-    dark = {
+    dark: dict[str, dict[str, dict[str, str]]] = {
         "Oval": {
             "normal-off": {"fill": "#CECECE", "outline": "#CECECE"},
             "hover-off": {"fill": "#D2D2D2", "outline": "#D2D2D2"},
@@ -262,10 +299,10 @@ class SwitchStyle(virtual.Style):
         }
     }
 
-    @typing_extensions.override
+    @override
     def set(
         self,
-        theme: typing.Literal["light", "dark"] | None = None,
+        theme: Literal["light", "dark"] | None = None,
         *,
         bg_slot: tuple[str | types.EllipsisType, ...] | str | None = None,
         ol_slot: tuple[str | types.EllipsisType, ...] | str | None = None,
@@ -274,14 +311,15 @@ class SwitchStyle(virtual.Style):
     ) -> None:
         """Set the style of the widget.
 
-        * `theme`: the theme name, None indicates both
-        * `bg_slot`: the background color of the widget.
-        * `ol_slot`: the outline color of the widget.
-        * `bg_dot`: the inside background color of the widget.
-        * `ol_dot`: the inside outline color of the widget.
+        states: ``"normal-off"``, ``"hover-off"``, ``"active-off"``,
+        ``"normal-on"``, ``"hover-on"``, ``"active-on"``
 
-        states: "normal-off", "hover-off", "active-off", "normal-on",
-        "hover-on", "active-on"
+        Args:
+            theme: the theme name, None indicates both.
+            bg_slot: the background color of the widget.
+            ol_slot: the outline color of the widget.
+            bg_dot: the inside background color of the widget.
+            ol_dot: the inside outline color of the widget.
         """
         self._set(theme, bg_slot, fill=("Rectangle.out", "SemicircularRectangle"))
         self._set(theme, ol_slot, outline=("Rectangle.out", "SemicircularRectangle"))
@@ -291,9 +329,17 @@ class SwitchStyle(virtual.Style):
 
 
 class InputBoxStyle(virtual.Style):
-    """Style of InputBox"""
+    """Style of InputBox.
 
-    light = {
+    Attributes:
+        states (tuple[str, ...]): all states of the widget.
+        light (dict[str, dict[str, dict[str, str]]]):
+            The light theme style dictionary.
+        dark (dict[str, dict[str, dict[str, str]]]):
+            The dark theme style dictionary.
+    """
+
+    light: dict[str, dict[str, dict[str, str]]] = {
         "Rectangle": {
             "normal": {"fill": "#FBFBFB", "outline": "#C0C0C0"},
             "hover": {"fill": "#F6F6F6", "outline": "#414141"},
@@ -316,7 +362,7 @@ class InputBoxStyle(virtual.Style):
         }
     }
 
-    dark = {
+    dark: dict[str, dict[str, dict[str, str]]] = {
         "Rectangle": {
             "normal": {"fill": "#131313", "outline": "#797979"},
             "hover": {"fill": "#0C0C0C", "outline": "#A5A5A5"},
@@ -339,10 +385,10 @@ class InputBoxStyle(virtual.Style):
         }
     }
 
-    @typing_extensions.override
+    @override
     def set(
         self,
-        theme: typing.Literal["light", "dark"] | None = None,
+        theme: Literal["light", "dark"] | None = None,
         *,
         fg: tuple[str | types.EllipsisType, ...] | str | None = None,
         bg: tuple[str | types.EllipsisType, ...] | str | None = None,
@@ -351,13 +397,14 @@ class InputBoxStyle(virtual.Style):
     ) -> None:
         """Set the style of the widget.
 
-        * `theme`: the theme name, None indicates both
-        * `fg`: the foreground color of the widget.
-        * `bg`: the background color of the widget.
-        * `ol`: the outline color of the widget.
-        * `bg_bar`: the highlight bar of the widget (Only for Windows11 theme)
+        states: ``"normal"``, ``"hover"``, ``"active"``
 
-        states: "normal", "hover", "active"
+        Args:
+            theme: the theme name, None indicates both.
+            fg: the foreground color of the widget.
+            bg: the background color of the widget.
+            ol: the outline color of the widget.
+            bg_bar: the highlight bar of the widget (Only for Windows11 theme).
         """
         self._set(theme, fg, fill="SingleLineText")
         self._set(theme, bg, fill=("Rectangle", "RoundedRectangle.in"))
@@ -367,12 +414,21 @@ class InputBoxStyle(virtual.Style):
 
 
 class ToggleButtonStyle(virtual.Style):
-    """Style of ToggleButton"""
+    """Style of ToggleButton.
 
-    states = ("normal-off", "hover-off", "active-off",
-              "normal-on", "hover-on", "active-on", "disabled")
+    Attributes:
+        states (tuple[str, ...]): all states of the widget.
+        light (dict[str, dict[str, dict[str, str]]]):
+            The light theme style dictionary.
+        dark (dict[str, dict[str, dict[str, str]]]):
+            The dark theme style dictionary.
+    """
 
-    light = {
+    states: tuple[str, ...] = (
+        "normal-off", "hover-off", "active-off",
+        "normal-on", "hover-on", "active-on", "disabled")
+
+    light: dict[str, dict[str, dict[str, str]]] = {
         "Information": {
             "normal-off": {"fill": "#1A1A1A"},
             "hover-off": {"fill": "#1A1A1A"},
@@ -399,7 +455,7 @@ class ToggleButtonStyle(virtual.Style):
         }
     }
 
-    dark = {
+    dark: dict[str, dict[str, dict[str, str]]] = {
         "Information": {
             "normal-off": {"fill": "#F1F1F1"},
             "hover-off": {"fill": "#F1F1F1"},
@@ -426,10 +482,10 @@ class ToggleButtonStyle(virtual.Style):
         }
     }
 
-    @typing_extensions.override
+    @override
     def set(
         self,
-        theme: typing.Literal["light", "dark"] | None = None,
+        theme: Literal["light", "dark"] | None = None,
         *,
         fg: tuple[str | types.EllipsisType, ...] | str | None = None,
         bg: tuple[str | types.EllipsisType, ...] | str | None = None,
@@ -437,13 +493,14 @@ class ToggleButtonStyle(virtual.Style):
     ) -> None:
         """Set the style of the widget.
 
-        * `theme`: the theme name, None indicates both
-        * `fg`: the foreground color of the widget.
-        * `bg`: the background color of the widget.
-        * `ol`: the outline color of the widget.
+        states: ``"normal-off"``, ``"hover-off"``, ``"active-off"``,
+        ``"normal-on"``, ``"hover-on"``, ``"active-on"``
 
-        states: "normal-off", "hover-off", "active-off", "normal-on",
-        "hover-on", "active-on"
+        Args:
+            theme: the theme name, None indicates both.
+            fg: the foreground color of the widget.
+            bg: the background color of the widget.
+            ol: the outline color of the widget.
         """
         self._set(theme, fg, fill=-1)
         self._set(theme, bg, fill=0)
@@ -452,12 +509,21 @@ class ToggleButtonStyle(virtual.Style):
 
 
 class CheckBoxStyle(ToggleButtonStyle):
-    """Style of CheckBox"""
+    """Style of CheckBox.
 
-    states = ("normal-off", "hover-off", "active-off",
-              "normal-on", "hover-on", "active-on", "disabled")
+    Attributes:
+        states (tuple[str, ...]): all states of the widget.
+        light (dict[str, dict[str, dict[str, str]]]):
+            The light theme style dictionary.
+        dark (dict[str, dict[str, dict[str, str]]]):
+            The dark theme style dictionary.
+    """
 
-    light = {
+    states: tuple[str, ...] = (
+        "normal-off", "hover-off", "active-off",
+        "normal-on", "hover-on", "active-on", "disabled")
+
+    light: dict[str, dict[str, dict[str, str]]] = {
         "Information": {
             "normal-off": {"fill": ""},
             "hover-off": {"fill": ""},
@@ -484,7 +550,7 @@ class CheckBoxStyle(ToggleButtonStyle):
         }
     }
 
-    dark = {
+    dark: dict[str, dict[str, dict[str, str]]] = {
         "Information": {
             "normal-off": {"fill": ""},
             "hover-off": {"fill": ""},
@@ -513,9 +579,17 @@ class CheckBoxStyle(ToggleButtonStyle):
 
 
 class RadioBoxStyle(virtual.Style):
-    """Style of RadioGroup"""
+    """Style of RadioGroup.
 
-    light = {
+    Attributes:
+        states (tuple[str, ...]): all states of the widget.
+        light (dict[str, dict[str, dict[str, str]]]):
+            The light theme style dictionary.
+        dark (dict[str, dict[str, dict[str, str]]]):
+            The dark theme style dictionary.
+    """
+
+    light: dict[str, dict[str, dict[str, str]]] = {
         "Oval.in": {
             "normal": {"fill": "#32BF42", "outline": "#32BF42"},
             "hover": {"fill": "#06B025", "outline": "#06B025"},
@@ -538,7 +612,7 @@ class RadioBoxStyle(virtual.Style):
         }
     }
 
-    dark = {
+    dark: dict[str, dict[str, dict[str, str]]] = {
         "Oval.in": {
             "normal": {"fill": "#4CC2FF", "outline": "#4CC2FF"},
             "hover": {"fill": "#49B3EB", "outline": "#49B3EB"},
@@ -561,10 +635,10 @@ class RadioBoxStyle(virtual.Style):
         }
     }
 
-    @typing_extensions.override
+    @override
     def set(
         self,
-        theme: typing.Literal["light", "dark"] | None = None,
+        theme: Literal["light", "dark"] | None = None,
         *,
         bg_box: tuple[str | types.EllipsisType, ...] | str | None = None,
         ol_box: tuple[str | types.EllipsisType, ...] | str | None = None,
@@ -573,13 +647,14 @@ class RadioBoxStyle(virtual.Style):
     ) -> None:
         """Set the style of the widget.
 
-        * `theme`: the theme name, None indicates both
-        * `bg_box`: the background color of the widget.
-        * `ol_box`: the outline color of the widget.
-        * `bg_dot`: the inside background color of the widget.
-        * `ol_dot`: the inside outline color of the widget.
+        states: ``"normal"``, ``"hover"``, ``"active"``
 
-        states: "normal", "hover", "active"
+        Args:
+            theme: the theme name, None indicates both.
+            bg_box: the background color of the widget.
+            ol_box: the outline color of the widget.
+            bg_dot: the inside background color of the widget.
+            ol_dot: the inside outline color of the widget.
         """
         self._set(theme, bg_box, fill=0)
         self._set(theme, ol_box, outline=0)
@@ -589,9 +664,17 @@ class RadioBoxStyle(virtual.Style):
 
 
 class ProgressBarStyle(virtual.Style):
-    """Style of ProgressBar"""
+    """Style of ProgressBar.
 
-    light = {
+    Attributes:
+        states (tuple[str, ...]): all states of the widget.
+        light (dict[str, dict[str, dict[str, str]]]):
+            The light theme style dictionary.
+        dark (dict[str, dict[str, dict[str, str]]]):
+            The dark theme style dictionary.
+    """
+
+    light: dict[str, dict[str, dict[str, str]]] = {
         "Rectangle.in": {
             "normal": {"fill": "#32BF42", "outline": "#32BF42"},
             "hover": {"fill": "#06B025", "outline": "#06B025"},
@@ -610,7 +693,7 @@ class ProgressBarStyle(virtual.Style):
         }
     }
 
-    dark = {
+    dark: dict[str, dict[str, dict[str, str]]] = {
         "Rectangle.in": {
             "normal": {"fill": "#4CC2FF", "outline": "#4CC2FF"},
             "hover": {"fill": "#49B3EB", "outline": "#49B3EB"},
@@ -629,10 +712,10 @@ class ProgressBarStyle(virtual.Style):
         }
     }
 
-    @typing_extensions.override
+    @override
     def set(
         self,
-        theme: typing.Literal["light", "dark"] | None = None,
+        theme: Literal["light", "dark"] | None = None,
         *,
         bg_slot: tuple[str | types.EllipsisType, ...] | str | None = None,
         ol_slot: tuple[str | types.EllipsisType, ...] | str | None = None,
@@ -641,13 +724,14 @@ class ProgressBarStyle(virtual.Style):
     ) -> None:
         """Set the style of the widget.
 
-        * `theme`: the theme name, None indicates both
-        * `bg_slot`: the background color of the widget.
-        * `ol_slot`: the outline color of the widget.
-        * `bg_bar`: the inside background color of the widget.
-        * `ol_bar`: the inside outline color of the widget.
+        states: ``"normal"``, ``"hover"``
 
-        states: "normal", "hover"
+        Args:
+            theme: the theme name, None indicates both.
+            bg_slot: the background color of the widget.
+            ol_slot: the outline color of the widget.
+            bg_bar: the inside background color of the widget.
+            ol_bar: the inside outline color of the widget.
         """
         self._set(theme, bg_slot, fill=0)
         self._set(theme, ol_slot, outline=0)
@@ -657,9 +741,17 @@ class ProgressBarStyle(virtual.Style):
 
 
 class UnderlineButtonStyle(TextStyle):
-    """Style of UnderlineButton"""
+    """Style of UnderlineButton.
 
-    light = {
+    Attributes:
+        states (tuple[str, ...]): all states of the widget.
+        light (dict[str, dict[str, dict[str, str]]]):
+            The light theme style dictionary.
+        dark (dict[str, dict[str, dict[str, str]]]):
+            The dark theme style dictionary.
+    """
+
+    light: dict[str, dict[str, dict[str, str]]] = {
         "Information": {
             "normal": {"fill": "#1A1A1A"},
             "hover": {"fill": "royalblue"},
@@ -667,7 +759,7 @@ class UnderlineButtonStyle(TextStyle):
         }
     }
 
-    dark = {
+    dark: dict[str, dict[str, dict[str, str]]] = {
         "Information": {
             "normal": {"fill": "#F1F1F1"},
             "hover": {"fill": "royalblue"},
@@ -677,9 +769,17 @@ class UnderlineButtonStyle(TextStyle):
 
 
 class HighlightButtonStyle(TextStyle):
-    """Style of HighlightButtonStyle"""
+    """Style of HighlightButtonStyle.
 
-    light = {
+    Attributes:
+        states (tuple[str, ...]): all states of the widget.
+        light (dict[str, dict[str, dict[str, str]]]):
+            The light theme style dictionary.
+        dark (dict[str, dict[str, dict[str, str]]]):
+            The dark theme style dictionary.
+    """
+
+    light: dict[str, dict[str, dict[str, str]]] = {
         "Information": {
             "normal": {"fill": "grey"},
             "hover": {"fill": "#1F1F1F"},
@@ -687,7 +787,7 @@ class HighlightButtonStyle(TextStyle):
         }
     }
 
-    dark = {
+    dark: dict[str, dict[str, dict[str, str]]] = {
         "Information": {
             "normal": {"fill": "grey"},
             "hover": {"fill": "#F1F1F1"},
@@ -697,9 +797,17 @@ class HighlightButtonStyle(TextStyle):
 
 
 class IconButtonStyle(LabelStyle):
-    """Style of IconButtonStyle"""
+    """Style of IconButtonStyle.
 
-    light = {
+    Attributes:
+        states (tuple[str, ...]): all states of the widget.
+        light (dict[str, dict[str, dict[str, str]]]):
+            The light theme style dictionary.
+        dark (dict[str, dict[str, dict[str, str]]]):
+            The dark theme style dictionary.
+    """
+
+    light: dict[str, dict[str, dict[str, str]]] = {
         "Information": {
             "normal": {"fill": "#1A1A1A"},
             "hover": {"fill": "#1A1A1A"},
@@ -717,7 +825,7 @@ class IconButtonStyle(LabelStyle):
         }
     }
 
-    dark = {
+    dark: dict[str, dict[str, dict[str, str]]] = {
         "Information": {
             "normal": {"fill": "#F1F1F1"},
             "hover": {"fill": "#F1F1F1"},
@@ -737,9 +845,17 @@ class IconButtonStyle(LabelStyle):
 
 
 class SliderStyle(virtual.Style):
-    """Style of Slider"""
+    """Style of Slider.
 
-    light = {
+    Attributes:
+        states (tuple[str, ...]): all states of the widget.
+        light (dict[str, dict[str, dict[str, str]]]):
+            The light theme style dictionary.
+        dark (dict[str, dict[str, dict[str, str]]]):
+            The dark theme style dictionary.
+    """
+
+    light: dict[str, dict[str, dict[str, str]]] = {
         "Oval.in": {
             "normal": {"fill": "#0067C0", "outline": "#0067C0"},
         },
@@ -765,7 +881,7 @@ class SliderStyle(virtual.Style):
         }
     }
 
-    dark = {
+    dark: dict[str, dict[str, dict[str, str]]] = {
         "Oval.in": {
             "normal": {"fill": "#4CC2FF", "outline": "#4CC2FF"},
         },
@@ -791,10 +907,10 @@ class SliderStyle(virtual.Style):
         }
     }
 
-    @typing_extensions.override
+    @override
     def set(
         self,
-        theme: typing.Literal["light", "dark"] | None = None,
+        theme: Literal["light", "dark"] | None = None,
         *,
         fg_slot: tuple[str | types.EllipsisType, ...] | str | None = None,
         bg_slot: tuple[str | types.EllipsisType, ...] | str | None = None,
@@ -803,14 +919,15 @@ class SliderStyle(virtual.Style):
     ) -> None:
         """Set the style of the widget.
 
-        * `theme`: the theme name, None indicates both
-        * `fg_slot`: the foreground color of the widget.
-        * `bg_slot`: the background color of the widget.
-        * `bg_pnt`: the pointer color of the widget.
-        * `bg_dot`: the pointer highlight part color of the widget (Only for
-        Windows11 theme).
+        states: ``"normal"``, ``"hover"``, ``"active"``
 
-        states: "normal", "hover", "active"
+        Args:
+            theme: the theme name, None indicates both.
+            fg_slot: the foreground color of the widget.
+            bg_slot: the background color of the widget.
+            bg_pnt: the pointer color of the widget.
+            bg_dot: the pointer highlight part color of the widget (Only for
+                Windows11 theme).
         """
         self._set(theme, fg_slot, fill=1, outline=1)
         self._set(theme, bg_slot, fill=0, outline=0)
@@ -821,9 +938,17 @@ class SliderStyle(virtual.Style):
 
 
 class SegmentedButtonStyle(virtual.Style):
-    """Style of SegmentedButton"""
+    """Style of SegmentedButton.
 
-    light = {
+    Attributes:
+        states (tuple[str, ...]): all states of the widget.
+        light (dict[str, dict[str, dict[str, str]]]):
+            The light theme style dictionary.
+        dark (dict[str, dict[str, dict[str, str]]]):
+            The dark theme style dictionary.
+    """
+
+    light: dict[str, dict[str, dict[str, str]]] = {
         "Rectangle": {
             "normal": {"fill": "#FBFBFB", "outline": "#DCDCDC"},
             "hover": {"fill": "#F6F6F6", "outline": "#DCDCDC"},
@@ -834,7 +959,7 @@ class SegmentedButtonStyle(virtual.Style):
         }
     }
 
-    dark = {
+    dark: dict[str, dict[str, dict[str, str]]] = {
         "Rectangle": {
             "normal": {"fill": "#2B2B2B", "outline": "#3D3D3D"},
             "hover": {"fill": "#323232", "outline": "#3D3D3D"},
@@ -845,21 +970,22 @@ class SegmentedButtonStyle(virtual.Style):
         }
     }
 
-    @typing_extensions.override
+    @override
     def set(
         self,
-        theme: typing.Literal["light", "dark"] | None = None,
+        theme: Literal["light", "dark"] | None = None,
         *,
         bg: tuple[str | types.EllipsisType, ...] | str | None = None,
         ol: tuple[str | types.EllipsisType, ...] | str | None = None,
     ) -> None:
         """Set the style of the widget.
 
-        * `theme`: the theme name, None indicates both
-        * `bg`: the background color of the widget.
-        * `ol`: the outline color of the widget.
+        states: ``"normal"``, ``"hover"``
 
-        states: "normal", "hover"
+        Args:
+            theme: the theme name, None indicates both.
+            bg: the background color of the widget.
+            ol: the outline color of the widget.
         """
         self._set(theme, bg, fill=0)
         self._set(theme, ol, outline=0)
@@ -867,7 +993,15 @@ class SegmentedButtonStyle(virtual.Style):
 
 
 class ToggleButtonStyle4SB(ToggleButtonStyle):
-    """style of ToggelButton for SegmentedButton"""
+    """style of ToggelButton for SegmentedButton.
+
+    Attributes:
+        states (tuple[str, ...]): all states of the widget.
+        light (dict[str, dict[str, dict[str, str]]]):
+            The light theme style dictionary.
+        dark (dict[str, dict[str, dict[str, str]]]):
+            The dark theme style dictionary.
+    """
 
     light = copy.deepcopy(ToggleButtonStyle.light)
     dark = copy.deepcopy(ToggleButtonStyle.dark)
@@ -880,9 +1014,17 @@ class ToggleButtonStyle4SB(ToggleButtonStyle):
 
 
 class OptionButtonStyle(virtual.Style):
-    """Style of OptionButton"""
+    """Style of OptionButton.
 
-    light = {
+    Attributes:
+        states (tuple[str, ...]): all states of the widget.
+        light (dict[str, dict[str, dict[str, str]]]):
+            The light theme style dictionary.
+        dark (dict[str, dict[str, dict[str, str]]]):
+            The dark theme style dictionary.
+    """
+
+    light: dict[str, dict[str, dict[str, str]]] = {
         "Rectangle": {
             "normal": {"fill": "#E1E1E1", "outline": "#C0C0C0"},
             "hover": {"fill": "#E5F1FB", "outline": "#288CDB"},
@@ -895,7 +1037,7 @@ class OptionButtonStyle(virtual.Style):
         }
     }
 
-    dark = {
+    dark: dict[str, dict[str, dict[str, str]]] = {
         "Rectangle": {
             "normal": {"fill": "#333333", "outline": "#333333"},
             "hover": {"fill": "#333333", "outline": "#858585"},
@@ -908,21 +1050,22 @@ class OptionButtonStyle(virtual.Style):
         }
     }
 
-    @typing_extensions.override
+    @override
     def set(
         self,
-        theme: typing.Literal["light", "dark"] | None = None,
+        theme: Literal["light", "dark"] | None = None,
         *,
         bg: tuple[str | types.EllipsisType, ...] | str | None = None,
         ol: tuple[str | types.EllipsisType, ...] | str | None = None,
     ) -> None:
         """Set the style of the widget.
 
-        * `theme`: the theme name, None indicates both
-        * `bg`: the background color of the widget.
-        * `ol`: the outline color of the widget.
+        states: ``"normal"``, ``"hover"``, ``"active"``
 
-        states: "normal", "hover", "active"
+        Args:
+            theme: the theme name, None indicates both.
+            bg: the background color of the widget.
+            ol: the outline color of the widget.
         """
         self._set(theme, bg, fill=0)
         self._set(theme, ol, outline=0)
@@ -930,9 +1073,17 @@ class OptionButtonStyle(virtual.Style):
 
 
 class SpinnerStyle(virtual.Style):
-    """Style of Spinner"""
+    """Style of Spinner.
 
-    light = {
+    Attributes:
+        states (tuple[str, ...]): all states of the widget.
+        light (dict[str, dict[str, dict[str, str]]]):
+            The light theme style dictionary.
+        dark (dict[str, dict[str, dict[str, str]]]):
+            The dark theme style dictionary.
+    """
+
+    light: dict[str, dict[str, dict[str, str]]] = {
         "Oval": {
             "normal": {"outline": "#B4D6FA"},
         },
@@ -941,7 +1092,7 @@ class SpinnerStyle(virtual.Style):
         }
     }
 
-    dark = {
+    dark: dict[str, dict[str, dict[str, str]]] = {
         "Oval": {
             "normal": {"outline": "#0E4775"},
         },
@@ -950,21 +1101,22 @@ class SpinnerStyle(virtual.Style):
         }
     }
 
-    @typing_extensions.override
+    @override
     def set(
         self,
-        theme: typing.Literal["light", "dark"] | None = None,
+        theme: Literal["light", "dark"] | None = None,
         *,
         fg: tuple[str | types.EllipsisType, ...] | str | None = None,
         bg: tuple[str | types.EllipsisType, ...] | str | None = None,
     ) -> None:
         """Set the style of the widget.
 
-        * `theme`: the theme name, None indicates both
-        * `fg`: the foreground color of the widget.
-        * `bg`: the background color of the widget.
+        states: ``"normal"``
 
-        states: "normal"
+        Args:
+            theme: the theme name, None indicates both.
+            fg: the foreground color of the widget.
+            bg: the background color of the widget.
         """
         self._set(theme, fg, outline=0)
         self._set(theme, bg, outline=1)
@@ -972,9 +1124,17 @@ class SpinnerStyle(virtual.Style):
 
 
 class TooltipStyle(virtual.Style):
-    """Style of Tooltip"""
+    """Style of Tooltip.
 
-    light = {
+    Attributes:
+        states (tuple[str, ...]): all states of the widget.
+        light (dict[str, dict[str, dict[str, str]]]):
+            The light theme style dictionary.
+        dark (dict[str, dict[str, dict[str, str]]]):
+            The dark theme style dictionary.
+    """
+
+    light: dict[str, dict[str, dict[str, str]]] = {
         "Information": {
             "normal": {"fill": "#1A1A1A"},
         },
@@ -986,7 +1146,7 @@ class TooltipStyle(virtual.Style):
         }
     }
 
-    dark = {
+    dark: dict[str, dict[str, dict[str, str]]] = {
         "Information": {
             "normal": {"fill": "#F1F1F1"},
         },
@@ -998,10 +1158,10 @@ class TooltipStyle(virtual.Style):
         }
     }
 
-    @typing_extensions.override
+    @override
     def set(
         self,
-        theme: typing.Literal["light", "dark"] | None = None,
+        theme: Literal["light", "dark"] | None = None,
         *,
         fg: tuple[str | types.EllipsisType, ...] | str | None = None,
         bg: tuple[str | types.EllipsisType, ...] | str | None = None,
@@ -1009,12 +1169,13 @@ class TooltipStyle(virtual.Style):
     ) -> None:
         """Set the style of the widget.
 
-        * `theme`: the theme name, None indicates both
-        * `fg`: the foreground color of the widget.
-        * `bg`: the background color of the widget.
-        * `ol`: the outline color of the widget.
+        states: ``"normal"``
 
-        states: "normal"
+        Args:
+            theme: the theme name, None indicates both.
+            fg: the foreground color of the widget.
+            bg: the background color of the widget.
+            ol: the outline color of the widget.
         """
         self._set(theme, fg, fill=-1)
         self._set(theme, bg, fill=0)

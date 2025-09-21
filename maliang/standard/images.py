@@ -10,7 +10,9 @@ __all__ = (
     # "Smoke",
 )
 
-import typing_extensions
+from typing import TYPE_CHECKING
+
+from typing_extensions import override
 
 try:
     from PIL import Image
@@ -20,29 +22,32 @@ except ImportError:
 from ..core import virtual
 from ..toolbox import enhanced
 
+if TYPE_CHECKING:
+    from typing import Any
+
 
 class StillImage(virtual.Image):
-    """A simple still image"""
+    """A simple still image."""
 
-    @typing_extensions.override
+    @override
     def display(self) -> None:
-        """Display the `Element` on a `Canvas`"""
+        """Display the ``Element`` on a ``Canvas``."""
         self.items = [self.widget.master.create_image(0, 0, image=self.image, **self.kwargs)]
 
-    @typing_extensions.override
+    @override
     def coords(
         self,
         size: tuple[float, float] | None = None,
         position: tuple[float, float] | None = None,
     ) -> None:
-        """Resize the `Element`"""
+        """Resize the ``Element``."""
         super().coords(size, position)
 
         self.widget.master.coords(self.items[0], *self.center())
 
 
 class Smoke(virtual.Image):
-    """A special Image with only one color"""
+    """A special Image with only one color."""
 
     def __init__(
         self,
@@ -53,16 +58,20 @@ class Smoke(virtual.Image):
         color: str | None = "#00000066",
         name: str | None = None,
         animation: bool = True,
-        **kwargs,
+        **kwargs: Any,
     ) -> None:
         """
-        * `widget`: parent widget
-        * `relative_position`: position relative to its widgets
-        * `size`: size of element
-        * `color`: color of the image object of the element
-        * `name`: name of element
-        * `animation`: whether use animation to change color
-        * `kwargs`: extra parameters for CanvasItem
+        Args:
+            widget: parent widget.
+            relative_position: position relative to its widgets.
+            size: size of element.
+            color: color of the image object of the element.
+            name: name of element.
+            animation: whether use animation to change color.
+            kwargs: extra parameters for CanvasItem.
+
+        Raises:
+            RuntimeError: If the ``pillow`` package is not installed.
         """
         if Image is None:
             raise RuntimeError("Package 'pillow' is missing.")
@@ -73,18 +82,18 @@ class Smoke(virtual.Image):
         self.image = self.initial_image = enhanced.PhotoImage(
             Image.new("RGBA", (round(self.size[0]), round(self.size[1])), color))
 
-    @typing_extensions.override
+    @override
     def display(self) -> None:
-        """Display the `Element` on a `Canvas`"""
+        """Display the ``Element`` on a ``Canvas``."""
         self.items = [self.widget.master.create_image(0, 0, image=self.image, **self.kwargs)]
 
-    @typing_extensions.override
+    @override
     def coords(
         self,
         size: tuple[float, float] | None = None,
         position: tuple[float, float] | None = None,
     ) -> None:
-        """Resize the `Element`"""
+        """Resize the ``Element``."""
         super().coords(size, position)
 
         self.widget.master.coords(self.items[0], *self.center())

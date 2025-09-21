@@ -19,16 +19,19 @@ __all__ = (
 )
 
 import math
-import typing
 import warnings
+from typing import TYPE_CHECKING
 
-import typing_extensions
+from typing_extensions import override
 
 from ..core import virtual
 
+if TYPE_CHECKING:
+    from typing import Literal
+
 
 class Line(virtual.Shape):
-    """Create a line for a widget"""
+    """Create a line for a widget."""
 
     def __init__(
         self,
@@ -42,32 +45,33 @@ class Line(virtual.Shape):
         **kwargs,
     ) -> None:
         """
-        * `widget`: parent widget
-        * `relative_position`: position relative to its widgets
-        * `size`: size of element
-        * `points`: key points of line
-        * `name`: name of element
-        * `gradient_animation`: whether use animation to change color
-        * `kwargs`: extra parameters for CanvasItem
+        Args:
+            widget: parent widget.
+            relative_position: position relative to its widgets.
+            size: size of element.
+            points: key points of line.
+            name: name of element.
+            gradient_animation: whether use animation to change color.
+            kwargs: extra parameters for CanvasItem.
         """
         self.points = [] if points is None else points
         super().__init__(
             widget, relative_position, size,
             name=name, gradient_animation=gradient_animation, **kwargs)
 
-    @typing_extensions.override
+    @override
     def display(self) -> None:
-        """Display the `Element` on a `Canvas`"""
+        """Display the ``Element`` on a ``Canvas``."""
         self.items = [self.widget.master.create_line(
             0, 0, 0, 0, tags=("fill", "fill"), **self.kwargs)]
 
-    @typing_extensions.override
+    @override
     def coords(
         self,
         size: tuple[float, float] | None = None,
         position: tuple[float, float] | None = None,
     ) -> None:
-        """Resize the `Element`"""
+        """Resize the ``Element``."""
         super().coords(size, position)
 
         points = [(x+self.position[0], y+self.position[1]) for x, y in self.points]
@@ -76,21 +80,21 @@ class Line(virtual.Shape):
 
 
 class Rectangle(virtual.Shape):
-    """Create a rectangle for a widget"""
+    """Create a rectangle for a widget."""
 
-    @typing_extensions.override
+    @override
     def display(self) -> None:
-        """Display the `Element` on a `Canvas`"""
+        """Display the ``Element`` on a ``Canvas``."""
         self.items = [self.widget.master.create_rectangle(
             0, 0, 0, 0, tags=("fill", "fill", "outline", "outline"), **self.kwargs)]
 
-    @typing_extensions.override
+    @override
     def coords(
         self,
         size: tuple[float, float] | None = None,
         position: tuple[float, float] | None = None,
     ) -> None:
-        """Resize the `Element`"""
+        """Resize the ``Element``."""
         super().coords(size, position)
 
         self.widget.master.coords(self.items[0], *self.region())
@@ -99,53 +103,53 @@ class Rectangle(virtual.Shape):
 class Oval(virtual.Shape):
     """Create a oval for a widget"""
 
-    @typing_extensions.override
+    @override
     def display(self) -> None:
-        """Display the `Element` on a `Canvas`"""
+        """Display the ``Element`` on a ``Canvas``."""
         self.items = [self.widget.master.create_oval(
             0, 0, 0, 0, tags=("fill", "fill", "outline", "outline"), **self.kwargs)]
 
-    @typing_extensions.override
+    @override
     def coords(
         self,
         size: tuple[float, float] | None = None,
         position: tuple[float, float] | None = None,
     ) -> None:
-        """Resize the `Element`"""
+        """Resize the ``Element``."""
         super().coords(size, position)
 
         self.widget.master.coords(self.items[0], *self.region())
 
-    @typing_extensions.override
+    @override
     def detect(self, x: float, y: float) -> bool:
-        """Detect whether the specified coordinates are within `Element`"""
+        """Detect whether the specified coordinates are within ``Element``."""
         x1, y1, w, h = *self.position, *self.size
         return math.hypot(2*(x-x1)/w - 1, 2*(y-y1)/h - 1) <= 1
 
 
 class Arc(virtual.Shape):
-    """Create a arc for a widget"""
+    """Create a arc for a widget."""
 
-    @typing_extensions.override
+    @override
     def display(self) -> None:
-        """Display the `Element` on a `Canvas`"""
+        """Display the ``Element`` on a ``Canvas``."""
         self.items = [self.widget.master.create_arc(
             0, 0, 0, 0, tags=("fill", "fill", "outline", "outline"), **self.kwargs)]
 
-    @typing_extensions.override
+    @override
     def coords(
         self,
         size: tuple[float, float] | None = None,
         position: tuple[float, float] | None = None,
     ) -> None:
-        """Resize the `Element`"""
+        """Resize the ``Element``."""
         super().coords(size, position)
 
         self.widget.master.coords(self.items[0], *self.region())
 
 
 class RegularPolygon(virtual.Shape):
-    """Create a regular polygon for a widget"""
+    """Create a regular polygon for a widget."""
 
     def __init__(
         self,
@@ -160,14 +164,15 @@ class RegularPolygon(virtual.Shape):
         **kwargs,
     ) -> None:
         """
-        * `widget`: parent widget
-        * `relative_position`: position relative to its widgets
-        * `size`: size of element
-        * `side`: number of sides of a regular polygon
-        * `angle`: number of radians of a regular polygon rotated clockwise
-        * `name`: name of element
-        * `gradient_animation`: whether use animation to change color
-        * `kwargs`: extra parameters for CanvasItem
+        Args:
+            widget: parent widget.
+            relative_position: position relative to its widgets.
+            size: size of element.
+            side: number of sides of a regular polygon.
+            angle: number of radians of a regular polygon rotated clockwise.
+            name: name of element.
+            gradient_animation: whether use animation to change color.
+            kwargs: extra parameters for CanvasItem.
         """
         self.side = side
         self.angle = angle
@@ -175,19 +180,19 @@ class RegularPolygon(virtual.Shape):
             widget, relative_position, size,
             name=name, gradient_animation=gradient_animation, **kwargs)
 
-    @typing_extensions.override
+    @override
     def display(self) -> None:
-        """Display the `Element` on a `Canvas`"""
+        """Display the ``Element`` on a ``Canvas``."""
         self.items = [self.widget.master.create_polygon(
             0, 0, 0, 0, tags=("fill", "fill", "outline", "outline"), **self.kwargs)]
 
-    @typing_extensions.override
+    @override
     def coords(
         self,
         size: tuple[float, float] | None = None,
         position: tuple[float, float] | None = None,
     ) -> None:
-        """Resize the `Element`"""
+        """Resize the ``Element``."""
         super().coords(size, position)
 
         r = min(self.size) / 2
@@ -203,7 +208,7 @@ class RegularPolygon(virtual.Shape):
 
 
 class RoundedRectangle(virtual.Shape):
-    """Create a rounded rectangle for a widget"""
+    """Create a rounded rectangle for a widget."""
 
     def __init__(
         self,
@@ -217,22 +222,23 @@ class RoundedRectangle(virtual.Shape):
         **kwargs,
     ) -> None:
         """
-        * `widget`: parent widget
-        * `relative_position`: position relative to its widgets
-        * `size`: size of element
-        * `radius`: radius of the fillet
-        * `name`: name of element
-        * `gradient_animation`: whether use animation to change color
-        * `kwargs`: extra parameters for CanvasItem
+        Args:
+            widget: parent widget.
+            relative_position: position relative to its widgets.
+            size: size of element.
+            radius: radius of the fillet.
+            name: name of element.
+            gradient_animation: whether use animation to change color.
+            kwargs: extra parameters for CanvasItem.
         """
         self.radius = radius
         super().__init__(
             widget, relative_position, size,
             name=name, gradient_animation=gradient_animation, **kwargs)
 
-    @typing_extensions.override
+    @override
     def display(self) -> None:
-        """Display the `Element` on a `Canvas`"""
+        """Display the ``Element`` on a ``Canvas``."""
         self.items = [
             self.widget.master.create_rectangle(
                 0, 0, 0, 0, outline="", tags=("fill", "fill"), **self.kwargs),
@@ -264,13 +270,13 @@ class RoundedRectangle(virtual.Shape):
                 0, 0, 0, 0, style="arc", start=-90, tags=("outline", "outline"), **self.kwargs),
         ]
 
-    @typing_extensions.override
+    @override
     def coords(
         self,
         size: tuple[float, float] | None = None,
         position: tuple[float, float] | None = None,
     ) -> None:
-        """Resize the `Element`"""
+        """Resize the ``Element``."""
         super().coords(size, position)
 
         x, y, w, h = *self.position, *self.size
@@ -301,7 +307,7 @@ class RoundedRectangle(virtual.Shape):
 
 
 class HalfRoundedRectangle(virtual.Shape):
-    """Create a half rounded rectangle for a widget"""
+    """Create a half rounded rectangle for a widget."""
 
     def __init__(
         self,
@@ -310,20 +316,21 @@ class HalfRoundedRectangle(virtual.Shape):
         size: tuple[int, int] | None = None,
         *,
         radius: int = 5,
-        ignore: typing.Literal["left", "right"] = "left",
+        ignore: Literal["left", "right"] = "left",
         name: str | None = None,
         gradient_animation: bool = True,
         **kwargs,
     ) -> None:
         """
-        * `widget`: parent widget
-        * `relative_position`: position relative to its widgets
-        * `size`: size of element
-        * `radius`: radius of the fillet
-        * `ignore`: edges to ignore
-        * `name`: name of element
-        * `gradient_animation`: whether use animation to change color
-        * `kwargs`: extra parameters for CanvasItem
+        Args:
+            widget: parent widget.
+            relative_position: position relative to its widgets.
+            size: size of element.
+            radius: radius of the fillet.
+            ignore: edges to ignore.
+            name: name of element.
+            gradient_animation: whether use animation to change color.
+            kwargs: extra parameters for CanvasItem.
         """
         self.radius = radius
         self.ignore = ignore
@@ -331,9 +338,9 @@ class HalfRoundedRectangle(virtual.Shape):
             widget, relative_position, size,
             name=name, gradient_animation=gradient_animation, **kwargs)
 
-    @typing_extensions.override
+    @override
     def display(self) -> None:
-        """Display the `Element` on a `Canvas`"""
+        """Display the ``Element`` on a ``Canvas``."""
         self.items = [
             self.widget.master.create_rectangle(
                 0, 0, 0, 0, outline="", tags=("fill", "fill"), **self.kwargs),
@@ -368,13 +375,13 @@ class HalfRoundedRectangle(virtual.Shape):
                 0, 0, 0, 0, style="arc", start=180, tags=("outline", "outline"), **self.kwargs),
         ]
 
-    @typing_extensions.override
+    @override
     def coords(
         self,
         size: tuple[float, float] | None = None,
         position: tuple[float, float] | None = None,
     ) -> None:
-        """Resize the `Element`"""
+        """Resize the ``Element``."""
         super().coords(size, position)
 
         x, y, w, h = *self.position, *self.size
@@ -411,11 +418,11 @@ class HalfRoundedRectangle(virtual.Shape):
 
 
 class SemicircularRectangle(virtual.Shape):
-    """Create a semicircular rectangle for a widget"""
+    """Create a semicircular rectangle for a widget."""
 
-    @typing_extensions.override
+    @override
     def display(self) -> None:
-        """Display the `Element` on a `Canvas`"""
+        """Display the ``Element`` on a ``Canvas``."""
         self.items = [
             self.widget.master.create_arc(
                 0, 0, 0, 0, outline="", extent=180, start=90,
@@ -437,13 +444,13 @@ class SemicircularRectangle(virtual.Shape):
                 0, 0, 0, 0, tags=("fill", "outline"), **self.kwargs),
         ]
 
-    @typing_extensions.override
+    @override
     def coords(
         self,
         size: tuple[float, float] | None = None,
         position: tuple[float, float] | None = None,
     ) -> None:
-        """Resize the `Element`"""
+        """Resize the ``Element``."""
         super().coords(size, position)
 
         x, y, w, h = *self.position, *self.size
@@ -464,9 +471,9 @@ class SemicircularRectangle(virtual.Shape):
         self.widget.master.coords(self.items[5], x1+r, y1, x2-r+1, y1)
         self.widget.master.coords(self.items[6], x1+r, y2, x2-r+1, y2)
 
-    @typing_extensions.override
+    @override
     def detect(self, x: float, y: float) -> bool:
-        """Detect whether the specified coordinates are within `Element`"""
+        """Detect whether the specified coordinates are within ``Element``."""
         x1, y1, w, h = *self.position, *self.size
         r = h / 2
         if x1+r <= x <= x1+w-r:
@@ -477,7 +484,7 @@ class SemicircularRectangle(virtual.Shape):
 
 
 class SharpRectangle(virtual.Shape):
-    """Create a sharp rectangle for a widget"""
+    """Create a sharp rectangle for a widget."""
 
     def __init__(
         self,
@@ -492,14 +499,15 @@ class SharpRectangle(virtual.Shape):
         **kwargs,
     ) -> None:
         """
-        * `widget`: parent widget
-        * `relative_position`: position relative to its widgets
-        * `size`: size of element
-        * `theta`: number of radians of sharp corners
-        * `ratio`: height ratio of the left and right sharp corners
-        * `name`: name of element
-        * `gradient_animation`: whether use animation to change color
-        * `kwargs`: extra parameters for CanvasItem
+        Args:
+            widget: parent widget.
+            relative_position: position relative to its widgets.
+            size: size of element.
+            theta: number of radians of sharp corners.
+            ratio: height ratio of the left and right sharp corners.
+            name: name of element.
+            gradient_animation: whether use animation to change color.
+            kwargs: extra parameters for CanvasItem.
         """
         self.theta = theta
         self.ratio = ratio
@@ -511,31 +519,31 @@ class SharpRectangle(virtual.Shape):
             widget, relative_position, size,
             name=name, gradient_animation=gradient_animation, **kwargs)
 
-    @typing_extensions.override
+    @override
     def display(self) -> None:
-        """Display the `Element` on a `Canvas`"""
+        """Display the ``Element`` on a ``Canvas``."""
         self.items = [self.widget.master.create_polygon(
             0, 0, 0, 0, tags=("fill", "fill", "outline", "outline"), **self.kwargs)]
 
-    @typing_extensions.override
+    @override
     def coords(
         self,
         size: tuple[float, float] | None = None,
         position: tuple[float, float] | None = None,
     ) -> None:
-        """Resize the `Element`"""
+        """Resize the ``Element``."""
         super().coords(size, position)
 
         x, y, w, h = *self.position, *self.size
 
         if w < h:
-            warnings.warn("Parameters are not suitable", UserWarning, 5)
+            warnings.warn("Parameters are not suitable.", UserWarning, 5)
 
         dy = [h*value for value in self.ratio]
         dx = [math.tan(self.theta)*y for y in dy]
 
         if sum(dx) > w:
-            warnings.warn("Parameters are not suitable", UserWarning, 5)
+            warnings.warn("Parameters are not suitable.", UserWarning, 5)
 
         x1, y1, x2, y2 = x, y, x + w, y + h
 
@@ -551,7 +559,7 @@ class SharpRectangle(virtual.Shape):
 
 
 class Parallelogram(virtual.Shape):
-    """Create a parallelogram for a widget"""
+    """Create a parallelogram for a widget."""
 
     def __init__(
         self,
@@ -565,40 +573,41 @@ class Parallelogram(virtual.Shape):
         **kwargs,
     ) -> None:
         """
-        * `widget`: parent widget
-        * `relative_position`: position relative to its widgets
-        * `size`: size of element
-        * `theta`: number of radians that the parallelogram is inclined to
-        * `name`: name of element
-        * `gradient_animation`: whether use animation to change color
-        * `kwargs`: extra parameters for CanvasItem
+        Args:
+            widget: parent widget.
+            relative_position: position relative to its widgets.
+            size: size of element.
+            theta: number of radians that the parallelogram is inclined to.
+            name: name of element.
+            gradient_animation: whether use animation to change color.
+            kwargs: extra parameters for CanvasItem.
         """
         self.theta = theta
         if not abs(theta) <= math.pi/3:
-            warnings.warn("Parameters are not suitable", UserWarning, 5)
+            warnings.warn("Parameters are not suitable.", UserWarning, 5)
         super().__init__(
             widget, relative_position, size,
             name=name, gradient_animation=gradient_animation, **kwargs)
 
-    @typing_extensions.override
+    @override
     def display(self) -> None:
-        """Display the `Element` on a `Canvas`"""
+        """Display the ``Element`` on a ``Canvas``."""
         self.items = [self.widget.master.create_polygon(
             0, 0, 0, 0, tags=("fill", "fill", "outline", "outline"), **self.kwargs)]
 
-    @typing_extensions.override
+    @override
     def coords(
         self,
         size: tuple[float, float] | None = None,
         position: tuple[float, float] | None = None,
     ) -> None:
-        """Resize the `Element`"""
+        """Resize the ``Element``."""
         super().coords(size, position)
 
         x, y, w, h = *self.position, *self.size
 
         if (dx := h*math.tan(self.theta)) >= w:
-            warnings.warn("Parameters are not suitable", UserWarning, 5)
+            warnings.warn("Parameters are not suitable.", UserWarning, 5)
 
         x1, y1, x2, y2 = x, y, x + w, y + h
 

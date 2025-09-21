@@ -13,14 +13,16 @@ __all__ = (
 import bisect
 import itertools
 import tkinter.font
-import typing
 import warnings
+from typing import TYPE_CHECKING
 
-import typing_extensions
+from typing_extensions import override
 
 from ..core import virtual
 
-if typing.TYPE_CHECKING:
+if TYPE_CHECKING:
+    from typing import Literal
+
     from ..core import containers
 
 
@@ -35,50 +37,50 @@ class _CanvasTextProxy:
             index += self.length()
         if 0 <= index <= self.length():
             return index
-        raise IndexError("string index out of range")
+        raise IndexError("string index out of range.")
 
     def length(self) -> int:
-        """Length"""
+        """Length."""
         return self.canvas.index(self.id, "end")
 
     def get(self) -> str:
-        """Get"""
+        """Get."""
         return self.canvas.itemcget(self.id, "text")
 
     def set(self, value: str, *, show: str | None = None) -> None:
-        """Set"""
+        """Set."""
         if show:
             value = show * len(value)
         self.canvas.itemconfigure(self.id, text=value)
 
     def insert(self, index: int, value: str, *, show: str | None = None) -> None:
-        """Insert"""
+        """Insert."""
         if show:
             value = show * len(value)
         self.canvas.insert(self.id, self._get_index(index), value)
 
     def append(self, value: str, *, show: str | None = None) -> None:
-        """Append"""
+        """Append."""
         self.insert(self.length(), value, show=show)
 
     def remove(self, start: int, end: int | None = None) -> None:
-        """Remove"""
+        """Remove."""
         start = self._get_index(start)
         end = start + 1 if end is None else self._get_index(end)
         self.canvas.dchars(self.id, start, end - 1)  # including
 
     def pop(self, index: int = -1) -> str:
-        """Pop"""
+        """Pop."""
         value = self.get()[index := self._get_index(index)]
         self.remove(index)
         return value
 
     def clear(self) -> None:
-        """Clear"""
+        """Clear."""
         self.canvas.itemconfigure(self.id, text="")
 
     def select_get(self) -> tuple[int, int] | None:
-        """select get"""
+        """select get."""
         if self.canvas.select_item() != self.id:
             return None
         start = self.canvas.index(self.id, "sel.first")
@@ -86,35 +88,35 @@ class _CanvasTextProxy:
         return start, end + 1
 
     def select_set(self, start: int, end: int | None = None) -> None:
-        """select set"""
+        """select set."""
         start = self._get_index(start)
         end = start + 1 if end is None else self._get_index(end)
         self.canvas.select_from(self.id, start)
         self.canvas.select_to(self.id, end - 1)  # including
 
     def select_all(self) -> None:
-        """select all"""
+        """select all."""
         self.select_set(0, self.length())
 
     def select_clear(self) -> None:
-        """select clear"""
+        """select clear."""
         if self.select_get():
             self.canvas.select_clear()
 
     def cursor_get(self) -> int | None:
-        """cursor get"""
+        """cursor get."""
         if self.canvas.focus() != self.id:
             return None
         return self.canvas.index(self.id, "insert")
 
     def cursor_set(self, index: int) -> None:
-        """cursor set"""
+        """cursor set."""
         index = self._get_index(index)
         self.canvas.focus(self.id)
         self.canvas.icursor(self.id, index)
 
     def cursor_find(self, x: int) -> int:
-        """cursor find"""
+        """cursor find."""
         x -= self.canvas.bbox(self.id)[0] + 1
         font = tkinter.font.Font(font=self.canvas.itemcget(self.id, "font"))
         index = bisect.bisect_right(tuple(itertools.accumulate(self.get())), x, key=font.measure)
@@ -129,59 +131,59 @@ class _CanvasTextProxy:
 
 
 class Information(virtual.Text):
-    """General information text"""
+    """General information text."""
 
-    @typing_extensions.override
+    @override
     def display(self) -> None:
-        """Display the `Element` on a `Canvas`"""
+        """Display the ``Element`` on a ``Canvas``."""
         self.kwargs.setdefault("anchor", "center")
         self.items = [self.widget.master.create_text(
             0, 0, text=self.text, font=self.font, tags=("fill", "fill"),
             **self.kwargs)]
 
-    @typing_extensions.override
+    @override
     def coords(
         self,
         size: tuple[float, float] | None = None,
         position: tuple[float, float] | None = None,
     ) -> None:
-        """Resize the `Element`"""
+        """Resize the ``Element``."""
         super().coords(size, position)
 
         self.widget.master.coords(self.items[0], *self.center())
 
     def get(self) -> str:
-        """Get the value of `Text`"""
+        """Get the value of ``Text``."""
         return self.text
 
     def set(self, text: str) -> None:
-        """Set the value of `Text`"""
+        """Set the value of ``Text``."""
         if len(text) > self.limit >= 0:
             text = text[:self.limit]
         self.text = text
         self.widget.master.itemconfigure(self.items[0], text=self.text)
 
     def append(self, text: str) -> None:
-        """Append value to the value of `Text`"""
+        """Append value to the value of ``Text``."""
         if len(self.text) + len(text) > self.limit >= 0:
             text = self.text[:self.limit-len(self.text)]
         self.text = self.text + text
         self.widget.master.itemconfigure(self.items[0], text=self.text)
 
     def delete(self, num: int) -> None:
-        """Remove a portion of the `Text` value from the trail"""
+        """Remove a portion of the ``Text`` value from the trail."""
         num = min(len(self.text), num)
         self.text = self.text[:-num]
         self.widget.master.itemconfigure(self.items[0], text=self.text)
 
     def clear(self) -> None:
-        """Clear the value of `Text`"""
+        """Clear the value of ``Text``."""
         self.text = ""
         self.widget.master.itemconfigure(self.items[0], text=self.text)
 
 
 class SingleLineText(virtual.Text):
-    """Single-line editable text"""
+    """Single-line editable text."""
 
     def __init__(
         self,
@@ -195,11 +197,11 @@ class SingleLineText(virtual.Text):
         limit_width: int = 0,
         show: str | None = None,
         placeholder: str = "",
-        align: typing.Literal["left", "center", "right"] = "left",
+        align: Literal["left", "center", "right"] = "left",
         family: str | None = None,
         fontsize: int | None = None,
-        weight: typing.Literal["normal", "bold"] = "normal",
-        slant: typing.Literal["roman", "italic"] = "roman",
+        weight: Literal["normal", "bold"] = "normal",
+        slant: Literal["roman", "italic"] = "roman",
         underline: bool = False,
         overstrike: bool = False,
         name: str | None = None,
@@ -207,25 +209,26 @@ class SingleLineText(virtual.Text):
         **kwargs,
     ) -> None:
         """
-        * `widget`: parent widget
-        * `relative_position`: position relative to its widgets
-        * `size`: size of element
-        * `text`: text value
-        * `family`: font family
-        * `fontsize`: font size
-        * `weight`: weight of the font
-        * `slant`: slant of the font
-        * `underline`: whether text is underline
-        * `overstrike`: whether text is overstrike
-        * `align`: align mode of the text
-        * `ignore`: ignore the input of some characters
-        * `limit`: limit on the number of characters
-        * `limit_width`: limit on the width of characters
-        * `show`: display a value that obscures the original content
-        * `placeholder`: a placeholder for the prompt
-        * `name`: name of element
-        * `gradient_animation`: whether use animation to change color
-        * `kwargs`: extra parameters for CanvasItem
+        Args:
+            widget: parent widget.
+            relative_position: position relative to its widgets.
+            size: size of element.
+            text: text value.
+            family: font family.
+            fontsize: font size.
+            weight: weight of the font.
+            slant: slant of the font.
+            underline: whether text is underline.
+            overstrike: whether text is overstrike.
+            align: align mode of the text.
+            ignore: ignore the input of some characters.
+            limit: limit on the number of characters.
+            limit_width: limit on the width of characters.
+            show: display a value that obscures the original content.
+            placeholder: a placeholder for the prompt.
+            name: name of element.
+            gradient_animation: whether use animation to change color.
+            kwargs: extra parameters for CanvasItem.
         """
         self.left: int = 0
         self.right: int = 0
@@ -240,9 +243,9 @@ class SingleLineText(virtual.Text):
             gradient_animation=gradient_animation, **kwargs)
         self.text_proxy = _CanvasTextProxy(widget.master, self.items[0])
 
-    @typing_extensions.override
+    @override
     def display(self) -> None:
-        """Display the `Element` on a `Canvas`"""
+        """Display the ``Element`` on a ``Canvas``."""
         self.items = [
             self.widget.master.create_text(
                 0, 0, text=self.text, font=self.font,
@@ -251,13 +254,13 @@ class SingleLineText(virtual.Text):
                 0, 0, text=self.placeholder, font=self.font,
                 anchor=self.anchor, fill="#787878", **self.kwargs)]
 
-    @typing_extensions.override
+    @override
     def coords(
         self,
         size: tuple[float, float] | None = None,
         position: tuple[float, float] | None = None,
     ) -> None:
-        """Resize the `Element`"""
+        """Resize the ``Element``."""
         super().coords(size, position)
 
         x, y = self.center()
@@ -270,14 +273,14 @@ class SingleLineText(virtual.Text):
         self.widget.master.coords(self.items[1], x, y)
 
     def _get_margin(self) -> float:
-        """Get the size of the spacing between the text and the border"""
+        """Get the size of the spacing between the text and the border."""
         if self.items:
             _, y1, _, y2 = self.widget.master.bbox(self.items[0])
             return max(0, self.size[1] - (y2-y1)) / 2
         return max(0, self.size[1] - abs(self.font.cget("size"))) / 2
 
     def _is_overflow(self) -> bool:
-        """Whether the text content extends beyond the text box"""
+        """Whether the text content extends beyond the text box."""
         x1, _, x2, _ = self.widget.master.bbox(self.items[0])
         width = (x2-x1) + self._get_margin()*2
         ratio = getattr(self.widget.master, "ratios", (1,))[0]
@@ -293,16 +296,16 @@ class SingleLineText(virtual.Text):
         raise IndexError("string index out of range")
 
     def get(self) -> str:
-        """Get text of the element"""
+        """Get text of the element."""
         return self.text
 
     def set(self, value: str) -> bool:
-        """Set text of the element"""
+        """Set text of the element."""
         self.clear()
         return self.append(value)
 
     def insert(self, index: int, value: str) -> bool:
-        """Insert text to the location of the specified index"""
+        """Insert text to the location of the specified index."""
         for char in self.ignore:
             value = value.replace(char, "")
         if not self.text_proxy.length() and value:
@@ -328,11 +331,11 @@ class SingleLineText(virtual.Text):
         return flag
 
     def append(self, value: str) -> bool:
-        """Add some characters to the text cursor"""
+        """Add some characters to the text cursor."""
         return self.insert(len(self.text), value)
 
     def remove(self, start: int, end: int | None = None) -> None:
-        """Remove text within the specified index range"""
+        """Remove text within the specified index range."""
         if self.text_proxy.length() == 0:
             return None
         start = self._get_index(start)
@@ -371,18 +374,18 @@ class SingleLineText(virtual.Text):
         return None
 
     def pop(self, index: int = -1) -> str:
-        """Delete a character at the text cursor"""
+        """Delete a character at the text cursor."""
         value = self.text[index]
         self.remove(index)
         return value
 
     def clear(self) -> None:
-        """Clear"""
+        """Clear."""
         self.text, self.left, self.right = "", 0, 0
         self.text_proxy.clear()
 
     def _move_left(self) -> None:
-        """Move the text to the left as a whole, i.e. press the right arrow"""
+        """Move the text to the left as a whole, i.e. press the right arrow."""
         if self.right == len(self.text):
             return
         self.text_proxy.insert(
@@ -395,7 +398,7 @@ class SingleLineText(virtual.Text):
             self.left += 1
 
     def _move_right(self) -> None:
-        """Move the text to the right as a whole, i.e. press the left arrow"""
+        """Move the text to the right as a whole, i.e. press the left arrow."""
         if self.left == 0:
             return
         self.left -= 1
@@ -407,7 +410,7 @@ class SingleLineText(virtual.Text):
             self.right -= 1
 
     def cursor_move(self, count: int) -> None:
-        """Move the index position of the text cursor"""
+        """Move the index position of the text cursor."""
         index = self.text_proxy.cursor_get()
         if index is None:
             warnings.warn("Can not move the cursor.", RuntimeWarning, 2)
@@ -422,7 +425,7 @@ class SingleLineText(virtual.Text):
             self._move_left()
 
     def cursor_move_to(self, count: int) -> None:
-        """Move the index position of the text cursor to a certain index"""
+        """Move the index position of the text cursor to a certain index."""
         index = self.text_proxy.cursor_get()
         if index is None:  # HACK: Duplicate shit code!
             warnings.warn("Can not move the cursor.", RuntimeWarning, 2)

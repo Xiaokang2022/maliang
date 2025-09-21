@@ -32,25 +32,26 @@ import contextlib
 import decimal
 import itertools
 import math
-import typing
 import warnings
+from typing import TYPE_CHECKING
 
-import typing_extensions
+from typing_extensions import override
 
 from ..animation import animations, controllers
 from ..core import configs, virtual
 from ..toolbox import utility
 from . import features, images, shapes, styles, texts
 
-if typing.TYPE_CHECKING:
-    import collections.abc
+if TYPE_CHECKING:
+    from collections.abc import Callable
+    from typing import Any, Literal
 
     from ..core import containers
     from ..toolbox import enhanced
 
 
 class Text(virtual.Widget):
-    """Text widget, generally used to display plain text"""
+    """Text widget, generally used to display plain text."""
 
     def __init__(
         self,
@@ -61,36 +62,38 @@ class Text(virtual.Widget):
         text: str = "",
         family: str | None = None,
         fontsize: int | None = None,
-        weight: typing.Literal['normal', 'bold'] = "normal",
-        slant: typing.Literal['roman', 'italic'] = "roman",
+        weight: Literal['normal', 'bold'] = "normal",
+        slant: Literal['roman', 'italic'] = "roman",
         underline: bool = False,
         overstrike: bool = False,
-        justify: typing.Literal["left", "center", "right"] = "left",
+        justify: Literal["left", "center", "right"] = "left",
         wrap_length: int | None = None,
-        anchor: typing.Literal["n", "e", "w", "s", "nw", "ne", "sw", "se", "center"] = "nw",
+        anchor: Literal["n", "e", "w", "s", "nw", "ne", "sw", "se", "center"] = "nw",
         capture_events: bool | None = None,
         gradient_animation: bool | None = None,
         auto_update: bool | None = None,
         style: type[virtual.Style] | None = None,
     ) -> None:
         """
-        * `master`: parent canvas
-        * `position`: position of the widget
-        * `size`: size of the widget
-        * `text`: text of the widget
-        * `family`: font family
-        * `fontsize`: font size
-        * `weight`: weight of the text
-        * `slant`: slant of the text
-        * `underline`: whether the text is underline
-        * `overstrike`: whether the text is overstrike
-        * `justify`: justify mode of the text
-        * `wrap_length`: limit the length of text, beyond which it will automatically wrap
-        * `anchor`: anchor of the widget
-        * `capture_events`: whether detect another widget under the widget
-        * `gradient_animation`: whether enable gradient_animation
-        * `auto_update`: whether the theme manager update it automatically
-        * `style`: style of the widget
+        Args:
+            master: parent canvas.
+            position: position of the widget.
+            size: size of the widget.
+            text: text of the widget.
+            family: font family.
+            fontsize: font size.
+            weight: weight of the text.
+            slant: slant of the text.
+            underline: whether the text is underline.
+            overstrike: whether the text is overstrike.
+            justify: justify mode of the text.
+            wrap_length: limit the length of text, beyond which it will
+                automatically wrap.
+            anchor: anchor of the widget.
+            capture_events: whether detect another widget under the widget.
+            gradient_animation: whether enable gradient_animation.
+            auto_update: whether the theme manager update it automatically.
+            style: style of the widget.
         """
         if auto_resize := size is None:
             size = utility.get_text_size(
@@ -111,11 +114,11 @@ class Text(virtual.Widget):
         self.feature = features.TextFeature(self)
 
     def get(self) -> str:
-        """Get the text of the widget"""
+        """Get the text of the widget."""
         return self.texts[0].get()
 
     def set(self, text: str) -> None:
-        """Set the text of the widget"""
+        """Set the text of the widget."""
         self.texts[0].set(text)
         if self.auto_resize:
             self.resize(utility.get_text_size(
@@ -123,7 +126,7 @@ class Text(virtual.Widget):
 
 
 class Image(virtual.Widget):
-    """Image widget, generally used to display normal still image"""
+    """Image widget, generally used to display normal still image."""
 
     def __init__(
         self,
@@ -132,22 +135,23 @@ class Image(virtual.Widget):
         size: tuple[int, int] | None = None,
         *,
         image: enhanced.PhotoImage | None = None,
-        anchor: typing.Literal["n", "e", "w", "s", "nw", "ne", "sw", "se", "center"] = "nw",
+        anchor: Literal["n", "e", "w", "s", "nw", "ne", "sw", "se", "center"] = "nw",
         capture_events: bool | None = None,
         gradient_animation: bool | None = None,
         auto_update: bool | None = None,
         style: type[virtual.Style] | None = None,
     ) -> None:
         """
-        * `master`: parent canvas
-        * `position`: position of the widget
-        * `size`: size of the widget
-        * `image`: image of the widget
-        * `anchor`: anchor of the widget
-        * `capture_events`: whether detect another widget under the widget
-        * `gradient_animation`: whether enable gradient_animation
-        * `auto_update`: whether the theme manager update it automatically
-        * `style`: style of the widget
+        Args:
+            master: parent canvas.
+            position: position of the widget.
+            size: size of the widget.
+            image: image of the widget.
+            anchor: anchor of the widget.
+            capture_events: whether detect another widget under the widget.
+            gradient_animation: whether enable gradient_animation.
+            auto_update: whether the theme manager update it automatically.
+            style: style of the widget.
         """
         if size is None and image is not None:
             size = image.width(), image.height()
@@ -165,13 +169,13 @@ class Image(virtual.Widget):
         self.feature = features.ImageFeature(self)
 
     def get(self) -> enhanced.PhotoImage:
-        """Get the image of the widget"""
+        """Get the image of the widget."""
         if (image := self.images[0].image) is not None:
             return image
         return self.images[0].initial_image
 
     def set(self, image: enhanced.PhotoImage | None) -> None:
-        """Set the image of the widget"""
+        """Set the image of the widget."""
         self.images[0].initial_image = image
         if image is not None:
             self.master.update()
@@ -181,7 +185,7 @@ class Image(virtual.Widget):
 
 
 class Label(virtual.Widget):
-    """Label widget, which is generally used to display key information"""
+    """Label widget, which is generally used to display key information."""
 
     def __init__(
         self,
@@ -192,36 +196,37 @@ class Label(virtual.Widget):
         text: str = "",
         family: str | None = None,
         fontsize: int | None = None,
-        weight: typing.Literal['normal', 'bold'] = "normal",
-        slant: typing.Literal['roman', 'italic'] = "roman",
+        weight: Literal['normal', 'bold'] = "normal",
+        slant: Literal['roman', 'italic'] = "roman",
         underline: bool = False,
         overstrike: bool = False,
-        justify: typing.Literal["left", "center", "right"] = "left",
+        justify: Literal["left", "center", "right"] = "left",
         image: enhanced.PhotoImage | None = None,
-        anchor: typing.Literal["n", "e", "w", "s", "nw", "ne", "sw", "se", "center"] = "nw",
+        anchor: Literal["n", "e", "w", "s", "nw", "ne", "sw", "se", "center"] = "nw",
         capture_events: bool | None = None,
         gradient_animation: bool | None = None,
         auto_update: bool | None = None,
         style: type[virtual.Style] | None = None,
     ) -> None:
         """
-        * `master`: parent canvas
-        * `position`: position of the widget
-        * `size`: size of the widget
-        * `text`: text of the widget
-        * `family`: font family
-        * `fontsize`: font size
-        * `weight`: weight of the text
-        * `slant`: slant of the text
-        * `underline`: whether the text is underline
-        * `overstrike`: whether the text is overstrike
-        * `justify`: justify mode of the text
-        * `image`: image of the widget
-        * `anchor`: anchor of the widget
-        * `capture_events`: whether detect another widget under the widget
-        * `gradient_animation`: whether enable gradient_animation
-        * `auto_update`: whether the theme manager update it automatically
-        * `style`: style of the widget
+        Args:
+            master: parent canvas.
+            position: position of the widget.
+            size: size of the widget.
+            text: text of the widget.
+            family: font family.
+            fontsize: font size.
+            weight: weight of the text.
+            slant: slant of the text.
+            underline: whether the text is underline.
+            overstrike: whether the text is overstrike.
+            justify: justify mode of the text.
+            image: image of the widget.
+            anchor: anchor of the widget.
+            capture_events: whether detect another widget under the widget.
+            gradient_animation: whether enable gradient_animation.
+            auto_update: whether the theme manager update it automatically.
+            style: style of the widget.
         """
         if auto_resize := size is None:
             size = utility.get_text_size(
@@ -244,11 +249,11 @@ class Label(virtual.Widget):
         self.feature = features.LabelFeature(self)
 
     def get(self) -> str:
-        """Get the text of the widget"""
+        """Get the text of the widget."""
         return self.texts[0].get()
 
     def set(self, text: str) -> None:
-        """Set the text of the widget"""
+        """Set the text of the widget."""
         self.texts[0].set(text)
         if self.auto_resize:
             self.resize(utility.get_text_size(
@@ -256,7 +261,7 @@ class Label(virtual.Widget):
 
 
 class Button(virtual.Widget):
-    """Button widget, typically used to trigger a function"""
+    """Button widget, typically used to trigger a function."""
 
     def __init__(
         self,
@@ -267,38 +272,39 @@ class Button(virtual.Widget):
         text: str = "",
         family: str | None = None,
         fontsize: int | None = None,
-        weight: typing.Literal['normal', 'bold'] = "normal",
-        slant: typing.Literal['roman', 'italic'] = "roman",
+        weight: Literal['normal', 'bold'] = "normal",
+        slant: Literal['roman', 'italic'] = "roman",
         underline: bool = False,
         overstrike: bool = False,
-        justify: typing.Literal["left", "center", "right"] = "left",
-        command: collections.abc.Callable | None = None,
+        justify: Literal["left", "center", "right"] = "left",
+        command: Callable | None = None,
         image: enhanced.PhotoImage | None = None,
-        anchor: typing.Literal["n", "e", "w", "s", "nw", "ne", "sw", "se", "center"] = "nw",
+        anchor: Literal["n", "e", "w", "s", "nw", "ne", "sw", "se", "center"] = "nw",
         capture_events: bool | None = None,
         gradient_animation: bool | None = None,
         auto_update: bool | None = None,
         style: type[virtual.Style] | None = None,
     ) -> None:
         """
-        * `master`: parent canvas
-        * `position`: position of the widget
-        * `size`: size of the widget
-        * `text`: text of the widget
-        * `family`: font family
-        * `fontsize`: font size
-        * `weight`: weight of the text
-        * `slant`: slant of the text
-        * `underline`: whether the text is underline
-        * `overstrike`: whether the text is overstrike
-        * `justify`: justify mode of the text
-        * `command`: a function that is triggered when the button is pressed
-        * `image`: image of the widget
-        * `anchor`: anchor of the widget
-        * `capture_events`: whether detect another widget under the widget
-        * `gradient_animation`: whether enable gradient_animation
-        * `auto_update`: whether the theme manager update it automatically
-        * `style`: style of the widget
+        Args:
+            master: parent canvas.
+            position: position of the widget.
+            size: size of the widget.
+            text: text of the widget.
+            family: font family.
+            fontsize: font size.
+            weight: weight of the text.
+            slant: slant of the text.
+            underline: whether the text is underline.
+            overstrike: whether the text is overstrike.
+            justify: justify mode of the text.
+            command: a function that is triggered when the button is pressed.
+            image: image of the widget.
+            anchor: anchor of the widget.
+            capture_events: whether detect another widget under the widget.
+            gradient_animation: whether enable gradient_animation.
+            auto_update: whether the theme manager update it automatically.
+            style: style of the widget.
         """
         if auto_resize := size is None:
             size = utility.get_text_size(
@@ -321,11 +327,11 @@ class Button(virtual.Widget):
         self.feature = features.ButtonFeature(self, command=command)
 
     def get(self) -> str:
-        """Get the text of the widget"""
+        """Get the text of the widget."""
         return self.texts[0].get()
 
     def set(self, text: str) -> None:
-        """Set the text of the widget"""
+        """Set the text of the widget."""
         self.texts[0].set(text)
         if self.auto_resize:
             self.resize(utility.get_text_size(
@@ -333,7 +339,8 @@ class Button(virtual.Widget):
 
 
 class Switch(virtual.Widget):
-    """Switch widget, typically used to control the turning of a function on and off"""
+    """Switch widget, typically used to control the turning of a function on
+    and off."""
 
     def __init__(
         self,
@@ -342,26 +349,27 @@ class Switch(virtual.Widget):
         length: int = 60,
         *,
         default: bool | None = None,
-        command: collections.abc.Callable[[bool], typing.Any] | None = None,
+        command: Callable[[bool], Any] | None = None,
         image: enhanced.PhotoImage | None = None,
-        anchor: typing.Literal["n", "e", "w", "s", "nw", "ne", "sw", "se", "center"] = "nw",
+        anchor: Literal["n", "e", "w", "s", "nw", "ne", "sw", "se", "center"] = "nw",
         capture_events: bool | None = None,
         gradient_animation: bool | None = None,
         auto_update: bool | None = None,
         style: type[virtual.Style] | None = None,
     ) -> None:
         """
-        * `master`: parent canvas
-        * `position`: position of the widget
-        * `length`: length of the widget
-        * `default`: default value of the widget
-        * `command`: a function that is triggered when the switch is changed
-        * `image`: image of the widget
-        * `anchor`: anchor of the widget
-        * `capture_events`: whether detect another widget under the widget
-        * `gradient_animation`: whether enable gradient_animation
-        * `auto_update`: whether the theme manager update it automatically
-        * `style`: style of the widget
+        Args:
+            master: parent canvas.
+            position: position of the widget.
+            length: length of the widget.
+            default: default value of the widget.
+            command: a function that is triggered when the switch is changed.
+            image: image of the widget.
+            anchor: anchor of the widget.
+            capture_events: whether detect another widget under the widget.
+            gradient_animation: whether enable gradient_animation.
+            auto_update: whether the theme manager update it automatically.
+            style: style of the widget.
         """
         super().__init__(
             master, position, (length, length / 2),
@@ -386,11 +394,11 @@ class Switch(virtual.Widget):
             self.set(default)
 
     def get(self) -> bool:
-        """Get the state of the switch"""
+        """Get the state of the switch."""
         return self.state.endswith("on")
 
     def set(self, value: bool, *, callback: bool = False) -> None:
-        """Set the state of the switch"""
+        """Set the state of the switch."""
         if callback and self.feature.command is not None:
             self.feature.command(value)
         if self.get() == bool(value):
@@ -402,7 +410,8 @@ class Switch(virtual.Widget):
 
 
 class InputBox(virtual.Widget):
-    """Input box widget, generally used to enter certain information on a single line"""
+    """Input box widget, generally used to enter certain information on a single
+    line."""
 
     def __init__(
         self,
@@ -412,45 +421,46 @@ class InputBox(virtual.Widget):
         *,
         family: str | None = None,
         fontsize: int | None = None,
-        weight: typing.Literal['normal', 'bold'] = "normal",
-        slant: typing.Literal['roman', 'italic'] = "roman",
+        weight: Literal['normal', 'bold'] = "normal",
+        slant: Literal['roman', 'italic'] = "roman",
         underline: bool = False,
         overstrike: bool = False,
-        align: typing.Literal["left", "right", "center"] = "left",
+        align: Literal["left", "right", "center"] = "left",
         placeholder: str = "",
         show: str | None = None,
         ignore: tuple[str, ...] = ("\n", "\r"),
         limit: int = -1,
         limit_width: int = 0,
         image: enhanced.PhotoImage | None = None,
-        anchor: typing.Literal["n", "e", "w", "s", "nw", "ne", "sw", "se", "center"] = "nw",
+        anchor: Literal["n", "e", "w", "s", "nw", "ne", "sw", "se", "center"] = "nw",
         capture_events: bool | None = None,
         gradient_animation: bool | None = None,
         auto_update: bool | None = None,
         style: type[virtual.Style] | None = None,
     ) -> None:
         """
-        * `master`: parent canvas
-        * `position`: position of the widget
-        * `size`: size of the widget
-        * `family`: font family
-        * `fontsize`: font size
-        * `weight`: weight of the text
-        * `slant`: slant of the text
-        * `underline`: whether the text is underline
-        * `overstrike`: whether the text is overstrike
-        * `align`: align mode of the text
-        * `show`: display a value that obscures the original content
-        * `ignore`: ignore the input of some characters
-        * `placeholder`: a placeholder for the prompt
-        * `limit`: limit on the number of characters
-        * `limit_width`: limit on the width of characters
-        * `image`: image of the widget
-        * `anchor`: anchor of the widget
-        * `capture_events`: whether detect another widget under the widget
-        * `gradient_animation`: whether enable gradient_animation
-        * `auto_update`: whether the theme manager update it automatically
-        * `style`: style of the widget
+        Args:
+            master: parent canvas.
+            position: position of the widget.
+            size: size of the widget.
+            family: font family.
+            fontsize: font size.
+            weight: weight of the text.
+            slant: slant of the text.
+            underline: whether the text is underline.
+            overstrike: whether the text is overstrike.
+            align: align mode of the text.
+            show: display a value that obscures the original content.
+            ignore: ignore the input of some characters.
+            placeholder: a placeholder for the prompt.
+            limit: limit on the number of characters.
+            limit_width: limit on the width of characters.
+            image: image of the widget.
+            anchor: anchor of the widget.
+            capture_events: whether detect another widget under the widget.
+            gradient_animation: whether enable gradient_animation.
+            auto_update: whether the theme manager update it automatically.
+            style: style of the widget.
         """
         if size is None:
             size = 200, utility.get_text_size(
@@ -476,34 +486,34 @@ class InputBox(virtual.Widget):
         self.feature = features.InputBoxFeature(self)
 
     def get(self) -> str:
-        """Get the value of the Entry"""
+        """Get the value of the Entry."""
         return self.texts[0].get()
 
     def set(self, value: str) -> bool:
-        """Set the text value of the Entry"""
+        """Set the text value of the Entry."""
         return self.texts[0].set(value)
 
     def insert(self, index: int, value: str) -> bool:
-        """Insert"""
+        """Insert."""
         return self.texts[0].insert(index, value)
 
     def append(self, value: str) -> bool:
-        """Append text to Entry"""
+        """Append text to Entry."""
         return self.texts[0].append(value)
 
     def remove(self, start: int, end: int | None = None) -> int:
-        """Remove"""
+        """Remove."""
         self.texts[0].remove(start, end)
 
     def pop(self, index: int = -1) -> str:
-        """Delete a specified amount of text"""
+        """Delete a specified amount of text."""
         return self.texts[0].pop(index)
 
     def clear(self) -> None:
-        """Clear the text value of the Entry"""
+        """Clear the text value of the Entry."""
         self.texts[0].clear()
 
-    @typing_extensions.override
+    @override
     def update(
         self,
         state: str | None = None,
@@ -513,9 +523,10 @@ class InputBox(virtual.Widget):
     ) -> None:
         """Update the widget.
 
-        * `state`: state of the widget
-        * `gradient_animation`: whether use gradient animation
-        * `nested`: whether nested
+        Args:
+            state: state of the widget.
+            gradient_animation: whether use gradient animation.
+            nested: whether nested.
         """
         super().update(
             state, gradient_animation=gradient_animation, nested=nested)
@@ -525,7 +536,7 @@ class InputBox(virtual.Widget):
 
 
 class CheckBox(virtual.Widget):
-    """Checkbox button widget, generally used to check some options"""
+    """Checkbox button widget, generally used to check some options."""
 
     def __init__(
         self,
@@ -534,26 +545,28 @@ class CheckBox(virtual.Widget):
         length: int = 30,
         *,
         default: bool | None = None,
-        command: collections.abc.Callable[[bool], typing.Any] | None = None,
+        command: Callable[[bool], Any] | None = None,
         image: enhanced.PhotoImage | None = None,
-        anchor: typing.Literal["n", "e", "w", "s", "nw", "ne", "sw", "se", "center"] = "nw",
+        anchor: Literal["n", "e", "w", "s", "nw", "ne", "sw", "se", "center"] = "nw",
         capture_events: bool | None = None,
         gradient_animation: bool | None = None,
         auto_update: bool | None = None,
         style: type[virtual.Style] | None = None,
     ) -> None:
         """
-        * `master`: parent canvas
-        * `position`: position of the widget
-        * `length`: length of the widget
-        * `default`: default state of the widget
-        * `command`: a function that is triggered when the state of check button is on
-        * `image`: image of the widget
-        * `anchor`: anchor of the widget
-        * `capture_events`: whether detect another widget under the widget
-        * `gradient_animation`: whether enable gradient_animation
-        * `auto_update`: whether the theme manager update it automatically
-        * `style`: style of the widget
+        Args:
+            master: parent canvas.
+            position: position of the widget.
+            length: length of the widget.
+            default: default state of the widget.
+            command: a function that is triggered when the state of check button
+                is on.
+            image: image of the widget.
+            anchor: anchor of the widget.
+            capture_events: whether detect another widget under the widget.
+            gradient_animation: whether enable gradient_animation.
+            auto_update: whether the theme manager update it automatically.
+            style: style of the widget.
         """
         super().__init__(
             master, position, (length, length), anchor=anchor,
@@ -574,11 +587,11 @@ class CheckBox(virtual.Widget):
             self.set(default)
 
     def get(self) -> bool:
-        """Get the state of the check button"""
+        """Get the state of the check button."""
         return self.state.endswith("on")
 
     def set(self, value: bool, *, callback: bool = False) -> None:
-        """Set the state of the check button"""
+        """Set the state of the check button."""
         if callback and self.feature.command is not None:
             self.feature.command(value)
         if self.get() == bool(value):
@@ -587,7 +600,7 @@ class CheckBox(virtual.Widget):
 
 
 class ToggleButton(virtual.Widget):
-    """A button that can display information and switch statuses"""
+    """A button that can display information and switch statuses."""
 
     def __init__(
         self,
@@ -598,40 +611,42 @@ class ToggleButton(virtual.Widget):
         text: str = "",
         family: str | None = None,
         fontsize: int | None = None,
-        weight: typing.Literal['normal', 'bold'] = "normal",
-        slant: typing.Literal['roman', 'italic'] = "roman",
+        weight: Literal['normal', 'bold'] = "normal",
+        slant: Literal['roman', 'italic'] = "roman",
         underline: bool = False,
         overstrike: bool = False,
-        justify: typing.Literal["left", "center", "right"] = "left",
+        justify: Literal["left", "center", "right"] = "left",
         default: bool | None = None,
-        command: collections.abc.Callable[[bool], typing.Any] | None = None,
+        command: Callable[[bool], Any] | None = None,
         image: enhanced.PhotoImage | None = None,
-        anchor: typing.Literal["n", "e", "w", "s", "nw", "ne", "sw", "se", "center"] = "nw",
+        anchor: Literal["n", "e", "w", "s", "nw", "ne", "sw", "se", "center"] = "nw",
         capture_events: bool | None = None,
         gradient_animation: bool | None = None,
         auto_update: bool | None = None,
         style: type[virtual.Style] | None = None,
     ) -> None:
         """
-        * `master`: parent canvas
-        * `position`: position of the widget
-        * `size`: size of the widget
-        * `text`: text of the widget
-        * `family`: font family
-        * `fontsize`: font size
-        * `weight`: weight of the text
-        * `slant`: slant of the text
-        * `underline`: whether the text is underline
-        * `overstrike`: whether the text is overstrike
-        * `justify`: justify mode of the text
-        * `default`: default state of the widget
-        * `command`: a function that is triggered when the state of check button is on
-        * `image`: image of the widget
-        * `anchor`: anchor of the widget
-        * `capture_events`: whether detect another widget under the widget
-        * `gradient_animation`: whether enable gradient_animation
-        * `auto_update`: whether the theme manager update it automatically
-        * `style`: style of the widget
+        Args:
+            master: parent canvas.
+            position: position of the widget.
+            size: size of the widget.
+            text: text of the widget.
+            family: font family.
+            fontsize: font size.
+            weight: weight of the text.
+            slant: slant of the text.
+            underline: whether the text is underline.
+            overstrike: whether the text is overstrike.
+            justify: justify mode of the text.
+            default: default state of the widget.
+            command: a function that is triggered when the state of check button
+                is on.
+            image: image of the widget.
+            anchor: anchor of the widget.
+            capture_events: whether detect another widget under the widget.
+            gradient_animation: whether enable gradient_animation.
+            auto_update: whether the theme manager update it automatically.
+            style: style of the widget.
         """
         if size is None:
             size = utility.get_text_size(
@@ -657,11 +672,11 @@ class ToggleButton(virtual.Widget):
             self.set(default)
 
     def get(self) -> bool:
-        """Get the state of the check button"""
+        """Get the state of the check button."""
         return self.state.endswith("on")
 
     def set(self, value: bool, *, callback: bool = False) -> None:
-        """Set the state of the switch"""
+        """Set the state of the switch."""
         if callback and self.feature.command is not None:
             self.feature.command(value)
         if self.get() == bool(value):
@@ -670,7 +685,7 @@ class ToggleButton(virtual.Widget):
 
 
 class RadioBox(virtual.Widget):
-    """Radio button widget, generally used to select one of several options"""
+    """Radio button widget, generally used to select one of several options."""
 
     def __init__(
         self,
@@ -679,26 +694,28 @@ class RadioBox(virtual.Widget):
         length: int = 30,
         *,
         default: bool | None = None,
-        command: collections.abc.Callable[[int], typing.Any] | None = None,
+        command: Callable[[int], Any] | None = None,
         image: enhanced.PhotoImage | None = None,
-        anchor: typing.Literal["n", "e", "w", "s", "nw", "ne", "sw", "se", "center"] = "nw",
+        anchor: Literal["n", "e", "w", "s", "nw", "ne", "sw", "se", "center"] = "nw",
         capture_events: bool | None = None,
         gradient_animation: bool | None = None,
         auto_update: bool | None = None,
         style: type[virtual.Style] | None = None,
     ) -> None:
         """
-        * `master`: parent canvas
-        * `position`: position of the widget
-        * `length`: length of the widget
-        * `default`: default state of the widget
-        * `command`: a function that is triggered when the state of radio button is on
-        * `image`: image of the widget
-        * `anchor`: anchor of the widget
-        * `capture_events`: whether detect another widget under the widget
-        * `gradient_animation`: whether enable gradient_animation
-        * `auto_update`: whether the theme manager update it automatically
-        * `style`: style of the widget
+        Args:
+            master: parent canvas.
+            position: position of the widget.
+            length: length of the widget.
+            default: default state of the widget.
+            command: a function that is triggered when the state of radio button
+                is on.
+            image: image of the widget.
+            anchor: anchor of the widget.
+            capture_events: whether detect another widget under the widget.
+            gradient_animation: whether enable gradient_animation.
+            auto_update: whether the theme manager update it automatically.
+            style: style of the widget.
         """
         self.groups: list[RadioBox] = [self]
         super().__init__(
@@ -726,11 +743,11 @@ class RadioBox(virtual.Widget):
             self.set(default)
 
     def get(self) -> bool:
-        """Get the state of the radio button"""
+        """Get the state of the radio button."""
         return self.shapes[1].visible
 
     def set(self, value: bool, *, callback: bool = False) -> None:
-        """Set the state of the radio button"""
+        """Set the state of the radio button."""
         if callback and self.feature.command is not None:
             self.feature.command(value)
         if self.get() == bool(value):
@@ -742,7 +759,8 @@ class RadioBox(virtual.Widget):
     def group(self, *radio_boxes: RadioBox) -> None:
         """Combine other radio boxes.
 
-        * `radio_boxes`: other radio boxes
+        Args:
+            radio_boxes: other radio boxes.
         """
         for radio_box in radio_boxes:
             if radio_box in self.groups:
@@ -753,7 +771,7 @@ class RadioBox(virtual.Widget):
 
 
 class ProgressBar(virtual.Widget):
-    """Progress bar widget, typically used to show the progress of an event"""
+    """Progress bar widget, typically used to show the progress of an event."""
 
     def __init__(
         self,
@@ -762,26 +780,28 @@ class ProgressBar(virtual.Widget):
         size: tuple[int, int] = (400, 20),
         *,
         default: float | None = None,
-        command: collections.abc.Callable[[float], typing.Any] | None = None,
+        command: Callable[[float], Any] | None = None,
         image: enhanced.PhotoImage | None = None,
-        anchor: typing.Literal["n", "e", "w", "s", "nw", "ne", "sw", "se", "center"] = "nw",
+        anchor: Literal["n", "e", "w", "s", "nw", "ne", "sw", "se", "center"] = "nw",
         capture_events: bool | None = None,
         gradient_animation: bool | None = None,
         auto_update: bool | None = None,
         style: type[virtual.Style] | None = None,
     ) -> None:
         """
-        * `master`: parent canvas
-        * `position`: position of the widget
-        * `size`: size of the widget
-        * `default`: default value of the widget
-        * `command`: a function that is triggered when the progress of progress bar is 100%
-        * `image`: image of the widget
-        * `anchor`: anchor of the widget
-        * `capture_events`: whether detect another widget under the widget
-        * `gradient_animation`: whether enable gradient_animation
-        * `auto_update`: whether the theme manager update it automatically
-        * `style`: style of the widget
+        Args:
+            master: parent canvas.
+            position: position of the widget.
+            size: size of the widget.
+            default: default value of the widget
+            command: a function that is triggered when the progress of progress
+                bar is 100%.
+            image: image of the widget.
+            anchor: anchor of the widget.
+            capture_events: whether detect another widget under the widget.
+            gradient_animation: whether enable gradient_animation.
+            auto_update: whether the theme manager update it automatically.
+            style: style of the widget.
         """
         self.value: float = 0
         super().__init__(
@@ -809,11 +829,11 @@ class ProgressBar(virtual.Widget):
             self.set(default)
 
     def get(self) -> float:
-        """Get the progress of the progress bar"""
+        """Get the progress of the progress bar."""
         return self.value
 
     def set(self, value: float, *, callback: bool = False) -> None:
-        """Set the progress of the progress bar"""
+        """Set the progress of the progress bar."""
         self.value = 0 if value < 0 else 1 if value > 1 else value
         if callback and self.command is not None:
             self.command(value)
@@ -834,7 +854,7 @@ class ProgressBar(virtual.Widget):
 
 
 class UnderlineButton(virtual.Widget):
-    """Underline button, generally used to display web links"""
+    """Underline button, generally used to display web links."""
 
     def __init__(
         self,
@@ -844,37 +864,39 @@ class UnderlineButton(virtual.Widget):
         text: str = "",
         family: str | None = None,
         fontsize: int | None = None,
-        weight: typing.Literal['normal', 'bold'] = "normal",
-        slant: typing.Literal['roman', 'italic'] = "roman",
+        weight: Literal['normal', 'bold'] = "normal",
+        slant: Literal['roman', 'italic'] = "roman",
         underline: bool = False,
         overstrike: bool = False,
-        justify: typing.Literal["left", "center", "right"] = "left",
-        command: collections.abc.Callable | None = None,
+        justify: Literal["left", "center", "right"] = "left",
+        command: Callable | None = None,
         image: enhanced.PhotoImage | None = None,
-        anchor: typing.Literal["n", "e", "w", "s", "nw", "ne", "sw", "se", "center"] = "nw",
+        anchor: Literal["n", "e", "w", "s", "nw", "ne", "sw", "se", "center"] = "nw",
         capture_events: bool | None = None,
         gradient_animation: bool = False,
         auto_update: bool | None = None,
         style: type[virtual.Style] | None = None,
     ) -> None:
         """
-        * `master`: parent canvas
-        * `position`: position of the widget
-        * `text`: text of the widget
-        * `family`: font family
-        * `fontsize`: font size
-        * `weight`: weight of the text
-        * `slant`: slant of the text
-        * `underline`: whether the text is underline
-        * `overstrike`: whether the text is overstrike
-        * `justify`: justify mode of the text
-        * `command`: a function that is triggered when the underline button is pressed
-        * `image`: image of the widget
-        * `anchor`: anchor of the widget
-        * `capture_events`: whether detect another widget under the widget
-        * `gradient_animation`: whether enable gradient_animation
-        * `auto_update`: whether the theme manager update it automatically
-        * `style`: style of the widget
+        Args:
+            master: parent canvas.
+            position: position of the widget.
+            text: text of the widget.
+            family: font family.
+            fontsize: font size.
+            weight: weight of the text.
+            slant: slant of the text.
+            underline: whether the text is underline.
+            overstrike: whether the text is overstrike.
+            justify: justify mode of the text.
+            command: a function that is triggered when the underline button is
+                pressed.
+            image: image of the widget.
+            anchor: anchor of the widget.
+            capture_events: whether detect another widget under the widget.
+            gradient_animation: whether enable gradient_animation.
+            auto_update: whether the theme manager update it automatically.
+            style: style of the widget.
         """
         super().__init__(
             master, position, utility.get_text_size(
@@ -892,7 +914,7 @@ class UnderlineButton(virtual.Widget):
 
 
 class HighlightButton(virtual.Widget):
-    """Highlight button, no outline, which added a highlight effect"""
+    """Highlight button, no outline, which added a highlight effect."""
 
     def __init__(
         self,
@@ -902,37 +924,38 @@ class HighlightButton(virtual.Widget):
         text: str = "",
         family: str | None = None,
         fontsize: int | None = None,
-        weight: typing.Literal['normal', 'bold'] = "normal",
-        slant: typing.Literal['roman', 'italic'] = "roman",
+        weight: Literal['normal', 'bold'] = "normal",
+        slant: Literal['roman', 'italic'] = "roman",
         underline: bool = False,
         overstrike: bool = False,
-        justify: typing.Literal["left", "center", "right"] = "left",
-        command: collections.abc.Callable | None = None,
+        justify: Literal["left", "center", "right"] = "left",
+        command: Callable | None = None,
         image: enhanced.PhotoImage | None = None,
-        anchor: typing.Literal["n", "e", "w", "s", "nw", "ne", "sw", "se", "center"] = "nw",
+        anchor: Literal["n", "e", "w", "s", "nw", "ne", "sw", "se", "center"] = "nw",
         capture_events: bool | None = None,
         gradient_animation: bool | None = None,
         auto_update: bool | None = None,
         style: type[virtual.Style] | None = None,
     ) -> None:
         """
-        * `master`: parent canvas
-        * `position`: position of the widget
-        * `text`: text of the widget
-        * `family`: font family
-        * `fontsize`: font size
-        * `weight`: weight of the text
-        * `slant`: slant of the text
-        * `underline`: whether the text is underline
-        * `overstrike`: whether the text is overstrike
-        * `justify`: justify mode of the text
-        * `command`: a function that is triggered when the hightlight button is pressed
-        * `image`: image of the widget
-        * `anchor`: anchor of the widget
-        * `capture_events`: whether detect another widget under the widget
-        * `gradient_animation`: whether enable gradient_animation
-        * `auto_update`: whether the theme manager update it automatically
-        * `style`: style of the widget
+        Args:
+            master: parent canvas.
+            position: position of the widget.
+            text: text of the widget.
+            family: font family.
+            fontsize: font size.
+            weight: weight of the text.
+            slant: slant of the text.
+            underline: whether the text is underline.
+            overstrike: whether the text is overstrike.
+            justify: justify mode of the text.
+            command: a function that is triggered when the hightlight button is pressed.
+            image: image of the widget.
+            anchor: anchor of the widget.
+            capture_events: whether detect another widget under the widget.
+            gradient_animation: whether enable gradient_animation.
+            auto_update: whether the theme manager update it automatically.
+            style: style of the widget.
         """
         super().__init__(
             master, position, utility.get_text_size(
@@ -950,7 +973,7 @@ class HighlightButton(virtual.Widget):
 
 
 class IconButton(virtual.Widget):
-    """A button with an icon on the left side"""
+    """A button with an icon on the left side."""
 
     def __init__(
         self,
@@ -961,38 +984,39 @@ class IconButton(virtual.Widget):
         text: str = "",
         family: str | None = None,
         fontsize: int | None = None,
-        weight: typing.Literal['normal', 'bold'] = "normal",
-        slant: typing.Literal['roman', 'italic'] = "roman",
+        weight: Literal['normal', 'bold'] = "normal",
+        slant: Literal['roman', 'italic'] = "roman",
         underline: bool = False,
         overstrike: bool = False,
-        justify: typing.Literal["left", "center", "right"] = "left",
-        command: collections.abc.Callable | None = None,
+        justify: Literal["left", "center", "right"] = "left",
+        command: Callable | None = None,
         image: enhanced.PhotoImage | None = None,
-        anchor: typing.Literal["n", "e", "w", "s", "nw", "ne", "sw", "se", "center"] = "nw",
+        anchor: Literal["n", "e", "w", "s", "nw", "ne", "sw", "se", "center"] = "nw",
         capture_events: bool | None = None,
         gradient_animation: bool | None = None,
         auto_update: bool | None = None,
         style: type[virtual.Style] | None = None,
     ) -> None:
         """
-        * `master`: parent canvas
-        * `position`: position of the widget
-        * `size`: size of the widget
-        * `text`: text of the widget
-        * `family`: font family
-        * `fontsize`: font size
-        * `weight`: weight of the text
-        * `slant`: slant of the text
-        * `underline`: whether the text is underline
-        * `overstrike`: whether the text is overstrike
-        * `justify`: justify mode of the text
-        * `command`: a function that is triggered when the button is pressed
-        * `image`: image of the widget
-        * `anchor`: anchor of the widget
-        * `capture_events`: whether detect another widget under the widget
-        * `gradient_animation`: whether enable gradient_animation
-        * `auto_update`: whether the theme manager update it automatically
-        * `style`: style of the widget
+        Args:
+            master: parent canvas.
+            position: position of the widget.
+            size: size of the widget.
+            text: text of the widget.
+            family: font family.
+            fontsize: font size.
+            weight: weight of the text.
+            slant: slant of the text.
+            underline: whether the text is underline.
+            overstrike: whether the text is overstrike.
+            justify: justify mode of the text.
+            command: a function that is triggered when the button is pressed.
+            image: image of the widget.
+            anchor: anchor of the widget.
+            capture_events: whether detect another widget under the widget.
+            gradient_animation: whether enable gradient_animation.
+            auto_update: whether the theme manager update it automatically.
+            style: style of the widget.
         """
         if size is None:
             size = utility.get_text_size(
@@ -1017,16 +1041,16 @@ class IconButton(virtual.Widget):
         self.feature = features.ButtonFeature(self, command=command)
 
     def get(self) -> str:
-        """Get the text of the widget"""
+        """Get the text of the widget."""
         return self.texts[0].get()
 
     def set(self, text: str) -> None:
-        """Set the text of the widget"""
+        """Set the text of the widget."""
         return self.texts[0].set(text)
 
 
 class Slider(virtual.Widget):
-    """A slider for visually resizing values"""
+    """A slider for visually resizing values."""
 
     def __init__(
         self,
@@ -1035,24 +1059,25 @@ class Slider(virtual.Widget):
         size: tuple[int, int] = (400, 30),
         *,
         default: float | None = None,
-        command: collections.abc.Callable[[float], typing.Any] | None = None,
-        anchor: typing.Literal["n", "e", "w", "s", "nw", "ne", "sw", "se", "center"] = "nw",
+        command: Callable[[float], Any] | None = None,
+        anchor: Literal["n", "e", "w", "s", "nw", "ne", "sw", "se", "center"] = "nw",
         capture_events: bool | None = None,
         gradient_animation: bool | None = None,
         auto_update: bool | None = None,
         style: type[virtual.Style] | None = None,
     ) -> None:
         """
-        * `master`: parent canvas
-        * `position`: position of the widget
-        * `size`: size of the widget
-        * `default`: default value of the widget
-        * `command`: a function that is triggered when the button is pressed
-        * `anchor`: anchor of the widget
-        * `capture_events`: whether detect another widget under the widget
-        * `gradient_animation`: whether enable gradient_animation
-        * `auto_update`: whether the theme manager update it automatically
-        * `style`: style of the widget
+        Args:
+            master: parent canvas.
+            position: position of the widget.
+            size: size of the widget.
+            default: default value of the widget.
+            command: a function that is triggered when the button is pressed.
+            anchor: anchor of the widget.
+            capture_events: whether detect another widget under the widget.
+            gradient_animation: whether enable gradient_animation.
+            auto_update: whether the theme manager update it automatically.
+            style: style of the widget.
         """
         self.value: float = 0
         self.command = command
@@ -1076,11 +1101,11 @@ class Slider(virtual.Widget):
             self.set(default)
 
     def get(self) -> float:
-        """Get the value of the slider"""
+        """Get the value of the slider."""
         return self.value
 
     def set(self, value: float, *, callback: bool = False) -> None:
-        """Set the value of the slider"""
+        """Set the value of the slider."""
         value = 1 if value > 1 else 0 if value < 0 else value
         if callback and self.command is not None:
             self.command(value)
@@ -1103,7 +1128,7 @@ class Slider(virtual.Widget):
 
 
 class SegmentedButton(virtual.Widget):
-    """A segmented button that can be used to toggle between multiple states"""
+    """A segmented button that can be used to toggle between multiple states."""
 
     def __init__(
         self,
@@ -1114,42 +1139,43 @@ class SegmentedButton(virtual.Widget):
         text: tuple[str, ...] = (),
         family: str | None = None,
         fontsize: int | None = None,
-        weight: typing.Literal['normal', 'bold'] = "normal",
-        slant: typing.Literal['roman', 'italic'] = "roman",
+        weight: Literal['normal', 'bold'] = "normal",
+        slant: Literal['roman', 'italic'] = "roman",
         underline: bool = False,
         overstrike: bool = False,
-        justify: typing.Literal["left", "center", "right"] = "left",
+        justify: Literal["left", "center", "right"] = "left",
         default: int | None = None,
-        command: collections.abc.Callable[[int | None], typing.Any] | None = None,
+        command: Callable[[int | None], Any] | None = None,
         image: tuple[enhanced.PhotoImage | None, ...] = (),
-        layout: typing.Literal["horizontal", "vertical"] = "horizontal",
-        anchor: typing.Literal["n", "e", "w", "s", "nw", "ne", "sw", "se", "center"] = "nw",
+        layout: Literal["horizontal", "vertical"] = "horizontal",
+        anchor: Literal["n", "e", "w", "s", "nw", "ne", "sw", "se", "center"] = "nw",
         capture_events: bool | None = None,
         gradient_animation: bool | None = None,
         auto_update: bool | None = None,
         style: type[virtual.Style] | None = None,
     ) -> None:
         """
-        * `master`: parent canvas
-        * `position`: position of the widget
-        * `size`: size of the widget
-        * `text`: text of the widget
-        * `family`: font family
-        * `fontsize`: font size
-        * `weight`: weight of the text
-        * `slant`: slant of the text
-        * `underline`: whether the text is underline
-        * `overstrike`: whether the text is overstrike
-        * `justify`: justify mode of the text
-        * `default`: default value of the widget
-        * `command`: a function that is triggered when the button is pressed
-        * `image`: image of the widget
-        * `layout`: layout mode of the widget
-        * `anchor`: anchor of the widget
-        * `capture_events`: whether detect another widget under the widget
-        * `gradient_animation`: whether enable gradient_animation
-        * `auto_update`: whether the theme manager update it automatically
-        * `style`: style of the widget
+        Args:
+            master: parent canvas.
+            position: position of the widget.
+            size: size of the widget.
+            text: text of the widget.
+            family: font family.
+            fontsize: font size.
+            weight: weight of the text.
+            slant: slant of the text.
+            underline: whether the text is underline.
+            overstrike: whether the text is overstrike.
+            justify: justify mode of the text.
+            default: default value of the widget.
+            command: a function that is triggered when the button is pressed.
+            image: image of the widget.
+            layout: layout mode of the widget.
+            anchor: anchor of the widget.
+            capture_events: whether detect another widget under the widget.
+            gradient_animation: whether enable gradient_animation.
+            auto_update: whether the theme manager update it automatically.
+            style: style of the widget.
         """
         self.value: int | None = None
         if not sizes:
@@ -1194,12 +1220,12 @@ class SegmentedButton(virtual.Widget):
         self.feature = features.SegmentedButtonFeature(self)
 
     def get(self) -> int | None:
-        """Get the index of the child toggle button with a value of True. If not, None is
-        returned."""
+        """Get the index of the child toggle button with a value of True. If
+        not, None is returned."""
         return self.value
 
     def set(self, value: int | None, *, callback: bool = False) -> None:
-        """Activate the child toggle button for the specified index"""
+        """Activate the child toggle button for the specified index."""
         if callback and self.command:
             self.command(value)
         for i, widget in enumerate(self.children):
@@ -1208,7 +1234,7 @@ class SegmentedButton(virtual.Widget):
 
 
 class SpinBox(virtual.Widget):
-    """A widget that makes it easy to enter numeric type data"""
+    """A widget that makes it easy to enter numeric type data."""
 
     def __init__(
         self,
@@ -1220,47 +1246,48 @@ class SpinBox(virtual.Widget):
         step: float = 1,
         family: str | None = None,
         fontsize: int | None = None,
-        weight: typing.Literal['normal', 'bold'] = "normal",
-        slant: typing.Literal['roman', 'italic'] = "roman",
+        weight: Literal['normal', 'bold'] = "normal",
+        slant: Literal['roman', 'italic'] = "roman",
         underline: bool = False,
         overstrike: bool = False,
-        align: typing.Literal["left", "right", "center"] = "left",
+        align: Literal["left", "right", "center"] = "left",
         placeholder: str = "",
         show: str | None = None,
         limit: int = math.inf,
         default: str | None = None,
-        command: collections.abc.Callable[[bool], typing.Any] | None = None,
+        command: Callable[[bool], Any] | None = None,
         image: enhanced.PhotoImage | None = None,
-        anchor: typing.Literal["n", "e", "w", "s", "nw", "ne", "sw", "se", "center"] = "nw",
+        anchor: Literal["n", "e", "w", "s", "nw", "ne", "sw", "se", "center"] = "nw",
         capture_events: bool | None = None,
         gradient_animation: bool | None = None,
         auto_update: bool | None = None,
         style: type[virtual.Style] | None = None,
     ) -> None:
         """
-        * `master`: parent canvas
-        * `position`: position of the widget
-        * `size`: size of the widget
-        * `format_spec`: format of value
-        * `step`: value of each change
-        * `family`: font family
-        * `fontsize`: font size
-        * `weight`: weight of the text
-        * `slant`: slant of the text
-        * `underline`: whether the text is underline
-        * `overstrike`: whether the text is overstrike
-        * `align`: align mode of the text
-        * `show`: display a value that obscures the original content
-        * `placeholder`: a placeholder for the prompt
-        * `limit`: limit on the number of characters
-        * `default`: default value of the widget
-        * `command`: a function that is triggered when the button is pressed
-        * `image`: image of the widget
-        * `anchor`: anchor of the widget
-        * `capture_events`: whether detect another widget under the widget
-        * `gradient_animation`: whether enable gradient_animation
-        * `auto_update`: whether the theme manager update it automatically
-        * `style`: style of the widget
+        Args:
+            master: parent canvas.
+            position: position of the widget.
+            size: size of the widget.
+            format_spec: format of value.
+            step: value of each change.
+            family: font family.
+            fontsize: font size.
+            weight: weight of the text.
+            slant: slant of the text.
+            underline: whether the text is underline.
+            overstrike: whether the text is overstrike.
+            align: align mode of the text.
+            show: display a value that obscures the original content.
+            placeholder: a placeholder for the prompt.
+            limit: limit on the number of characters.
+            default: default value of the widget.
+            command: a function that is triggered when the button is pressed.
+            image: image of the widget.
+            anchor: anchor of the widget.
+            capture_events: whether detect another widget under the widget.
+            gradient_animation: whether enable gradient_animation.
+            auto_update: whether the theme manager update it automatically.
+            style: style of the widget.
         """
         if size is None:
             size = 200, utility.get_text_size(
@@ -1289,7 +1316,7 @@ class SpinBox(virtual.Widget):
             self.set(default)
 
     def change(self, up: bool) -> None:
-        """Try change the current value"""
+        """Try change the current value."""
         if value := self.children[0].get():
             with contextlib.suppress(decimal.DecimalException):
                 value = decimal.Decimal(value) + (self.step if up else -self.step)
@@ -1298,28 +1325,28 @@ class SpinBox(virtual.Widget):
             self.children[0].set(("%"+self.format) % 0)
 
     def get(self) -> str:
-        """Get the value of the Entry"""
+        """Get the value of the Entry."""
         return self.children[0].get()
 
     def set(self, value: str) -> None:
-        """Set the text value of the Entry"""
+        """Set the text value of the Entry."""
         self.children[0].set(value)
 
     def append(self, value: str) -> None:
-        """Append text to Entry"""
+        """Append text to Entry."""
         self.children[0].append(value)
 
     def delete(self, count: int) -> None:
-        """Delete a specified amount of text"""
+        """Delete a specified amount of text."""
         self.children[0].delete(count)
 
     def clear(self) -> None:
-        """Clear the text value of the Entry"""
+        """Clear the text value of the Entry."""
         self.children[0].clear()
 
 
 class OptionButton(virtual.Widget):
-    """A button that has many options to choose"""
+    """A button that has many options to choose."""
 
     def __init__(
         self,
@@ -1330,42 +1357,43 @@ class OptionButton(virtual.Widget):
         text: tuple[str, ...] = (),
         family: str | None = None,
         fontsize: int | None = None,
-        weight: typing.Literal['normal', 'bold'] = "normal",
-        slant: typing.Literal['roman', 'italic'] = "roman",
+        weight: Literal['normal', 'bold'] = "normal",
+        slant: Literal['roman', 'italic'] = "roman",
         underline: bool = False,
         overstrike: bool = False,
-        justify: typing.Literal["left", "center", "right"] = "left",
+        justify: Literal["left", "center", "right"] = "left",
         default: int | None = None,
-        command: collections.abc.Callable[[int | None], typing.Any] | None = None,
+        command: Callable[[int | None], Any] | None = None,
         image: tuple[enhanced.PhotoImage | None, ...] = (),
-        anchor: typing.Literal["n", "e", "w", "s", "nw", "ne", "sw", "se", "center"] = "nw",
-        align: typing.Literal["up", "center", "down"] = "center",
+        anchor: Literal["n", "e", "w", "s", "nw", "ne", "sw", "se", "center"] = "nw",
+        align: Literal["up", "center", "down"] = "center",
         capture_events: bool | None = None,
         gradient_animation: bool | None = None,
         auto_update: bool | None = None,
         style: type[virtual.Style] | None = None,
     ) -> None:
         """
-        * `master`: parent canvas
-        * `position`: position of the widget
-        * `size`: size of the widget
-        * `text`: text of the widget
-        * `family`: font family
-        * `fontsize`: font size
-        * `weight`: weight of the text
-        * `slant`: slant of the text
-        * `underline`: whether the text is underline
-        * `overstrike`: whether the text is overstrike
-        * `justify`: justify mode of the text
-        * `default`: default value of the widget
-        * `command`: a function that is triggered when the button is pressed
-        * `image`: image of the widget
-        * `anchor`: anchor of the widget
-        * `align`: align of the widget
-        * `capture_events`: whether detect another widget under the widget
-        * `gradient_animation`: whether enable gradient_animation
-        * `auto_update`: whether the theme manager update it automatically
-        * `style`: style of the widget
+        Args:
+            master: parent canvas.
+            position: position of the widget.
+            size: size of the widget.
+            text: text of the widget.
+            family: font family.
+            fontsize: font size.
+            weight: weight of the text.
+            slant: slant of the text.
+            underline: whether the text is underline.
+            overstrike: whether the text is overstrike.
+            justify: justify mode of the text.
+            default: default value of the widget.
+            command: a function that is triggered when the button is pressed.
+            image: image of the widget.
+            anchor: anchor of the widget.
+            align: align of the widget.
+            capture_events: whether detect another widget under the widget.
+            gradient_animation: whether enable gradient_animation.
+            auto_update: whether the theme manager update it automatically.
+            style: style of the widget.
         """
         if size is None:
             size = sorted(utility.get_text_size(t, fontsize, family, weight=weight,
@@ -1394,8 +1422,8 @@ class OptionButton(virtual.Widget):
         if default is not None:
             self.set(default)
 
-    def _get_position(self, align: typing.Literal["up", "center", "down"]) -> tuple[int, int]:
-        """Get the position of "pop-up" SegmentedButton"""
+    def _get_position(self, align: Literal["up", "center", "down"]) -> tuple[int, int]:
+        """Get the position of "pop-up" SegmentedButton."""
         x, y = self.size[0]/2 - self.offset[0], self.size[1]/2 - self.offset[1]
         match align:
             case "up": y += self.size[1]/2 + 6
@@ -1407,7 +1435,7 @@ class OptionButton(virtual.Widget):
             self._segmented_button.forget(True)
 
     def _open_options(self) -> None:
-        """Open the options"""
+        """Open the options."""
         self.master.widgets.remove(self._segmented_button)
         self.master.widgets.append(self._segmented_button)
         for element in self._segmented_button.elements:
@@ -1423,26 +1451,26 @@ class OptionButton(virtual.Widget):
         self._segmented_button.forget(False)
 
     def _close_options(self, index: int | None = None) -> None:
-        """Close the options"""
+        """Close the options."""
         self._button.texts[0].set("" if index is None else self.text[index])
         self._segmented_button.forget(True)
         if self.command is not None:
             self.command(index)
 
     def get(self) -> int | None:
-        """Get the index of the child toggle button with a value of True. If not, None is
-        returned."""
+        """Get the index of the child toggle button with a value of True. If
+        not, None is returned."""
         return self._segmented_button.value
 
     def set(self, value: int | None, *, callback: bool = False) -> None:
-        """Activate the child toggle button for the specified index"""
+        """Activate the child toggle button for the specified index."""
         self._segmented_button.set(value, callback=True)
         if callback and self.command is not None:
             self.command(value)
 
 
 class ComboBox(virtual.Widget):
-    """An input box that can provide several options"""
+    """An input box that can provide several options."""
 
     def __init__(
         self,
@@ -1453,42 +1481,43 @@ class ComboBox(virtual.Widget):
         text: tuple[str, ...] = (),
         family: str | None = None,
         fontsize: int | None = None,
-        weight: typing.Literal['normal', 'bold'] = "normal",
-        slant: typing.Literal['roman', 'italic'] = "roman",
+        weight: Literal['normal', 'bold'] = "normal",
+        slant: Literal['roman', 'italic'] = "roman",
         underline: bool = False,
         overstrike: bool = False,
-        justify: typing.Literal["left", "center", "right"] = "left",
+        justify: Literal["left", "center", "right"] = "left",
         default: int | None = None,
-        command: collections.abc.Callable[[int | None], typing.Any] | None = None,
+        command: Callable[[int | None], Any] | None = None,
         image: tuple[enhanced.PhotoImage | None, ...] = (),
-        anchor: typing.Literal["n", "e", "w", "s", "nw", "ne", "sw", "se", "center"] = "nw",
-        align: typing.Literal["up", "down"] = "down",
+        anchor: Literal["n", "e", "w", "s", "nw", "ne", "sw", "se", "center"] = "nw",
+        align: Literal["up", "down"] = "down",
         capture_events: bool | None = None,
         gradient_animation: bool | None = None,
         auto_update: bool | None = None,
         style: type[virtual.Style] | None = None,
     ) -> None:
         """
-        * `master`: parent canvas
-        * `position`: position of the widget
-        * `size`: size of the widget
-        * `text`: text of the widget
-        * `family`: font family
-        * `fontsize`: font size
-        * `weight`: weight of the text
-        * `slant`: slant of the text
-        * `underline`: whether the text is underline
-        * `overstrike`: whether the text is overstrike
-        * `justify`: justify mode of the text
-        * `default`: default value of the widget
-        * `command`: a function that is triggered when the button is pressed
-        * `image`: image of the widget
-        * `anchor`: anchor of the widget
-        * `align`: align of the widget
-        * `capture_events`: whether detect another widget under the widget
-        * `gradient_animation`: whether enable gradient_animation
-        * `auto_update`: whether the theme manager update it automatically
-        * `style`: style of the widget
+        Args:
+            master: parent canvas.
+            position: position of the widget.
+            size: size of the widget.
+            text: text of the widget.
+            family: font family.
+            fontsize: font size.
+            weight: weight of the text.
+            slant: slant of the text.
+            underline: whether the text is underline.
+            overstrike: whether the text is overstrike.
+            justify: justify mode of the text.
+            default: default value of the widget.
+            command: a function that is triggered when the button is pressed.
+            image: image of the widget.
+            anchor: anchor of the widget.
+            align: align of the widget.
+            capture_events: whether detect another widget under the widget.
+            gradient_animation: whether enable gradient_animation.
+            auto_update: whether the theme manager update it automatically.
+            style: style of the widget.
         """
         if size is None:
             size = sorted(utility.get_text_size(t, fontsize, family, weight=weight,
@@ -1519,8 +1548,8 @@ class ComboBox(virtual.Widget):
         if default is not None:
             self.set(default)
 
-    def _get_position(self, align: typing.Literal["up", "center", "down"]) -> tuple[int, int]:
-        """Get the position of "pop-up" SegmentedButton"""
+    def _get_position(self, align: Literal["up", "center", "down"]) -> tuple[int, int]:
+        """Get the position of "pop-up" SegmentedButton."""
         x, y = self.size[0]/2 - self.offset[0], self.size[1]/2 - self.offset[1]
         match align:
             case "up": y -= self.size[1]/2
@@ -1532,7 +1561,7 @@ class ComboBox(virtual.Widget):
             self._segmented_button.forget(True)
 
     def _open_options(self) -> None:
-        """Open the options"""
+        """Open the options."""
         self.master.widgets.remove(self._segmented_button)
         self.master.widgets.append(self._segmented_button)
         for element in self._segmented_button.elements:
@@ -1548,26 +1577,26 @@ class ComboBox(virtual.Widget):
         self._segmented_button.forget(False)
 
     def _close_options(self, index: int | None = None) -> None:
-        """Close the options"""
+        """Close the options."""
         self._input_box.texts[0].set("" if index is None else self.text[index])
         self._segmented_button.forget(True)
         if self.command is not None:
             self.command(index)
 
     def get(self) -> int | None:
-        """Get the index of the child toggle button with a value of True. If not, None is
-        returned."""
+        """Get the index of the child toggle button with a value of True. If
+        not, None is returned."""
         return self._segmented_button.value
 
     def set(self, value: int | None, *, callback: bool = False) -> None:
-        """Activate the child toggle button for the specified index"""
+        """Activate the child toggle button for the specified index."""
         self._segmented_button.set(value, callback=True)
         if callback and self.command is not None:
             self.command(value)
 
 
 class Spinner(virtual.Widget):
-    """Spinners visually communicate that something is processing"""
+    """Spinners visually communicate that something is processing."""
 
     def __init__(
         self,
@@ -1576,28 +1605,30 @@ class Spinner(virtual.Widget):
         size: tuple[int, int] = (30, 30),
         *,
         default: float | None = None,
-        command: collections.abc.Callable[[float], typing.Any] | None = None,
+        command: Callable[[float], Any] | None = None,
         widths: tuple[int, int] | None = None,
-        mode: typing.Literal["determinate", "indeterminate"] = "determinate",
-        anchor: typing.Literal["n", "e", "w", "s", "nw", "ne", "sw", "se", "center"] = "nw",
+        mode: Literal["determinate", "indeterminate"] = "determinate",
+        anchor: Literal["n", "e", "w", "s", "nw", "ne", "sw", "se", "center"] = "nw",
         capture_events: bool | None = None,
         gradient_animation: bool | None = None,
         auto_update: bool | None = None,
         style: type[virtual.Style] | None = None,
     ) -> None:
         """
-        * `master`: parent canvas
-        * `position`: position of the widget
-        * `size`: size of the widget
-        * `default`: default value of the widget
-        * `command`: a function that is triggered when the progress of progress bar is 100%
-        * `widths`: width of the outside ring and inside ring
-        * `mode`: mode of the Spinner
-        * `anchor`: anchor of the widget
-        * `capture_events`: whether detect another widget under the widget
-        * `gradient_animation`: whether enable gradient_animation
-        * `auto_update`: whether the theme manager update it automatically
-        * `style`: style of the widget
+        Args:
+            master: parent canvas.
+            position: position of the widget.
+            size: size of the widget.
+            default: default value of the widget.
+            command: a function that is triggered when the progress of progress
+                bar is 100%.
+            widths: width of the outside ring and inside ring.
+            mode: mode of the Spinner.
+            anchor: anchor of the widget.
+            capture_events: whether detect another widget under the widget.
+            gradient_animation: whether enable gradient_animation.
+            auto_update: whether the theme manager update it automatically.
+            style: style of the widget.
         """
         self.value: float = 0.
         super().__init__(
@@ -1625,7 +1656,7 @@ class Spinner(virtual.Widget):
             self.set(default)
 
     def get(self) -> float:
-        """Get the progress of the Spinner"""
+        """Get the progress of the Spinner."""
         if self.mode == "indeterminate":
             warnings.warn(
                 "The mode of Spinner is 'indeterminate',"
@@ -1634,7 +1665,7 @@ class Spinner(virtual.Widget):
         return self.value
 
     def set(self, value: float, *, callback: bool = False) -> None:
-        """Set the progress of the Spinner"""
+        """Set the progress of the Spinner."""
         if self.mode == "indeterminate":
             warnings.warn(
                 "The mode of Spinner is 'indeterminate', so the method may not have an effect.",
@@ -1644,16 +1675,16 @@ class Spinner(virtual.Widget):
             self.command(value)
         self.master.itemconfigure(self.shapes[1].items[0], extent=-value*359)
 
-    @typing_extensions.override
+    @override
     def destroy(self) -> None:
-        """Destroy the widget"""
+        """Destroy the widget."""
         if self.mode == "indeterminate":
             self._spin.stop()
         return super().destroy()
 
 
 class Tooltip(virtual.Widget):
-    """A tooltip that can display additional information"""
+    """A tooltip that can display additional information."""
 
     def __init__(
         self,
@@ -1661,35 +1692,36 @@ class Tooltip(virtual.Widget):
         size: tuple[int, int] | None = None,
         *,
         text: str = "",
-        align: typing.Literal["up", "down", "right", "left", "center"] = "down",
+        align: Literal["up", "down", "right", "left", "center"] = "down",
         padding: int = 3,
         family: str | None = None,
         fontsize: int | None = None,
-        weight: typing.Literal['normal', 'bold'] = "normal",
-        slant: typing.Literal['roman', 'italic'] = "roman",
+        weight: Literal['normal', 'bold'] = "normal",
+        slant: Literal['roman', 'italic'] = "roman",
         underline: bool = False,
         overstrike: bool = False,
-        justify: typing.Literal["left", "center", "right"] = "left",
+        justify: Literal["left", "center", "right"] = "left",
         gradient_animation: bool | None = None,
         auto_update: bool | None = None,
         style: type[virtual.Style] | None = None,
     ) -> None:
         """
-        * `widget`: the associated widget
-        * `size`: size of the widget
-        * `text`: text of the widget
-        * `align`: align mode of the tooltip
-        * `padding`: extra padding between tooltip and the associated widget
-        * `family`: font family
-        * `fontsize`: font size
-        * `weight`: weight of the text
-        * `slant`: slant of the text
-        * `underline`: whether the text is underline
-        * `overstrike`: whether the text is overstrike
-        * `justify`: justify mode of the text
-        * `gradient_animation`: whether enable gradient_animation
-        * `auto_update`: whether the theme manager update it automatically
-        * `style`: style of the widget
+        Args:
+            widget: the associated widget.
+            size: size of the widget.
+            text: text of the widget.
+            align: align mode of the tooltip.
+            padding: extra padding between tooltip and the associated widget.
+            family: font family.
+            fontsize: font size.
+            weight: weight of the text.
+            slant: slant of the text.
+            underline: whether the text is underline.
+            overstrike: whether the text is overstrike.
+            justify: justify mode of the text.
+            gradient_animation: whether enable gradient_animation.
+            auto_update: whether the theme manager update it automatically.
+            style: style of the widget.
         """
         if size is None:
             size = utility.get_text_size(
@@ -1718,15 +1750,15 @@ class Tooltip(virtual.Widget):
         self.forget()
 
     def get(self) -> str:
-        """Get the text of the widget"""
+        """Get the text of the widget."""
         return self.texts[0].get()
 
     def set(self, text: str) -> None:
-        """Set the text of the widget"""
+        """Set the text of the widget."""
         return self.texts[0].set(text)
 
     def _display(self, state: str | None, _: bool) -> None:
-        """Show or hide the tooltip"""
+        """Show or hide the tooltip."""
         if state is None:
             return
         if state.startswith("hover"):
