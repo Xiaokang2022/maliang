@@ -9,7 +9,7 @@ Here are some examples of projects developed with `maliang`.
 
 !!! tip "Tips"
 
-    If you want to add your projects written in tkt to the site, no problem! As long as the following requirements are met, I will consider adding your project here!
+    If you want to add your projects written in `maliang` to the site, no problem! As long as the following requirements are met, I will consider adding your project here!
 
     - [X] Add `maliang` to *requirements.txt* and indicate which version you are using so I can find your project;
     - [X] Show a preview of your own project in README so I can show your project here;

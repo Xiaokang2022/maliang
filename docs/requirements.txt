@@ -1,5 +1,7 @@
 mkdocs
 mkdocs-material
+
+# mkdocs plugins
 mkdocs-glightbox
 mkdocs-git-committers-plugin-2
 mkdocs-git-revision-date-localized-plugin
@@ -7,6 +9,27 @@ mkdocs-statistics-plugin
 mkdocs-minify-plugin
 mkdocs-macros-plugin
 mkdocs-rss-plugin
-mkdocs-autorefs
+mkdocs-print-site-plugin
 mkdocs-markmap
 mkdocs_puml
+markdown-exec[ansi]
+
+# versioning
+mike
+
+# code documentation
+mkdocstrings
+mkdocstrings-python
+mkdocs-autorefs
+mkdocs-gen-files
+mkdocs-literate-nav
+ruff
+
+# official griffe extensions
+griffe-inherited-docstrings
+griffe-pydantic
+griffe-typingdoc
+griffe-warnings-deprecated
+
+# third-party griffe extensions
+griffe-modernized-annotations

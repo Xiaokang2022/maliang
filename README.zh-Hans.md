@@ -7,7 +7,7 @@
 <p align="center"><a title="官方网站" href="https://xiaokang2022.github.io/maliang/">https://xiaokang2022.github.io/maliang/</a></p>
 
 <p align="center">
-一个基于 <code>tkinter</code> 且控件都由 <code>Canvas</code> 绘制的轻量级 UI 框架
+一个基于 <code>tkinter</code> 且控件都由画布绘制的轻量级 UI 框架
 </p>
 
 <p align="center">

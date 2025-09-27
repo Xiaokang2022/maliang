@@ -14,7 +14,7 @@ If you ❤️ this package, please leave your ⭐ to us, thank you very much!
 ![Watchers](https://img.shields.io/github/watchers/Xiaokang2022/maliang)
 """
 
-__version__ = "3.1.4"
+__version__ = "3.1.5"
 __author__ = "Xiaokang2022 <2951256653@qq.com>"
 
 from .core import *

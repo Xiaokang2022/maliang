@@ -7,7 +7,7 @@
 <p align="center"><a title="Official Website" href="https://xiaokang2022.github.io/maliang/">https://xiaokang2022.github.io/maliang/</a></p>
 
 <p align="center">
-A lightweight UI framework based on <code>tkinter</code> with all UI drawn in <code>Canvas</code>
+A lightweight UI framework based on <code>tkinter</code> with all UI drawn in Canvas
 </p>
 
 <p align="center">

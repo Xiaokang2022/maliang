@@ -13,7 +13,7 @@ hide:
 <p align="center"><img alt="logo" src="./logo.png" /></p>
 
 <p align="center">
-A lightweight UI framework based on <code>tkinter</code> with all UI drawn in <code>Canvas</code>
+A lightweight UI framework based on <code>tkinter</code> with all UI drawn in Canvas
 </p>
 
 <p align="center">
@@ -34,12 +34,14 @@ A lightweight UI framework based on <code>tkinter</code> with all UI drawn in <c
 <a href="https://github.com/Xiaokang2022/maliang/pulse"><img alt="Insights" src="https://repobeats.axiom.co/api/embed/b4832e0ac90defe97c7e11e0c9e926793ec7135c.svg" /></a>
 </p>
 
+<p align="center" markdown>
 ![light](https://api.star-history.com/svg?repos=Xiaokang2022/maliang&type=Date&theme=light#only-light)
 ![dark](https://api.star-history.com/svg?repos=Xiaokang2022/maliang&type=Date&theme=dark#only-dark)
+</p>
 
 ## 📦 Installation
 
-Install it with the following command:
+To install this package, your Python version must be **`>=3.10`**. Install it with the following command:
 
 ```shell linenums="0"
 pip install maliang
@@ -74,6 +76,7 @@ In addition to the basic functionality, we also offer a number of extension pack
 * <https://github.com/Xiaokang2022/maliang-mpl>: support for `matplotlib`
 * <https://github.com/Xiaokang2022/maliang-media>: support for media files
 * <https://github.com/Xiaokang2022/maliang-three>: support for simple 3D drawings
+* <https://github.com/Xiaokang2022/maliang-table>: support for table widget
 
 You can install all the official extensions with the following command:
 
@@ -81,11 +84,21 @@ You can install all the official extensions with the following command:
 pip install maliang[ext]
 ```
 
+In addition, you can find all the third-party extensions that we've collected [here](https://xiaokang2022.github.io/maliang/t%26d/third-party/).
+
+!!! Warning
+
+    These packages mentioned above are not included in the source code of this project, if you use them and want to redistribute them, please follow their open source license!
+
 ## 👀 More
+
+### ℹ️ About
+
+The logo of this project is taken from the open source project: <https://github.com/microsoft/fluentui-emoji>, and the name is taken from a Chinese fairy tale: [*《神笔马良》*](https://baike.baidu.com/item/%E7%A5%9E%E7%AC%94%E9%A9%AC%E8%89%AF/14821387)
 
 ### 🖼️ Gallery
 
-The demos below are some of the things that can be achieved with the project, they may be built with the latest version of the project, or they may be built with an older version, but either way, the code for the demo below can be found in the [demo repository](https://github.com/Xiaokang2022/maliang-demos)!
+The demos below are some of the things that can be achieved with the project, they may be built with the latest version of the project, or they may be built with an older version, but either way, the code for the demo below can be found in the demo repository <https://github.com/Xiaokang2022/maliang-demos>!
 
 ??? note "Expand"
 

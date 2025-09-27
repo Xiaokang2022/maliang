@@ -13,7 +13,7 @@ hide:
 <p align="center"><img alt="logo" src="./logo.png" /></p>
 
 <p align="center">
-一个基于 <code>tkinter</code> 且控件都由 <code>Canvas</code> 绘制的轻量级 UI 框架
+一个基于 <code>tkinter</code> 且控件都由画布绘制的轻量级 UI 框架
 </p>
 
 <p align="center">
@@ -34,12 +34,14 @@ hide:
 <a href="https://github.com/Xiaokang2022/maliang/pulse"><img alt="Insights" src="https://repobeats.axiom.co/api/embed/b4832e0ac90defe97c7e11e0c9e926793ec7135c.svg" /></a>
 </p>
 
+<p align="center" markdown>
 ![light](https://api.star-history.com/svg?repos=Xiaokang2022/maliang&type=Date&theme=light#only-light)
 ![dark](https://api.star-history.com/svg?repos=Xiaokang2022/maliang&type=Date&theme=dark#only-dark)
+</p>
 
 ## 📦 安装
 
-用以下命令进行安装：
+要安装该包，你的 Python 版本必须 **`>=3.10`**。用以下命令进行安装：
 
 ```shell linenums="0"
 pip install maliang
@@ -74,6 +76,7 @@ pip install maliang[opt]
 * <https://github.com/Xiaokang2022/maliang-mpl>: 提供 `matplotlib` 包的相关支持
 * <https://github.com/Xiaokang2022/maliang-media>: 提供媒体文件的相关支持
 * <https://github.com/Xiaokang2022/maliang-three>: 提供简单 3D 绘图的相关支持
+* <https://github.com/Xiaokang2022/maliang-table>: 提供表格控件的相关支持
 
 用以下命令可以安装全部的官方扩展包：
 
@@ -81,11 +84,21 @@ pip install maliang[opt]
 pip install maliang[ext]
 ```
 
+此外，你还可以在 [这里](https://xiaokang2022.github.io/maliang/t%26d/third-party/) 找到所有已被我们收集到的第三方扩展包。
+
+!!! Warning "特别说明"
+
+    上述包并不包含在本项目的源代码中，如果你使用了它们并想要再分发，请遵循它们的开源协议！
+
 ## 👀 更多
+
+### ℹ️ 关于
+
+本项目的徽标取自开源项目：<https://github.com/microsoft/fluentui-emoji>，名称取自中国童话故事：[*《神笔马良》*](https://baike.baidu.com/item/%E7%A5%9E%E7%AC%94%E9%A9%AC%E8%89%AF/14821387)
 
 ### 🖼️ 画廊
 
-下面是一些可以用该项目实现的演示，它们可能是用该项目的最新版本构建的，也可能是用旧版构建的，但无论怎样，它们的代码都可以在[演示存储库](https://github.com/Xiaokang2022/maliang-demos)中找到！
+下面是一些可以用该项目实现的演示，它们可能是用该项目的最新版本构建的，也可能是用旧版构建的，但无论怎样，它们的代码都可以在演示存储库 <https://github.com/Xiaokang2022/maliang-demos> 中找到！
 
 ??? note "展开"
 
