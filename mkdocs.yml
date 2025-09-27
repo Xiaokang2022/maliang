@@ -1,3 +1,5 @@
+# https://github.com/Xiaokang2022/Xiaokang2022.github.io/blob/main/mkdocs.yml
+
 site_name: maliang # 站点名称
 site_url: https://Xiaokang2022.github.io/maliang/ # 站点链接
 repo_url: https://github.com/Xiaokang2022/maliang # 仓库地址
@@ -61,18 +63,42 @@ markdown_extensions:
 
   - pymdownx.extra # 见上面 Python Markdown 配置说明
 
-  - pymdownx.blocks.admonition # 支持更高级提示框语法（可能与 admonition 混淆）
-  - pymdownx.blocks.caption # 支持更高级标题语法
   - pymdownx.blocks.definition # 支持更高级的定义块语法（可能与 def_list 混淆）
   - pymdownx.blocks.details # 支持更高级的提示框布局（可能与 pymdownx.details 混淆）
   - pymdownx.blocks.html # 支持一些更高级的 Markdown 内嵌 HTML 语法（pymdownx.blocks 默认开启）
-  - pymdownx.blocks.tab # 支持更高级的标签块写法（可能与 pymdownx.tabbed 混淆）
+  - pymdownx.blocks.tab: # 支持更高级的标签块写法（可能与 pymdownx.tabbed 混淆）
+      alternate_style: True
+      combine_header_slug: True
+      slugify:
+        !!python/object/apply:pymdownx.slugs.slugify { kwds: { case: lower } }
+  - pymdownx.blocks.admonition: # 支持更高级提示框语法（可能与 admonition 混淆）
+      types:
+        - new
+        - settings
+        - note
+        - abstract
+        - info
+        - tip
+        - success
+        - question
+        - warning
+        - failure
+        - danger
+        - bug
+        - example
+        - quote
+  - pymdownx.blocks.caption: # 支持更高级标题语法
+      types:
+        - name: figure-caption
+          prefix: "图 {} "
+        - name: table-caption
+          prefix: "表 {} "
 
   - pymdownx.betterem # 斜体与粗体优化，更好的嵌套使用
   - pymdownx.caret # 文本下划线及上标
   - pymdownx.critic # 支持 Critic Markup 语法
   - pymdownx.details # 支持提示框的折叠
-  - pymdownx.fancylists  # 高级列表
+  - pymdownx.fancylists # 高级列表
   - pymdownx.inlinehilite # 行内代码高亮
   - pymdownx.keys # 按键高亮优化，增加图标
   - pymdownx.mark # 文本高亮
@@ -97,6 +123,7 @@ markdown_extensions:
       anchor_linenums: true # 用锚链接包装代码行号，便于超链接和共享（就是行号可以像锚点一样被点击）
       line_spans: __span # 这对于高亮功能正常工作至关重要
       pygments_lang_class: true # 对于自定义注释标记的运行至关重要
+      default_lang: python # 默认解析的语言
       # pygments_style: one-dark # 代码高亮风格，见 https://pygments.org/styles/
       # noclasses: true  # 使用 pygments_style 必须开启
       # auto_title: true # 自动为所有代码块添加一个标题
@@ -122,6 +149,9 @@ markdown_extensions:
       custom_fences:
         - name: mermaid # 允许 mermaid 图表语法
           class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+        - name: markmap # 允许 markmap 图表语法
+          class: language-markmap
           format: !!python/name:pymdownx.superfences.fence_code_format
 
   - pymdownx.tabbed: # 选项卡
@@ -170,7 +200,7 @@ theme: # 此项各个设定因主题而异
     - media: "(prefers-color-scheme: light)" # 亮色主题
       scheme: default
       primary: white
-      accent: green
+      accent: light blue
       toggle:
         icon: material/weather-sunny
         name: 明亮主题
@@ -250,10 +280,10 @@ extra: # 额外设定
           note: 感谢您的反馈！
 
 extra_javascript:
-  - js/click-colorful.js # 鼠标点击效果
-  - js/shortcuts.js # 绑定左右键换页的键盘快捷键
-  - js/katex.js # 数学表达式
-  - js/tablesort.js # 表格排序功能
+  - https://xiaokang2022.github.io/js/click-colorful.js # 鼠标点击效果
+  - https://xiaokang2022.github.io/js/shortcuts.js # 绑定左右键换页的键盘快捷键
+  - https://xiaokang2022.github.io/js/katex.js # 数学表达式
+  - https://xiaokang2022.github.io/js/tablesort.js # 表格排序功能
   - https://unpkg.com/katex@latest/dist/katex.min.js # 数学表达式
   - https://unpkg.com/katex@latest/dist/contrib/auto-render.min.js # 自动渲染数学表达式
   - https://unpkg.com/tablesort@latest/dist/tablesort.min.js # 表格排序功能运行环境（默认文本类型）
@@ -267,10 +297,10 @@ extra_javascript:
   - https://unpkg.com/markmap-view@latest/dist/browser/index.js # markmap 运行环境
 
 extra_css:
-  - css/extra.css # 加载自定义的样式
+  - https://xiaokang2022.github.io/css/extra.css # 加载自定义的样式
   - https://unpkg.com/katex@latest/dist/katex.min.css # 数学表达式
   - https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css # 图标字体库
-  - https://cdnjs.cloudflare.com/ajax/libs/lxgw-wenkai-screen-webfont/1.5.0/style.min.css # 设置字体（霞鹜文楷）【版本不能再更高了，会导致公式字体变小】
+  - https://cdnjs.cloudflare.com/ajax/libs/lxgw-wenkai-screen-webfont/1.7.0/style.min.css # 设置字体（霞鹜文楷）
 
 plugins:
   # 内置插件
@@ -283,9 +313,11 @@ plugins:
       pagination_keep_content: true
       pagination_format: "$link_first $link_previous ~2~ $link_next $link_last"
   # 第三方插件
+  - mike:
   - macros:
+  - markdown-exec:
   - statistics:
-      page_template: overrides\statistics_template.html
+      page_template: overrides/statistics_template.html
   - markmap:
       d3_version: ""
       lib_version: ""
@@ -305,12 +337,15 @@ plugins:
   - plantuml:
       puml_url: https://www.plantuml.com/plantuml/
       theme:
-        light: material/green-light
+        light: material/blue-light
         dark: material/amber-dark
   - git-revision-date-localized:
       enable_creation_date: true
       type: timeago
-  - git-committers:
+  - git-authors: # 通过本地 git 存储库获取贡献者
+      add_co_authors: true
+      sort_authors_by: contribution
+  - git-committers: # 通过云端 git 存储库获取贡献者
       repository: Xiaokang2022/maliang
       branch: main
       token: !ENV GH_TOKEN # 需要自行在终端中设置临时环境变量，强烈不建议显式地在此处设置 token
@@ -318,10 +353,52 @@ plugins:
         - web-flow
   - autorefs:
       resolve_closest: true
+  - literate-nav:
+      nav_file: summary.md
+  # - gen-files:
+  #     scripts:
+  #     - scripts/gen_doc_pages.py
+  - mkdocstrings:
+      handlers:
+        python:
+          inventories:  # 无法联网的话必须删除这个
+          - https://docs.python.org/3/objects.inv
+          options:
+            show_bases: true
+            show_source: false
+            heading_level: 2
+            parameter_headings: true
+            show_symbol_type_heading: true
+            show_symbol_type_toc: true
+            members_order: source
+            summary: true
+            docstring_section_style: spacy
+            separate_signature: true
+            show_signature_annotations: true
+            annotations_path: source
+            line_length: 100
+            overloads_only: true
+            merge_init_into_class: true
+            signature_crossrefs: true
+            filters: ["!^_"]
+            show_root_full_path: false
+            extensions:
+            - griffe_sphinx:
+            - griffe_inherited_docstrings:
+            - griffe_pydantic:
+                schema: true
+            - griffe_typingdoc:
+            - griffe_warnings_deprecated:
+            - griffe_modernized_annotations:
   - minify:
       minify_html: true
       htmlmin_opts:
         remove_comments: true
+  - print-site:
+      print_page_title: Documentation
+      print_page_basename: downloads
+      enumerate_headings: false
+      enumerate_figures: false
 
 exclude_docs: en/
 

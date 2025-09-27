@@ -18,7 +18,7 @@ theme:
     - media: "(prefers-color-scheme: light)"
       scheme: default
       primary: white
-      accent: green
+      accent: light blue
       toggle:
         icon: material/weather-sunny
         name: Light Mode
