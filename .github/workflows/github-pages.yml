@@ -16,6 +16,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@main
+        with:
+          fetch-depth: 0
 
       - name: Configure Git Credentials
         run: |
