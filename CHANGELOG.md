@@ -12,6 +12,28 @@
 > * 🟠 **Deprecated / 弃用**
 > * 🟤 **Refactored / 重构**
 
+## 🔖 `3.1.5`
+
+🕓 *Release Date / 发布日期 : 2025-09-27*
+
+🟢 **Added / 新增**
+
+* Add a new extension package: [`maliang-table`](https://github.com/Xiaokang2022/maliang-table)  
+新增了一个扩展包：[`maliang-table`](https://github.com/Xiaokang2022/maliang-table)
+
+🟣 **Fixed / 修复**
+
+* Fix typos in the parameters of some functions in submodules `color.rgb` and `color.hsl`  
+修复子模块 `color.rgb` 和 `color.hsl` 中一些函数的参数的错别字
+
+* Fixed a typo in the instance variable `initial_image` of the class `virtual.Image`  
+修复了类 `virtual.Image` 的实例变量 `initial_image` 的错别字
+
+🟤 **Refactored / 重构**
+
+* Improve code for readability and maintainability  
+改善代码，提高可读性和可维护性
+
 ## 🔖 `3.1.4`
 
 🕓 *Release Date / 发布日期 : 2025-08-02*
