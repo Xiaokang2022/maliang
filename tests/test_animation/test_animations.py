@@ -153,7 +153,6 @@ class TestMoveWindow(unittest.TestCase):
     def tearDown(self) -> None:
         self.tk.destroy()
 
-    @unittest.skip("TEMP")  # TODO
     def test_init(self) -> None:
         animations.MoveWindow(self.tk, (-99, -99), 1, fps=1).command(1)
         animations.MoveWindow(self.top, (-99, -99), 1, fps=1).command(1)
