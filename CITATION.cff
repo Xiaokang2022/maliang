@@ -1,0 +1,35 @@
+# This CITATION.cff file was generated with cffinit.
+# Visit https://bit.ly/cffinit to generate yours today!
+
+cff-version: 1.2.0
+title: maliang
+message: >-
+  If you use this software, please cite it using the
+  metadata from this file.
+type: software
+authors:
+  - given-names: Zhikang
+    family-names: Yan
+    email: 2951256653@qq.com
+    orcid: 'https://orcid.org/0009-0009-0375-6691'
+identifiers:
+  - type: url
+    value: >-
+      https://github.com/Xiaokang2022/maliang/releases/tag/3.1.5
+    description: The GitHub release URL of tag 3.1.5
+repository-code: 'https://github.com/Xiaokang2022/maliang'
+url: 'https://xiaokang2022.github.io/maliang/'
+abstract: >-
+  A lightweight UI framework based on tkinter with all UI
+  drawn in Canvas.
+keywords:
+  - tkinter
+  - gui
+  - ui
+  - cross-platform
+  - themed
+  - typed
+license: MIT
+commit: 7776e761041e651cc3c85e92a080f65bd1750e64
+version: 3.1.5
+date-released: '2025-09-27'
