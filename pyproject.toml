@@ -61,7 +61,7 @@ version = { attr = "maliang.__version__" }
 include = ["maliang*"]
 
 [tool.pylint]
-output-format = "colorized"
+output-format = "github,colorized"
 reports = "y"
 fail-on = "E,F"
 fail-under = 9
