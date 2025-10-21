@@ -22,7 +22,7 @@ import math
 import platform
 import sys
 import tkinter
-from typing import Any, Final, Literal
+from typing import Any, ClassVar, Final, Literal
 
 
 class _DefaultRootDescriptor:
@@ -53,12 +53,12 @@ class Env:
     """
 
     # Global configurations
-    system: str
-    theme: Literal["light", "dark"]
+    system: ClassVar[str]
+    theme: ClassVar[Literal["light", "dark"]]
 
     # Default parameters for widgets
-    gradient_animation: bool
-    auto_update: bool
+    gradient_animation: ClassVar[bool]
+    auto_update: ClassVar[bool]
 
     # Dynamic value
     root = _DefaultRootDescriptor()
@@ -92,8 +92,8 @@ class Font:
         size (int): The default font size, negative value means size in pixels.
     """
 
-    family: str
-    size: int
+    family: ClassVar[str]
+    size: ClassVar[int]
 
     @classmethod
     def reset(cls) -> None:
