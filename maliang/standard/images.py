@@ -10,20 +10,17 @@ __all__ = (
     # "Smoke",
 )
 
-from typing import TYPE_CHECKING
+from typing import Any
 
 from typing_extensions import override
+
+from ..core import virtual
+from ..toolbox import enhanced
 
 try:
     from PIL import Image
 except ImportError:
     Image = None
-
-from ..core import virtual
-from ..toolbox import enhanced
-
-if TYPE_CHECKING:
-    from typing import Any
 
 
 class StillImage(virtual.Image):

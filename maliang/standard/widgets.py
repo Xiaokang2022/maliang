@@ -33,7 +33,8 @@ import decimal
 import itertools
 import math
 import warnings
-from typing import TYPE_CHECKING
+from collections.abc import Callable
+from typing import TYPE_CHECKING, Any, Literal
 
 from typing_extensions import override
 
@@ -43,9 +44,6 @@ from ..toolbox import utility
 from . import features, images, shapes, styles, texts
 
 if TYPE_CHECKING:
-    from collections.abc import Callable
-    from typing import Any, Literal
-
     from ..core import containers
     from ..toolbox import enhanced
 

@@ -26,15 +26,12 @@ __all__ = (
 )
 
 import copy
-from typing import TYPE_CHECKING
+import types
+from typing import Literal
 
 from typing_extensions import override
 
 from ..core import virtual
-
-if TYPE_CHECKING:
-    import types
-    from typing import Literal
 
 
 class TextStyle(virtual.Style):

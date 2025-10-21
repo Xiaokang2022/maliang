@@ -23,7 +23,8 @@ __all__ = (
     "SpinBoxFeature",
 )
 
-from typing import TYPE_CHECKING
+from collections.abc import Callable
+from typing import TYPE_CHECKING, Any
 
 from typing_extensions import override
 
@@ -34,8 +35,6 @@ from ..toolbox import utility
 
 if TYPE_CHECKING:
     import tkinter
-    from collections.abc import Callable
-    from typing import Any
 
 
 class TextFeature(virtual.Feature):

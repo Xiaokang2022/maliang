@@ -14,12 +14,9 @@ __all__ = (
 
 import operator
 import statistics
-from typing import TYPE_CHECKING
+from collections.abc import Callable
 
 from ..animation import controllers
-
-if TYPE_CHECKING:
-    from collections.abc import Callable
 
 
 def contrast(

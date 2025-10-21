@@ -27,7 +27,8 @@ import sys
 import threading
 import traceback
 import warnings
-from typing import TYPE_CHECKING
+from collections.abc import Callable
+from typing import TYPE_CHECKING, Any, Literal
 
 from ..core import configs
 from ..toolbox import utility
@@ -63,8 +64,6 @@ except ImportError:
 
 if TYPE_CHECKING:
     import tkinter
-    from collections.abc import Callable
-    from typing import Any, Literal
 
 _callback_events: dict[Callable[..., Any], tuple] = {}
 """Events that are responded to when the system theme changes."""

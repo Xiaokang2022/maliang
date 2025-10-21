@@ -21,8 +21,8 @@ __all__ = (
     "ScaleFontSize",
 )
 
-from collections.abc import Sequence
-from typing import TYPE_CHECKING, overload
+from collections.abc import Callable, Sequence
+from typing import TYPE_CHECKING, Any, overload
 
 from ..color import convert, rgb
 from ..core import configs, containers
@@ -30,8 +30,6 @@ from . import controllers
 
 if TYPE_CHECKING:
     import tkinter
-    from collections.abc import Callable
-    from typing import Any
 
     from ..core import virtual
 

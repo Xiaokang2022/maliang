@@ -20,14 +20,11 @@ __all__ = (
 
 import math
 import warnings
-from typing import TYPE_CHECKING
+from typing import Any, Literal
 
 from typing_extensions import override
 
 from ..core import virtual
-
-if TYPE_CHECKING:
-    from typing import Any, Literal
 
 
 class Line(virtual.Shape):

@@ -16,11 +16,8 @@ import tkinter
 import tkinter.colorchooser
 import tkinter.filedialog
 import warnings
-from typing import TYPE_CHECKING
-
-if TYPE_CHECKING:
-    from collections.abc import Callable, Sequence
-    from typing import Any, Literal
+from collections.abc import Callable, Sequence
+from typing import Any, Literal
 
 
 def _get_temp_root() -> tkinter.Tk:

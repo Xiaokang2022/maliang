@@ -3,17 +3,17 @@
 
 """Controller generator and standard control functions.
 
-Definition of control function:
+Definition of control function::
 
     def control_function(t: float, /) -> float:
-        \"""Control function for animation.
+        '''Control function for animation.
 
         Args:
             t: the percentage of time.
 
         Returns:
             a multiple of the cardinality of the animation.
-        \"""
+        '''
 """
 
 from __future__ import annotations as _
@@ -30,11 +30,8 @@ __all__ = (
 import functools
 import math
 import warnings
-from typing import TYPE_CHECKING, overload
-
-if TYPE_CHECKING:
-    from collections.abc import Callable
-    from typing import Literal
+from collections.abc import Callable
+from typing import Literal, overload
 
 
 def _map_t(start: float, end: float) -> Callable[[float], float]:

@@ -22,10 +22,7 @@ import math
 import platform
 import sys
 import tkinter
-from typing import TYPE_CHECKING
-
-if TYPE_CHECKING:
-    from typing import Any, Final, Literal
+from typing import Any, Final, Literal
 
 
 class _DefaultRootDescriptor:
@@ -89,7 +86,7 @@ class Env:
 
 class Font:
     """Configurations for default font.
-    
+
     Attributes:
         family (str): The default font family.
         size (int): The default font size, negative value means size in pixels.

@@ -14,15 +14,13 @@ import bisect
 import itertools
 import tkinter.font
 import warnings
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any, Literal
 
 from typing_extensions import override
 
 from ..core import virtual
 
 if TYPE_CHECKING:
-    from typing import Any, Literal
-
     from ..core import containers
 
 

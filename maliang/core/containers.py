@@ -24,20 +24,16 @@ import sys
 import tkinter
 import tkinter.font
 import traceback
-from typing import TYPE_CHECKING
+from collections.abc import Callable
+from typing import TYPE_CHECKING, Any, Final, Literal
 
-from typing_extensions import override
+from typing_extensions import Self, override
 
 from ..theme import manager
 from ..toolbox import enhanced, utility
 from . import configs
 
 if TYPE_CHECKING:
-    from collections.abc import Callable
-    from typing import Any, Final, Literal
-
-    from typing_extensions import Self
-
     from . import virtual
 
 

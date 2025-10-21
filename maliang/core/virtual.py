@@ -37,9 +37,10 @@ import tkinter.font
 import traceback
 import types
 import warnings
-from typing import TYPE_CHECKING
+from collections.abc import Callable
+from typing import TYPE_CHECKING, Any, Literal
 
-from typing_extensions import override
+from typing_extensions import Self, override
 
 from ..animation import animations
 from ..color import convert, rgb
@@ -47,11 +48,6 @@ from ..theme import manager
 from . import configs
 
 if TYPE_CHECKING:
-    from collections.abc import Callable
-    from typing import Any, Literal
-
-    from typing_extensions import Self
-
     from ..toolbox import enhanced
     from . import containers
 

@@ -24,7 +24,8 @@ import sys
 import tkinter
 import tkinter.font
 import traceback
-from typing import TYPE_CHECKING
+from collections.abc import Callable
+from typing import Any
 
 from ..core import configs, virtual
 from . import enhanced
@@ -33,10 +34,6 @@ try:
     from PIL import Image
 except ImportError:
     Image = None
-
-if TYPE_CHECKING:
-    from collections.abc import Callable
-    from typing import Any
 
 
 class Trigger:
