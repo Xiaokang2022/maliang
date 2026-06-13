@@ -58,7 +58,7 @@ urls."Source code" = "https://github.com/Xiaokang2022/maliang"
 version = { attr = "maliang.__version__" }
 
 [tool.setuptools.packages.find]
-include = ["maliang*"]
+include = ["src*"]
 
 [tool.pylint]
 output-format = "github,colorized"
