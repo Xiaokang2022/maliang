@@ -584,6 +584,9 @@ class Canvas(tkinter.Canvas, Misc):
         for _n in "<Motion>", "<B1-Motion>", "<B2-Motion>", "<B3-Motion>":
             self.bind(_n, lambda e, n=_n: self.on_motion(e, n))
 
+        # When mouse leaves this Canvas, clear hover/active states of widgets
+        self.bind("<Leave>", lambda e: self._on_leave(e))
+
         for _n in "<ButtonRelease-1>", "<ButtonRelease-2>", "<ButtonRelease-3>":
             self.bind(_n, lambda e, n=_n: self.on_release(e, n))
 
@@ -680,7 +683,22 @@ class Canvas(tkinter.Canvas, Misc):
             del self.__dict__["ratios"]  # Clear cache to update the ratios
 
         if self._auto_zoom:
+            # If size hasn't changed (only position changed), skip scaling.
+            # This prevents moving the Canvas (place x/y changes) from
+            # repeatedly triggering automatic zoom operations per frame.
+            if self._size == size:
+                # still need to update child canvases' zoom state
+                for canvas in self.canvases:
+                    canvas.zoom()
+                return
+
             relative_ratio = self._size[0]/size[0], self._size[1]/size[1]
+            # If the relative ratio is effectively 1, avoid unnecessary work.
+            if abs(relative_ratio[0] - 1.0) < 1e-12 and abs(relative_ratio[1] - 1.0) < 1e-12:
+                for canvas in self.canvases:
+                    canvas.zoom()
+                return
+
             self._zoom_tk_widgets(relative_ratio)
 
             for widget in self.widgets:
@@ -767,6 +785,22 @@ class Canvas(tkinter.Canvas, Misc):
                         event.x = 9999
                 elif widget.capture_events:
                     event.x = 9999
+        self.trigger_config.update(cursor="arrow")
+
+    def _on_leave(self, event: tkinter.Event) -> None:
+        """Handle mouse leaving the Canvas: normalize widget states."""
+        for widget in tuple(self.widgets):
+            if not hasattr(widget, "feature") or widget.disappeared:
+                continue
+            s = widget.state
+            if s.startswith("hover"):
+                new_state = "normal" + s[len("hover"):]
+                if new_state != s:
+                    widget.update(new_state)
+            elif s.startswith("active"):
+                new_state = "normal" + s[len("active"):]
+                if new_state != s:
+                    widget.update(new_state)
         self.trigger_config.update(cursor="arrow")
 
     def on_click(self, event: tkinter.Event, name: str) -> None:
