@@ -29,11 +29,11 @@ A lightweight UI framework based on <code>tkinter</code> with all UI drawn in Ca
 </p>
 
 <p align="center">
-    <a href="https://star-history.com/#Xiaokang2022/maliang&Date">
+    <a href="https://star-history.dera.page/#Xiaokang2022/maliang&Date">
         <picture>
-            <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=Xiaokang2022/maliang&type=Date&theme=dark" />
-            <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=Xiaokang2022/maliang&type=Date" />
-            <img src="https://api.star-history.com/svg?repos=Xiaokang2022/maliang&type=Date" />
+            <source media="(prefers-color-scheme: dark)" srcset="https://star-history.dera.page/svg?repos=Xiaokang2022/maliang&type=Date&theme=dark" />
+            <source media="(prefers-color-scheme: light)" srcset="https://star-history.dera.page/svg?repos=Xiaokang2022/maliang&type=Date" />
+            <img src="https://star-history.dera.page/svg?repos=Xiaokang2022/maliang&type=Date" />
         </picture>
     </a>
 </p>

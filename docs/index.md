@@ -35,8 +35,8 @@ hide:
 </p>
 
 <p align="center" markdown>
-![light](https://api.star-history.com/svg?repos=Xiaokang2022/maliang&type=Date&theme=light#only-light)
-![dark](https://api.star-history.com/svg?repos=Xiaokang2022/maliang&type=Date&theme=dark#only-dark)
+![light](https://star-history.dera.page/svg?repos=Xiaokang2022/maliang&type=Date&theme=light#only-light)
+![dark](https://star-history.dera.page/svg?repos=Xiaokang2022/maliang&type=Date&theme=dark#only-dark)
 </p>
 
 ## 📦 安装
