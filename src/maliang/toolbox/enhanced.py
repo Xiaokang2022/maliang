@@ -26,7 +26,7 @@ if ImageTk is None:
         @functools.cached_property
         def _data(self) -> list[list[str]]:
             """Image data in the form of a string."""
-            return [line.split() for line in self.tk.call(self, "data")]
+            return [row.split() for row in self.tk.splitlist(self.tk.call(self, "data"))]
 
         @functools.cached_property
         def _transparency_data(self) -> list[list[bool]]:
