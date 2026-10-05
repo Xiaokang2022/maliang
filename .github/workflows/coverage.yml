@@ -39,9 +39,7 @@ jobs:
 
     - name: Generate coverage report
       run: |
-        pip install pytest
-        pip install pytest-cov
-        pip install pytest-rerunfailures
+        pip install -r tests/requirements.txt
         pip install .[opt]
         pytest --cov --cov-report=xml:coverage-${{ matrix.os }}.xml --junitxml=junit-${{ matrix.os }}.xml
 

@@ -68,5 +68,9 @@ fail-on = "E,F"
 fail-under = 9
 disable = 'line-too-long'
 
+[tool.coverage.run]
+source = ["src"]
+omit = ["*/tests/*"]
+
 [tool.pytest.ini_options]
-addopts = ["--color=yes", "--reruns=3", "--doctest-modules"]
+addopts = ["-v", "--color=yes", "--reruns=3", "--doctest-modules"]
