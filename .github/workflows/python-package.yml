@@ -25,6 +25,7 @@ jobs:
       uses: actions/setup-python@main
       with:
         python-version: ${{ matrix.python-version }}
+        allow-prereleases: true
 
     - name: Install the GUI environment (Ubuntu only)
       if: runner.os == 'Linux'
