@@ -9,7 +9,7 @@ maintainers = [{ name = "Xiaokang2022" }, { email = "2951256653@qq.com" }]
 description = "A lightweight UI framework based on tkinter with all UI drawn in Canvas."
 readme = "README.md"
 license = { text = "MIT" }
-requires-python = ">=3.10"
+requires-python = ">=3.11"
 keywords = [
     "tkinter",
     "gui",
