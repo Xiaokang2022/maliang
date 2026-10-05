@@ -147,21 +147,33 @@ class TestMoveWindowTk(unittest.TestCase):
 class TestMoveWindow(unittest.TestCase):
 
     def setUp(self) -> None:
-        self.tk = containers.Tk(position=(200, 200))
-        self.top = containers.Toplevel(self.tk, position=(200, 200))
+        # NOTE: The default size (1280x720) is larger than the virtual screen
+        # of some CI runners (the macOS runner only has about 1176x694). The
+        # window manager of macOS moves a window that cannot be placed at the
+        # requested position, so a small window is used here to make sure that
+        # the requested position is always applied as it is.
+        self.tk = containers.Tk((200, 200), position=(200, 200))
+        self.top = containers.Toplevel(self.tk, (200, 200), position=(200, 200))
+
+        self.tk.update()  # let the window manager apply the position
+        self.top.update()
 
     def tearDown(self) -> None:
         self.tk.destroy()
 
     def test_init(self) -> None:
+        # NOTE: MoveWindow moves a window by a relative offset, so the result
+        # depends on the position that is really applied to the window.
+        init_x, init_y = self.tk.winfo_x(), self.top.winfo_y()
+
         animations.MoveWindow(self.tk, (-99, -99), 1, fps=1).command(1)
         animations.MoveWindow(self.top, (-99, -99), 1, fps=1).command(1)
 
         self.tk.update()
         self.top.update()
 
-        self.assertEqual(self.tk.winfo_x(), 101)
-        self.assertEqual(self.top.winfo_y(), 101)
+        self.assertEqual(self.tk.winfo_x(), init_x - 99)
+        self.assertEqual(self.top.winfo_y(), init_y - 99)
 
 
 class TestMoveTkWidget(unittest.TestCase):
