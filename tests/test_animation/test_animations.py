@@ -4,21 +4,22 @@ import doctest
 import tkinter
 import unittest
 
+import tests
 from maliang.animation import animations
 from maliang.core import containers
 from maliang.standard import widgets
 
 
-def load_tests(loader: unittest.TestLoader, tests: unittest.TestSuite, pattern: str | None) -> unittest.TestSuite:
+def load_tests(loader: unittest.TestLoader, suite: unittest.TestSuite, pattern: str | None) -> unittest.TestSuite:
     del loader, pattern
-    tests.addTests(doctest.DocTestSuite(animations))
-    return tests
+    suite.addTests(doctest.DocTestSuite(animations))
+    return suite
 
 
 class TestAnimation(unittest.TestCase):
 
     def setUp(self):
-        self.tk = containers.Tk()
+        self.tk = tests.window()
 
     def tearDown(self):
         self.tk.destroy()
@@ -125,13 +126,15 @@ class TestAnimation(unittest.TestCase):
 class TestMoveWindowTk(unittest.TestCase):
 
     def setUp(self) -> None:
-        self.tk = tkinter.Tk()
-        self.tk.geometry("+100+100")
+        # NOTE: The root window is shared by all test cases (see `tests`), so
+        # that no root window is destroyed during the test session.
+        self.tk = tests.root()
+        self.tk.wm_geometry("+100+100")
         self.top = tkinter.Toplevel(self.tk)
         self.top.geometry("+100+100")
 
     def tearDown(self) -> None:
-        self.tk.destroy()
+        self.top.destroy()
 
     def test_init(self) -> None:
         animations.MoveWindow(self.tk, (99, 99), 1, fps=1).command(1)
@@ -152,8 +155,8 @@ class TestMoveWindow(unittest.TestCase):
         # window manager of macOS moves a window that cannot be placed at the
         # requested position, so a small window is used here to make sure that
         # the requested position is always applied as it is.
-        self.tk = containers.Tk((200, 200), position=(200, 200))
-        self.top = containers.Toplevel(self.tk, (200, 200), position=(200, 200))
+        self.tk = tests.window((200, 200), position=(200, 200))
+        self.top = tests.window((200, 200), position=(200, 200))
 
         self.tk.update()  # let the window manager apply the position
         self.top.update()
@@ -179,7 +182,7 @@ class TestMoveWindow(unittest.TestCase):
 class TestMoveTkWidget(unittest.TestCase):
 
     def setUp(self) -> None:
-        self.tk = containers.Tk()
+        self.tk = tests.window()
         self.widget = tkinter.Label(self.tk)
         self.widget2 = tkinter.Label(self.tk)
         self.widget2.pack()
@@ -204,7 +207,7 @@ class TestMoveTkWidget(unittest.TestCase):
 class TestMoveWidget(unittest.TestCase):
 
     def setUp(self) -> None:
-        self.tk = containers.Tk()
+        self.tk = tests.window()
         self.cv = containers.Canvas(self.tk)
         self.widget = widgets.Button(self.cv, (10, 10))
         self.widget2 = widgets.Button(self.cv, (10, 10))
@@ -224,7 +227,7 @@ class TestMoveWidget(unittest.TestCase):
 class TestMoveElement(unittest.TestCase):
 
     def setUp(self) -> None:
-        self.tk = containers.Tk()
+        self.tk = tests.window()
         self.cv = containers.Canvas(self.tk)
         self.widget = widgets.Button(self.cv, (10, 10))
 
@@ -243,7 +246,7 @@ class TestMoveElement(unittest.TestCase):
 class TestMoveItem(unittest.TestCase):
 
     def setUp(self) -> None:
-        self.tk = containers.Tk()
+        self.tk = tests.window()
         self.cv = containers.Canvas(self.tk)
         self.item = self.cv.create_rectangle(10, 10, 20, 20)
         self.item2 = self.cv.create_rectangle(10, 10, 20, 20)
@@ -263,7 +266,7 @@ class TestMoveItem(unittest.TestCase):
 class TestGradientTkWidget(unittest.TestCase):
 
     def setUp(self) -> None:
-        self.tk = containers.Tk()
+        self.tk = tests.window()
         self.widget = tkinter.Label(self.tk)
         self.widget2 = tkinter.Label(self.tk)
 
@@ -283,7 +286,7 @@ class TestGradientTkWidget(unittest.TestCase):
 class TestGradientItem(unittest.TestCase):
 
     def setUp(self) -> None:
-        self.tk = containers.Tk()
+        self.tk = tests.window()
         self.cv = tkinter.Canvas(self.tk)
         self.item = self.cv.create_rectangle(10, 10, 20, 20)
         self.item2 = self.cv.create_rectangle(10, 10, 20, 20)
@@ -304,7 +307,7 @@ class TestGradientItem(unittest.TestCase):
 class TestScaleFontSize(unittest.TestCase):
 
     def setUp(self) -> None:
-        self.tk = containers.Tk()
+        self.tk = tests.window()
         self.cv = containers.Canvas(self.tk)
         self.widget = widgets.Text(self.cv, (10, 10), text="Hello, World!")
 

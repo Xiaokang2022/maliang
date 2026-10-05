@@ -8,25 +8,32 @@ import tkinter
 import unittest
 import unittest.mock
 
+import tests
 from maliang.core import containers
 from maliang.standard import widgets
 from maliang.toolbox import enhanced
 
 
-def load_tests(loader: unittest.TestLoader, tests: unittest.TestSuite, pattern: str | None) -> unittest.TestSuite:
+def load_tests(loader: unittest.TestLoader, suite: unittest.TestSuite, pattern: str | None) -> unittest.TestSuite:
     del loader, pattern
-    tests.addTests(doctest.DocTestSuite(containers))
-    return tests
+    suite.addTests(doctest.DocTestSuite(containers))
+    return suite
 
 
+# NOTE: The windows used by the test cases are children (`Toplevel`) of the
+# shared root window, see `tests` for the reason why. The windows created by
+# `tests.window` support the same methods as those created by `containers.Tk`
+# because `containers.Toplevel` is a subclass of `containers.Tk`.
 class TestTk(unittest.TestCase):
 
     def test_init(self) -> None:
-        containers.Tk(icon="").destroy()
-        containers.Tk(title=":)").destroy()
+        tests.window(icon="").destroy()
+        tests.window(title=":)").destroy()
 
     def test_ratios(self) -> None:
-        with containers.Tk() as tk:
+        # NOTE: The window must not be smaller than the minimum size of the
+        # window manager, otherwise the requested size is not applied.
+        with tests.window((600, 400)) as tk:
             self.assertEqual(tk.ratios, (1., 1.))
             tk.wm_geometry(f"{tk.size[0]//2}x{tk.size[1]//2}")
             tk.update()
@@ -34,7 +41,7 @@ class TestTk(unittest.TestCase):
             self.assertEqual(tk.ratios, (0.5, 0.5))
 
     def test_icon(self) -> None:
-        with containers.Tk() as tk:
+        with tests.window() as tk:
             if platform.system() != "Linux":
                 tk.icon("")
                 tk.icon("tests/assets/images/logo.ico")
@@ -42,13 +49,13 @@ class TestTk(unittest.TestCase):
             tk.icon(enhanced.PhotoImage(file="tests/assets/images/logo.png", master=tk))
 
     def test_alpha(self) -> None:
-        with containers.Tk() as tk:
+        with tests.window() as tk:
             self.assertEqual(tk.alpha(), 1.)
             self.assertIsNone(tk.alpha(0.8))
             self.assertEqual(tk.alpha(), 0.8)
 
     def test_topmost(self) -> None:
-        with containers.Tk() as tk:
+        with tests.window() as tk:
             self.assertIsNone(tk.topmost())
             tk.after(1, lambda: self.assertTrue(tk.topmost(None)))  # Linux needs a short pause
             tk.update()
@@ -58,7 +65,7 @@ class TestTk(unittest.TestCase):
     # TODO: Test on Darwin and  Linux
     @unittest.skipUnless(platform.system() == "Windows", "The results are difficult to test")
     def test_fullscreen(self) -> None:
-        with containers.Tk() as tk:
+        with tests.window() as tk:
             self.assertIsNone(tk.fullscreen())
             self.assertTrue(tk.fullscreen(None))
             self.assertIsNone(tk.fullscreen(False))
@@ -66,7 +73,7 @@ class TestTk(unittest.TestCase):
 
     @unittest.skipUnless(platform.system() == "Windows", "Only works on Windows")
     def test_toolwindow(self) -> None:
-        with containers.Tk() as tk:
+        with tests.window() as tk:
             self.assertIsNone(tk.toolwindow())
             self.assertTrue(tk.toolwindow(None))
             self.assertIsNone(tk.toolwindow(False))
@@ -74,7 +81,7 @@ class TestTk(unittest.TestCase):
 
     @unittest.skipUnless(platform.system() == "Windows", "Only works on Windows")
     def test_transparentcolor(self) -> None:
-        with containers.Tk() as tk:
+        with tests.window() as tk:
             self.assertEqual(tk.transparentcolor(), None)
             self.assertIsNone(tk.transparentcolor("red"))
             self.assertEqual(str(tk.transparentcolor()), "red")
@@ -83,26 +90,26 @@ class TestTk(unittest.TestCase):
 
     @unittest.skipUnless(platform.system() == "Darwin", "Only works on Darwin")
     def test_modified(self) -> None:
-        with containers.Tk() as tk:
+        with tests.window() as tk:
             self.assertFalse(tk.modified())
             self.assertIsNone(tk.modified(True))
             self.assertTrue(tk.modified())
 
     @unittest.skipUnless(platform.system() == "Darwin", "Only works on Darwin")
     def test_transparent(self) -> None:
-        with containers.Tk() as tk:
+        with tests.window() as tk:
             self.assertFalse(tk.transparent())
             self.assertIsNone(tk.transparent(True))
             self.assertTrue(tk.transparent())
 
     def test_center(self) -> None:
-        with containers.Tk() as tk:
+        with tests.window() as tk:
             tk.center()
             with containers.Toplevel() as tl:
                 tl.center(refer=tk)
 
     def test_theme(self) -> None:
-        with containers.Tk() as tk:
+        with tests.window() as tk:
             with containers.Toplevel(tk):
                 with containers.Canvas(tk):
                     tk.theme("dark", include_children=True, include_canvases=True)
@@ -114,13 +121,13 @@ class TestTk(unittest.TestCase):
             nonlocal a
             a = True
 
-        with containers.Tk() as tk:
+        with tests.window() as tk:
             tk.at_exit(command, ensure_destroy=False)
             tk.call(tk.wm_protocol("WM_DELETE_WINDOW"))
 
         self.assertTrue(a)
 
-        tk = containers.Tk()  # NOTE: This does not need to be destroyed again
+        tk = tests.window()  # NOTE: This does not need to be destroyed again
         tk.at_exit(lambda: None)
         tk.call(tk.wm_protocol("WM_DELETE_WINDOW"))
 
@@ -129,23 +136,25 @@ class TestTk(unittest.TestCase):
 
         with io.StringIO() as captured_output:
             with contextlib.redirect_stderr(captured_output):
-                with containers.Tk() as tk:
+                with tests.window() as tk:
                     tk.at_exit(callback_raise, ensure_destroy=False)
                     tk.call(tk.wm_protocol("WM_DELETE_WINDOW"))
 
             self.assertTrue(bool(captured_output.getvalue()))
 
     def test_zoom(self) -> None:
-        with containers.Tk() as tk:
+        with tests.window() as tk:
             with containers.Canvas(tk):
                 tk.ratios  # trigger caching
-                tk.geometry(size=(23, 33))
+                # NOTE: `containers.Tk.geometry` is used here, but pylint resolves
+                # `containers.Toplevel.geometry` to `tkinter.Wm.geometry`.
+                tk.geometry(size=(23, 33))  # pylint: disable=E1123
                 tk.update()
                 tk._zoom()
 
     @unittest.mock.patch("maliang.core.containers.Tk.theme")
     def test_wrap_method(self, mock_theme: unittest.mock.Mock) -> None:
-        with containers.Tk() as tk:
+        with tests.window() as tk:
             tk._wrap_method("wm_resizable")
             tk.wm_resizable(False, False)
             mock_theme.assert_called()
@@ -154,7 +163,7 @@ class TestTk(unittest.TestCase):
 class TestToplevel(unittest.TestCase):
 
     def setUp(self) -> None:
-        self.tk = containers.Tk()
+        self.tk = tests.window()
 
     def tearDown(self) -> None:
         self.tk.destroy()
@@ -166,11 +175,11 @@ class TestToplevel(unittest.TestCase):
 class TestCanvas(unittest.TestCase):
 
     def test_init(self) -> None:
-        with containers.Tk() as tk:
+        with tests.window() as tk:
             containers.Canvas(tk, auto_update=True)
 
     def test_ratios(self) -> None:
-        with containers.Tk() as tk:
+        with tests.window() as tk:
             with containers.Canvas(tk) as cv:
                 cv.place(width=100, height=100)
                 cv.update()
@@ -180,7 +189,7 @@ class TestCanvas(unittest.TestCase):
                 self.assertEqual(cv.ratios, (0.5, 0.5))
 
     def test_theme(self) -> None:
-        with containers.Tk() as tk:
+        with tests.window() as tk:
             with containers.Canvas(tk) as cv:
                 widgets.Button(cv, (0, 0), auto_update=True)
                 widgets.Button(cv, (0, 0), auto_update=False)
@@ -189,27 +198,27 @@ class TestCanvas(unittest.TestCase):
                     cv.theme("dark")
 
     def test_initialization(self) -> None:
-        with containers.Tk() as tk:
+        with tests.window() as tk:
             for anchor in "nw", "n", "w", "ne", "sw", "e", "s", "se", "center":
                 with containers.Canvas(tk) as cv:
                     cv.place(width=100, height=100, anchor=anchor)
                     cv._initialization()
 
     def test_zoom_tk_widgets(self) -> None:
-        with containers.Tk() as tk:
+        with tests.window() as tk:
             with containers.Canvas(tk) as cv:
                 tkinter.Button(cv).place(x=0, y=0)
                 with containers.Canvas(cv):
                     cv._zoom_tk_widgets(rel_ratio=(1., 1.))
 
     def test_clear(self) -> None:
-        with containers.Tk() as tk:
+        with tests.window() as tk:
             with containers.Canvas(tk) as cv:
                 tkinter.Button(cv)
                 cv.clear()
 
     def test_zoom_self(self) -> None:
-        with containers.Tk() as tk:
+        with tests.window() as tk:
             with containers.Canvas(tk, auto_zoom=True, zoom_all_items=True) as cv:
                 containers.Canvas(cv)
                 widgets.Button(cv, (0, 0))
@@ -219,7 +228,7 @@ class TestCanvas(unittest.TestCase):
                 cv._zoom_self()
 
     def test_create_text(self) -> None:
-        with containers.Tk() as tk:
+        with tests.window() as tk:
             with containers.Canvas(tk) as cv:
                 cv.create_text(0, 0)
                 cv.create_text(0, 0, font=10)
@@ -227,7 +236,7 @@ class TestCanvas(unittest.TestCase):
                 cv.create_text(0, 0, font=("Aria", 10, "bold"))
 
     def test_zoom(self) -> None:
-        with containers.Tk() as tk:
+        with tests.window() as tk:
             with containers.Canvas(tk, free_anchor=True) as cv:
                 with unittest.mock.patch("maliang.core.containers.Canvas.winfo_viewable", return_value=True):
                     cv.place(width=100, height=100)
@@ -235,7 +244,7 @@ class TestCanvas(unittest.TestCase):
                     cv.zoom()
 
     def test_on_events(self) -> None:
-        with containers.Tk() as tk:
+        with tests.window() as tk:
             with containers.Canvas(tk) as cv:
                 widgets.Button(cv, (0, 0), capture_events=True)
                 widgets.Button(cv, (0, 0))
@@ -256,7 +265,7 @@ class TestCanvas(unittest.TestCase):
                 cv.on_key_release(event)
 
     def test_register_event(self) -> None:
-        with containers.Tk() as tk:
+        with tests.window() as tk:
             with containers.Canvas(tk) as cv:
                 widget = widgets.Button(cv, (0, 0))
                 cv.register_event("<<Test>>")

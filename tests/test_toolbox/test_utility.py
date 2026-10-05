@@ -11,6 +11,7 @@ import unittest
 import unittest.mock
 
 import maliang
+import tests
 from maliang.core import configs, containers
 from maliang.toolbox import utility
 
@@ -20,10 +21,10 @@ except ImportError:
     PIL = None
 
 
-def load_tests(loader: unittest.TestLoader, tests: unittest.TestSuite, pattern: str | None) -> unittest.TestSuite:
+def load_tests(loader: unittest.TestLoader, suite: unittest.TestSuite, pattern: str | None) -> unittest.TestSuite:
     del loader, pattern
-    tests.addTests(doctest.DocTestSuite(utility))
-    return tests
+    suite.addTests(doctest.DocTestSuite(utility))
+    return suite
 
 
 class TestTrigger(unittest.TestCase):
@@ -54,7 +55,7 @@ class TestTrigger(unittest.TestCase):
 class TestCase(unittest.TestCase):
 
     def setUp(self) -> None:
-        self.tk = containers.Tk()
+        self.tk = tests.window()
         self.cv = containers.Canvas(self.tk)
 
     def tearDown(self) -> None:

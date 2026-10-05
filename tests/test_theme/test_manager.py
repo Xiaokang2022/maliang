@@ -8,20 +8,21 @@ import platform
 import unittest
 import unittest.mock
 
-from maliang.core import configs, containers
+import tests
+from maliang.core import configs
 from maliang.theme import manager
 
 
-def load_tests(loader: unittest.TestLoader, tests: unittest.TestSuite, pattern: str | None) -> unittest.TestSuite:
+def load_tests(loader: unittest.TestLoader, suite: unittest.TestSuite, pattern: str | None) -> unittest.TestSuite:
     del loader, pattern
-    tests.addTests(doctest.DocTestSuite(manager))
-    return tests
+    suite.addTests(doctest.DocTestSuite(manager))
+    return suite
 
 
 class TestCase(unittest.TestCase):
 
     def setUp(self) -> None:
-        self.tk = containers.Tk()
+        self.tk = tests.window()
 
     def tearDown(self) -> None:
         self.tk.destroy()
