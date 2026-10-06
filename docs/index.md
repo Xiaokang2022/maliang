@@ -41,7 +41,7 @@ hide:
 
 ## 📦 安装
 
-要安装该包，你的 Python 版本必须 **`>=3.10`**。用以下命令进行安装：
+要安装该包，你的 Python 版本必须 **`>=3.11`**。用以下命令进行安装：
 
 ```shell linenums="0"
 pip install maliang

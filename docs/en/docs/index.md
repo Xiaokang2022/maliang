@@ -41,7 +41,7 @@ A lightweight UI framework based on <code>tkinter</code> with all UI drawn in Ca
 
 ## 📦 Installation
 
-To install this package, your Python version must be **`>=3.10`**. Install it with the following command:
+To install this package, your Python version must be **`>=3.11`**. Install it with the following command:
 
 ```shell linenums="0"
 pip install maliang

@@ -24,7 +24,7 @@
 
 - 提交信息按照 [约定式提交](https://github.com/conventional-commits/conventionalcommits.org) 规范
 - 版本号按照 [语义化版本](https://github.com/semver/semver) 规范
-- 版本更新时须同步更新 `CHANGELOG.md`、`CITATION.cff`、`pyproject.toml`
+- 版本更新时须同步更新 `CHANGELOG.md`、`CITATION.cff`、`src/maliang/__init__.py`
 - 临时分支合并后须删除
 
 ## 安全

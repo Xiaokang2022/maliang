@@ -12,6 +12,44 @@
 > * 🟠 **Deprecated / 弃用**
 > * 🟤 **Refactored / 重构**
 
+## 🔖 `3.2.0`
+
+🕓 *Release Date / 发布日期 : 2026-10-06*
+
+🟢 **Added / 新增**
+
+* Widgets now reset their `hover`/`active` state when the mouse leaves the canvas  
+控件在鼠标离开画布时会自动重置其 `hover`/`active` 状态
+
+🟡 **Changed / 变更**
+
+* The minimum required Python version is changed from 3.10 to 3.11, and Python 3.15 is now supported  
+最低 Python 版本要求由 3.10 变更为 3.11，并且现已支持 Python 3.15  
+Issue: #153
+
+🔵 **Optimized / 优化**
+
+* Avoid unnecessary zooming of the canvas when only its position changes  
+避免画布在仅位置变化时进行不必要的缩放
+
+🟣 **Fixed / 修复**
+
+* Fixed a bug where the coordinate passing of the widget `Line` was not supported on some Tcl/Tk versions  
+修复了控件 `Line` 的坐标传递在部分 Tcl/Tk 版本上不受支持的 bug  
+Issue: #154
+
+* Fixed a bug where `PhotoImage` parsed the image data incorrectly when PIL was not installed on Tk 9.0+  
+修复了 Tk 9.0+ 且未安装 PIL 时 `PhotoImage` 解析图像数据错误的 bug
+
+🟤 **Refactored / 重构**
+
+* Adjust the source code directory structure to the `src` layout  
+调整源代码目录结构为 `src` 布局
+
+* Improve the unit tests and the CI workflows, and fix the occasional crash and the failure of the window position assertions on the macOS runner  
+完善单元测试与 CI 工作流，并修复 macOS 运行器上偶现的崩溃和窗口位置断言失败的问题  
+Issue: #153
+
 ## 🔖 `3.1.5`
 
 🕓 *Release Date / 发布日期 : 2025-09-27*
