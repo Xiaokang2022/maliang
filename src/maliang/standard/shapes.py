@@ -73,7 +73,10 @@ class Line(virtual.Shape):
 
         points = [(x+self.position[0], y+self.position[1]) for x, y in self.points]
 
-        self.widget.master.coords(self.items[0], *points)
+        # NOTE: `Canvas.coords` must be given a flat sequence of numbers,
+        # passing nested sequences is not supported on every Tcl/Tk version.
+        self.widget.master.coords(
+            self.items[0], *[coordinate for point in points for coordinate in point])
 
 
 class Rectangle(virtual.Shape):
